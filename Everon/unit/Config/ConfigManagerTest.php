@@ -163,7 +163,7 @@ class ManagerTest extends \Everon\TestCase
         $ConfigManager->setFactory($Factory);
         
         //todo add setter in TestCase for setting up Environment for tests
-        $Environment = new Environment($this->Environment->getRoot());
+        $Environment = new Environment($this->Environment->getRoot(), $this->Environment->getEveronRoot());
         $Environment->setConfig($this->getConfigDirectory());
         $Environment->setCacheConfig($this->getConfigCacheDirectory());
         $ConfigManager->setEnvironment($Environment);

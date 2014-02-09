@@ -14,14 +14,15 @@ class EnvironmentTest extends \Everon\TestCase
    
     public function testConstructor()
     {
-        $Environment = new \Everon\Environment('testing');
+        $Environment = new \Everon\Environment('app_root', 'src_root');
         $this->assertInstanceOf('Everon\Interfaces\Environment', $Environment);
     }
 
     public function testGetters()
     {
         $root = $this->Environment->getRoot();
-        $Environment = new \Everon\Environment($root);
+        $root_source = $this->Environment->getEveronRoot();
+        $Environment = new \Everon\Environment($root, $root_source);
 
         $this->assertEquals($root, $Environment->getRoot());
 
@@ -33,11 +34,6 @@ class EnvironmentTest extends \Everon\TestCase
 
         $this->assertEquals($root.'Tests'.DIRECTORY_SEPARATOR, $Environment->getTest());
 
-        $this->assertEquals($root.'Src'.DIRECTORY_SEPARATOR, $Environment->getSource());
-        $this->assertEquals($root.'Src'.DIRECTORY_SEPARATOR.'Everon'.DIRECTORY_SEPARATOR, $Environment->getEveron());
-        $this->assertEquals($root.'Src'.DIRECTORY_SEPARATOR.'Everon'.DIRECTORY_SEPARATOR.'Interfaces'.DIRECTORY_SEPARATOR, $Environment->getEveronInterface());
-        $this->assertEquals($root.'Src'.DIRECTORY_SEPARATOR.'Everon'.DIRECTORY_SEPARATOR.'Config'.DIRECTORY_SEPARATOR, $Environment->getEveronConfig());
-
         $this->assertEquals($root.'Tmp'.DIRECTORY_SEPARATOR, $Environment->getTmp());
         $this->assertEquals($root.'Tmp'.DIRECTORY_SEPARATOR.'logs'.DIRECTORY_SEPARATOR, $Environment->getLog());
         $this->assertEquals($root.'Tmp'.DIRECTORY_SEPARATOR.'cache'.DIRECTORY_SEPARATOR, $Environment->getCache());
@@ -47,7 +43,7 @@ class EnvironmentTest extends \Everon\TestCase
     
     public function testSetters()
     {
-        $Environment = new \Everon\Environment('testing');
+        $Environment = new \Everon\Environment('app_root', 'src_root');
         
         $Environment->setRoot('test');
         $this->assertEquals('test', $Environment->getRoot());
@@ -67,12 +63,6 @@ class EnvironmentTest extends \Everon\TestCase
         $Environment->setTest('test');
         $this->assertEquals('test', $Environment->getTest());
 
-        $Environment->setSource('test');
-        $this->assertEquals('test', $Environment->getSource());
-        
-        $Environment->setEveron('test');
-        $this->assertEquals('test', $Environment->getEveron());
-        
         $Environment->setEveronInterface('test');
         $this->assertEquals('test', $Environment->getEveronInterface());
         

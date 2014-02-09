@@ -14,33 +14,31 @@ use Everon\Interfaces;
 class FileSystemTest extends \Everon\TestCase
 {
     
-    public function setUp()
+    protected function tearDown()
     {
         $path = [
+            'this/is/test/more',
+            'this/is/test/example.txt',
+            'this/is/test',
+            'this/is',
+            'this',
             'var/this/is/test/example.txt',
             'var/this/is/test/',
             'var/this/is/',
             'var/this/',
             'var/',
-            'this/is/test/more',
-            'this/is/test/example.txt',
-            'this/is/test',
-            'this/is',
-            'this'
         ];
-        
+
         array_walk($path, function($item){
             $resource = $this->getTmpDirectory().$item;
             if (is_file($resource)) {
                 @unlink($resource);
             }
-            
-            if (is_dir($resource))
+            if (is_dir($resource)) {
                 @rmdir($resource);
-        });
+            }
 
-        $path = implode(DIRECTORY_SEPARATOR, ['this', 'is', 'test', 'example.txt']);
-        @unlink($path);
+        });
     }
    
     public function testConstructor()

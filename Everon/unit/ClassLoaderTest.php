@@ -29,7 +29,7 @@ class ClassLoaderTest extends \Everon\TestCase
      */    
     public function testLoadShouldIncludeFile(\Everon\Interfaces\ClassLoader $Loader, \Everon\Interfaces\Environment $Environment)
     {
-        $Loader->add('Everon', $Environment->getSource());
+        $Loader->add('Everon', $Environment->getEveronRoot());
         $Loader->load('Everon\Core');
     }
 
