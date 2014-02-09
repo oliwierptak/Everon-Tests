@@ -1,7 +1,15 @@
 {
-    "name": "oliwierptak/Everon-Tests",
+    "name": "everon/everon-tests",
+    "type": "library",
+    "description": "Tests for Everon",
+    "keywords": ["framework", "tests"],
+    "license": "MIT",
+    "authors": [{
+        "name": "Oliwier Ptak",
+        "email": "oliwierptak@gmail.com"
+    }],
     "version": "0.2.0",
     "require": {
-        
+        "php": "~5.5"
     }
 }
