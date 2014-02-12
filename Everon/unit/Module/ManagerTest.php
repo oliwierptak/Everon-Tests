@@ -26,7 +26,7 @@ class ManagerTest extends \Everon\TestCase
      */
     function testGetModuleShouldReturnModule(Interfaces\ModuleManager $ModuleManager)
     {
-        $Module = $ModuleManager->getModule('UserLogin');
+        $Module = $ModuleManager->getModule('_Core');
         $this->assertInstanceOf('Everon\Interfaces\Module', $Module);
     }
     
