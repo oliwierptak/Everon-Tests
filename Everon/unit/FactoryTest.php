@@ -422,7 +422,7 @@ class FactoryTest extends \Everon\TestCase
     {
         $Factory = $this->buildFactory();
         $Container = $Factory->getDependencyContainer();
-        $ViewManager = $Factory->buildViewManager(['e' => '.htm'], $this->Environment->getView());
+        $ViewManager = $Factory->buildViewManager(['e' => '.htm'], $this->Environment->getTheme(), $this->Environment->getCacheView());
         $Container->register('ViewManager', function() use ($ViewManager) {
             return $ViewManager;
         });
