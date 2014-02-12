@@ -29,7 +29,7 @@ class EnvironmentTest extends \Everon\TestCase
         $this->assertEquals($root.'Config'.DIRECTORY_SEPARATOR, $Environment->getConfig());
         $this->assertEquals($root.'DataMapper'.DIRECTORY_SEPARATOR, $Environment->getDataMapper());
         $this->assertEquals($root.'Domain'.DIRECTORY_SEPARATOR, $Environment->getDomain());
-        $this->assertEquals($root.'View'.DIRECTORY_SEPARATOR, $Environment->getView());
+        $this->assertEquals($root.'Theme'.DIRECTORY_SEPARATOR, $Environment->getTheme());
         $this->assertEquals($root.'Controller'.DIRECTORY_SEPARATOR, $Environment->getController());
 
         $this->assertEquals($root.'Tests'.DIRECTORY_SEPARATOR, $Environment->getTest());
@@ -54,8 +54,8 @@ class EnvironmentTest extends \Everon\TestCase
         $Environment->setDomain('test');
         $this->assertEquals('test', $Environment->getDomain());
         
-        $Environment->setView('test');
-        $this->assertEquals('test', $Environment->getView());
+        $Environment->setTheme('test');
+        $this->assertEquals('test', $Environment->getTheme());
         
         $Environment->setController('test');
         $this->assertEquals('test', $Environment->getController());
