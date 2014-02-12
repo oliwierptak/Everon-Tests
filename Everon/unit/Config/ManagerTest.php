@@ -15,9 +15,8 @@ class ManagerTest extends \Everon\TestCase
 {
     public function testConstructor()
     {
-        $Matcher = $this->getMock('Everon\Interfaces\ConfigExpressionMatcher');
         $Loader = $this->getMock('Everon\Interfaces\ConfigLoader');
-        $Manager = new \Everon\Config\Manager($Loader, $Matcher);
+        $Manager = new \Everon\Config\Manager($Loader);
         $this->assertInstanceOf('Everon\Interfaces\ConfigManager', $Manager);
     }
 
@@ -102,8 +101,7 @@ class ManagerTest extends \Everon\TestCase
      */
     public function testRegisterWithCache(\Everon\Interfaces\ConfigManager $ConfigManager, \Everon\Interfaces\Config $Expected)
     {
-        $ConfigManager->getConfigLoader()->disableCache();
-        $ConfigManager->getConfigLoader()->enableCache();
+        $ConfigManager->setIsCachingEnabled(true);
         $ConfigManager->unRegister($Expected->getName());
         $ConfigManager->register($Expected);
         $Config = $ConfigManager->getConfigByName($Expected->getName());
@@ -115,7 +113,7 @@ class ManagerTest extends \Everon\TestCase
      */
     public function testLoadAndRegisterConfigsWithCache(\Everon\Interfaces\ConfigManager $ConfigManager, \Everon\Interfaces\Config $Expected)
     {
-        $ConfigManager->getConfigLoader()->enableCache();
+        $ConfigManager->setIsCachingEnabled(true);
 
         $Property = $this->getProtectedProperty('Everon\Config\Manager', 'configs');
         $Property->setValue($ConfigManager, null);
@@ -129,7 +127,7 @@ class ManagerTest extends \Everon\TestCase
      */
     public function testGetConfigsWithCache(\Everon\Interfaces\ConfigManager $ConfigManager, \Everon\Interfaces\Config $Expected)
     {
-        $ConfigManager->getConfigLoader()->enableCache();
+        $ConfigManager->setIsCachingEnabled(true);
 
         $Property = $this->getProtectedProperty('Everon\Config\Manager', 'configs');
         $Property->setValue($ConfigManager, null);
@@ -149,23 +147,22 @@ class ManagerTest extends \Everon\TestCase
         $Compiler = function(&$data) {};
 
         $filename = $this->getConfigDirectory().'test.ini';
-        $ConfigLoaderItem = new \Everon\Config\Loader\Item($filename, parse_ini_file($filename, true));
-        $Expected = new \Everon\Config(
+        $ConfigLoaderItem = $Factory->buildConfigLoaderItem($filename, parse_ini_file($filename, true));
+        $Expected = $Factory->buildConfig(
             'test',
             $ConfigLoaderItem,
             $Compiler
         );
-        
-        $Loader = new \Everon\Config\Loader($this->getConfigDirectory(), $this->getConfigCacheDirectory());
-        $Loader->setFactory($Factory);
-        
-        $ConfigManager = new \Everon\Config\Manager($Loader);
-        $ConfigManager->setFactory($Factory);
-        
-        //todo add setter in TestCase for setting up Environment for tests
-        $Environment = new Environment($this->Environment->getRoot(), $this->Environment->getEveronRoot());
+
+        $Environment = new Environment($this->FrameworkEnvironment->getRoot(), $this->FrameworkEnvironment->getEveronRoot());
         $Environment->setConfig($this->getConfigDirectory());
         $Environment->setCacheConfig($this->getConfigCacheDirectory());
+        
+        $ConfigLoader = $Factory->buildConfigLoader($Environment->getConfig(), $Environment->getCacheConfig());
+        $ConfigLoader->setFactory($Factory);
+        
+        $ConfigManager = $Factory->buildConfigManager($ConfigLoader);
+        $ConfigManager->setFactory($Factory);
         $ConfigManager->setEnvironment($Environment);
         
         return [

@@ -29,16 +29,20 @@ class ManagerTest extends \Everon\TestCase
         $Module = $ModuleManager->getModule('UserLogin');
         $this->assertInstanceOf('Everon\Interfaces\Module', $Module);
     }
-        
     
     function dataProvider()
     {
         $Factory = $this->buildFactory();
         $Container = $Factory->getDependencyContainer();
-        $FileSystem = $Factory->buildFileSystem($this->Environment->getRoot());
+        $FileSystem = $Factory->buildFileSystem($this->FrameworkEnvironment->getRoot());
         
         $Container->register('FileSystem', function() use ($FileSystem) {
             return $FileSystem;
+        });
+
+        $ViewManagerMock = $this->getMock('Everon\Interfaces\ViewManager');
+        $Container->register('ViewManager', function() use ($ViewManagerMock) {
+            return $ViewManagerMock;
         });
         
         $ModuleManager = $Factory->buildModuleManager();

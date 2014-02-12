@@ -15,13 +15,14 @@ class ItemRouterTest extends \Everon\TestCase
     public function testConstructor()
     {
         $data = [
-            '____name' => 'test',
+            \Everon\Config\Item::PROPERTY_NAME => 'test',
+            \Everon\Config\Item\Router::PROPERTY_MODULE => 'test',
             'url' => '/',
             'controller' => 'Test',
             'action' => 'testMe',
             'get' => [],
             'post' => [],
-            'default' => true,
+            \Everon\Config\Item::PROPERTY_DEFAULT => true,
         ];
         
         $Item = new \Everon\Config\Item\Router($data);
@@ -30,7 +31,9 @@ class ItemRouterTest extends \Everon\TestCase
         $this->assertEquals($data['controller'], $Item->getController());
         $this->assertEquals($data['action'], $Item->getAction());
         $this->assertEquals($data['url'], $Item->getUrl());
-        $this->assertEquals($data['____name'], $Item->getName());
+        $this->assertEquals($data[\Everon\Config\Item::PROPERTY_NAME], $Item->getName());
+        $this->assertEquals($data[\Everon\Config\Item::PROPERTY_DEFAULT], $Item->isDefault());
+        $this->assertEquals($data[\Everon\Config\Item\Router::PROPERTY_MODULE], $Item->getModule());
     }
 
 }

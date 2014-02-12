@@ -70,8 +70,8 @@ class ClassMapTest extends \Everon\TestCase
     public function dataProvider()
     {
         $filename = $this->getTmpDirectory().'class_map_test.php';
-        
         $ClassMap = new \Everon\ClassMap($filename);
+        
         return [
             [$ClassMap]
         ];

@@ -9,8 +9,11 @@
  */
 namespace Everon\Test;
 
+use Everon\Helper;
+
 class ViewTest extends \Everon\TestCase
 {
+    use Helper\Arrays;
 
     public function testConstructor()
     {
@@ -148,7 +151,7 @@ EOF;
     /**
      * @dataProvider dataProvider
      */
-    public function testSetConatiner(\Everon\Interfaces\View $View)
+    public function testSetContainer(\Everon\Interfaces\View $View)
     {
         $View->setContainer('');
         $this->assertInstanceOf('Everon\Interfaces\TemplateContainer', $View->getContainer());
@@ -163,7 +166,7 @@ EOF;
     /**
      * @dataProvider dataProvider
      * @expectedException \Everon\Exception\Template
-     * @expectedExceptionMessage Invalid Container type
+     * @expectedExceptionMessage Invalid container type
      */
     public function testSetContainerShouldThrowExceptionWhenWrongInputIsSet(\Everon\Interfaces\View $View)
     {
@@ -174,31 +177,19 @@ EOF;
     /**
      * @dataProvider dataProvider
      */
-    public function testGetContainerShouldReturnIndexContainerWhenNull(\Everon\Interfaces\View $View)
+    public function testGetContainerShouldReturnEmptyStringWhenContainerIsNull(\Everon\Interfaces\View $View)
     {
         $PropertyContainer = $this->getProtectedProperty('Everon\View', 'Container');
         $PropertyContainer->setValue($View, null);
         
         $Output = $View->getContainer();
-        $this->assertEquals(file_get_contents($this->getTemplateDirectory().'Index/index.htm'), (string) $Output);
+        $this->assertEquals('', (string) $Output);
     }
 
     public function dataProvider()
     {
         $Factory = $this->buildFactory();
-        $Template = $Factory->buildTemplate($this->getTemplateDirectory().'Index/index.htm', []);
-        
-        $IndexViewMock = $this->getMock('Everon\View', [], [], '', false);
-        $IndexViewMock->expects($this->once())
-            ->method('getContainer')
-            ->will($this->returnValue($Template));
-        
-        $ViewManagerMock = $this->getMock('Everon\View\Manager', [], [], '', false);
-        $ViewManagerMock->expects($this->once())
-            ->method('getView')
-            ->will($this->returnValue($IndexViewMock));
-        
-        $View = $Factory->buildView('MyView', $this->getTemplateDirectory(), [], $Template, '.htm', 'Everon\Test');
+        $View = $Factory->buildView('MyView', $this->getTemplateDirectory(), [], '.htm', 'Everon\Test');
         
         return [
             [$View]

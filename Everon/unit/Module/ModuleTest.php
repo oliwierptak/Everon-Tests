@@ -18,15 +18,14 @@ class ModuleTest extends \Everon\TestCase
     public function testConstructor()
     {
         $ConfigMock = $this->getMock('Everon\Interfaces\Config');
-        $Module = new \Everon\Module('test', $ConfigMock, $ConfigMock);
+        $Module = new \Everon\Test\Module\_Core\Module('test', 'directory', $ConfigMock, $ConfigMock);
         $this->assertInstanceOf('Everon\Interfaces\Module', $Module);
     }
     
     public function dataProvider()
     {
         $Factory = $this->buildFactory();
-        $Container = $Factory->getDependencyContainer();
-        
+
         return [
             [$Factory]
         ];

@@ -9,8 +9,12 @@
  */
 namespace Everon\Test;
 
+use Everon\Helper;
+
 class RouterTest extends \Everon\TestCase
 {
+    use Helper\Arrays;
+    
 
     /**
      * @dataProvider dataProvider
@@ -23,7 +27,7 @@ class RouterTest extends \Everon\TestCase
 
     /**
      * @dataProvider dataProvider
-     * @expectedException \Everon\Exception\InvalidRoute
+     * @expectedException \Everon\Exception\RouteNotDefined
      */
     public function testPageNotFound(\Everon\Interfaces\Factory $Factory, \Everon\Interfaces\Request $Request, \Everon\Config\Router $Config, $expected)
     {
@@ -63,11 +67,17 @@ class RouterTest extends \Everon\TestCase
     
     public function dataProvider()
     {
+        $data = parse_ini_file($this->getFixtureDirectory().'config'.DIRECTORY_SEPARATOR.'router.ini', true);
+        foreach ($data as $name => $item_data) {
+            $data[$name][\Everon\Config\Item\Router::PROPERTY_MODULE] = 'Test';
+        }
+        
         /**
          * @var \Everon\Interfaces\Factory $Factory
          */
         $Factory = $this->buildFactory();
-        $RouterConfig = $Factory->getDependencyContainer()->resolve('ConfigManager')->getConfigByName('router');
+        $ConfigLoaderItem = $Factory->buildConfigLoaderItem('router.ini', $data);
+        $RouterConfig = $Factory->buildConfig('Router', $ConfigLoaderItem, function($data){return $data;});
         
         return [
             [$Factory,

@@ -20,8 +20,8 @@ class EnvironmentTest extends \Everon\TestCase
 
     public function testGetters()
     {
-        $root = $this->Environment->getRoot();
-        $root_source = $this->Environment->getEveronRoot();
+        $root = $this->FrameworkEnvironment->getRoot();
+        $root_source = $this->FrameworkEnvironment->getEveronRoot();
         $Environment = new \Everon\Environment($root, $root_source);
 
         $this->assertEquals($root, $Environment->getRoot());
