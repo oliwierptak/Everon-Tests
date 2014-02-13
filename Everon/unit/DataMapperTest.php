@@ -43,8 +43,6 @@ class DataMapperTest extends \Everon\TestCase
         $Table = $Schema->getTable('user');
         $Mapper = $Factory->buildDataMapper($Table, $Schema);
         
-        //sd($Mapper);
-        
         $entity_data = [
             'first_name' => 'John',
             'last_name' => 'Doe'
