@@ -232,7 +232,7 @@ class FactoryTest extends \Everon\TestCase
 
     /**
      * @dataProvider dataProvider
-     * @expectedException \Everon\Exception\Factory
+     * @expectedException \Everon\Exception\DependencyContainer
      * @expectedExceptionMessage Error injecting dependency: "Wrong"
      */    
     public function testDependencyToObjectShouldThrowExceptionWhenWrongDependency(Interfaces\Factory $Factory)
