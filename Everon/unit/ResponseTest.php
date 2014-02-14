@@ -14,42 +14,35 @@ class ResponseTest extends \Everon\TestCase
     
     public function testConstructor()
     {
-        $HeadersMock = $this->getMock('Everon\Http\HeaderCollection');
+        $HeadersMock = $this->getMock('Everon\Http\HeaderCollection', [], [], '', false);
         $Response = new \Everon\Response('Guid', $HeadersMock);
         $this->assertInstanceOf('\Everon\Interfaces\Response', $Response);
     }
 
     /**
      * @dataProvider dataProvider
-     * @runInSeparateProcess
      */
-    public function AtestToJson(\Everon\Interfaces\Factory $Factory)
+    public function testToJson(\Everon\Interfaces\Response $Response)
     {
-        $this->markTestSkipped();
-        $Response = $Factory->buildResponse(['test'=>'yes']);
-        $this->assertInternalType('string', $Response->toJson());
-        $this->assertEquals('{"data":{"test":"yes"}}', $Response->toJson());
+        $Response->setData(['test'=>'yes']);
+        $json = $Response->toJson();
         
-        $Response->send();
-        
-        $headers = xdebug_get_headers();
-        $this->assertEquals($headers[0], 'content-type: application/json');
+        $this->assertInternalType('string', $json);
+        $this->assertEquals('{"data":{"test":"yes"}}', $json);
+        $this->assertEquals('application/json', $Response->getContentType());
     }
-    
+
     /**
      * @dataProvider dataProvider
-     * @runInSeparateProcess
      */
-    public function AtestToHtml(\Everon\Interfaces\Factory $Factory)
+    public function testToText(\Everon\Interfaces\Response $Response)
     {
-        $this->markTestSkipped();
-        $Response = $Factory->buildResponse(['test'=>'yes']);
-        $this->assertInternalType('string', $Response->toHtml());
+        $Response->setData('this is a test');
+        $text = $Response->toText();
 
-        $Response->send();
-
-        $headers = xdebug_get_headers();
-        $this->assertEquals($headers[0], 'content-type: text/html; charset="utf-8"');        
+        $this->assertInternalType('string', $text);
+        $this->assertEquals('this is a test', $text);
+        $this->assertEquals('text/plain', $Response->getContentType());
     }
     
     public function dataProvider()
@@ -57,11 +50,12 @@ class ResponseTest extends \Everon\TestCase
         /**
          * @var \Everon\Interfaces\Factory $Factory
          */
+        $HeadersMock = $this->getMock('Everon\Http\HeaderCollection', [], [], '', false);
         $Factory = $this->buildFactory();
+        $Response = $Factory->buildResponse('guid', $HeadersMock);
         
         return [
-            [$Factory]
+            [$Response]
         ];
     }
-
 }
