@@ -201,9 +201,18 @@ class FactoryTest extends \Everon\TestCase
      */
     public function testBuildResponse(Interfaces\Factory $Factory)
     {
-        $HeadersMock = $this->getMock('Everon\Http\HeaderCollection');
-        $Response = $Factory->buildResponse('guid', $HeadersMock);
+        $Response = $Factory->buildResponse('guid');
         $this->assertInstanceOf('Everon\Interfaces\Response', $Response);
+    }
+    
+    /**
+     * @dataProvider dataProvider
+     */
+    public function testBuildHttpResponse(Interfaces\Factory $Factory)
+    {
+        $HeadersMock = $this->getMock('Everon\Http\Interfaces\HeaderCollection');
+        $Response = $Factory->buildHttpResponse('guid', $HeadersMock);
+       $this->assertInstanceOf('Everon\Http\Interfaces\Response', $Response);
     }
     
     /**
@@ -396,8 +405,18 @@ class FactoryTest extends \Everon\TestCase
      */
     public function testBuildResponseShouldThrowExceptionWhenWrongClass(Interfaces\Factory $FactoryMock)
     {
-        $HeadersMock = $this->getMock('Everon\Http\HeaderCollection');
-        $FactoryMock->buildResponse('guid', $HeadersMock);
+        $FactoryMock->buildResponse('guid');
+    }
+    
+    /**
+     * @dataProvider dataProviderForExceptions
+     * @expectedException \Everon\Exception\Factory
+     * @expectedExceptionMessage HttpResponse initialization error
+     */
+    public function testBuildHttpResponseShouldThrowExceptionWhenWrongClass(Interfaces\Factory $FactoryMock)
+    {
+        $HeadersMock = $this->getMock('Everon\Http\Interfaces\HeaderCollection');
+        $FactoryMock->buildHttpResponse('guid', $HeadersMock);
     }
     
     /**
