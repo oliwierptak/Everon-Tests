@@ -1,7 +1,7 @@
 <?php
 namespace Everon;
 
-$CustomSetup = function(){}; //disable default exception handler
+$CustomExceptionHandler = function(){}; //disable default exception handler
 
 require_once(
     implode(DIRECTORY_SEPARATOR,
