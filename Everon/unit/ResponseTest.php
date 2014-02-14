@@ -29,7 +29,6 @@ class ResponseTest extends \Everon\TestCase
         
         $this->assertInternalType('string', $json);
         $this->assertEquals('{"data":{"test":"yes"}}', $json);
-        $this->assertEquals('application/json', $Response->getContentType());
     }
 
     /**
@@ -42,7 +41,6 @@ class ResponseTest extends \Everon\TestCase
 
         $this->assertInternalType('string', $text);
         $this->assertEquals('this is a test', $text);
-        $this->assertEquals('text/plain', $Response->getContentType());
     }
     
     public function dataProvider()
