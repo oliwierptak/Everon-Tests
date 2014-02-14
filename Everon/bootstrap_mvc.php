@@ -8,8 +8,6 @@ require_once(
         [dirname(__FILE__), '..', '..', 'Config', 'Bootstrap', 'mvc.php'])  
 );
 
-
-
 //cleanup global state after bootstrap, otherwise phpunit will complain, and $backupGlobalsBlacklist does not work
 unset($CustomExceptionHandler);
 unset($nesting);
