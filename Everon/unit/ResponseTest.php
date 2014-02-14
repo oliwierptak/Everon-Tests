@@ -50,9 +50,8 @@ class ResponseTest extends \Everon\TestCase
         /**
          * @var \Everon\Interfaces\Factory $Factory
          */
-        $HeadersMock = $this->getMock('Everon\Http\HeaderCollection', [], [], '', false);
         $Factory = $this->buildFactory();
-        $Response = $Factory->buildResponse('guid', $HeadersMock);
+        $Response = $Factory->buildResponse('guid');
         
         return [
             [$Response]

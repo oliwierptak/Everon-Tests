@@ -19,13 +19,28 @@ class ResponseTest extends \Everon\TestCase
     }
 
     /**
+     * @dataProvider dataProvider
      * @runInSeparateProcess
      */
-    public function testToJson()
+    public function testToHtml(\Everon\Http\Interfaces\Response $Response)
     {
-        $H = new \Everon\Http\HeaderCollection([]); //phpunit complains about mock file not found
-        $Response = new \Everon\Http\Response('Guid', $H);
+        $Response->setData('<b>test</b>');
+        $html = $Response->toHtml();
+        $headers = xdebug_get_headers();
         
+        $this->assertEquals($headers[0], 'EVRID:Guid');
+        $this->assertEquals($headers[1], 'content-type: text/html; charset="utf-8"');
+        $this->assertInternalType('string', $html);
+        $this->assertEquals('<b>test</b>', $html);
+        $this->assertEquals('text/html', $Response->getContentType());
+    }
+    
+    /**
+     * @dataProvider dataProvider
+     * @runInSeparateProcess
+     */
+    public function testToJson(\Everon\Http\Interfaces\Response $Response)
+    {
         $Response->setData(['test'=>'yes']);
         $json = $Response->toJson();
         $headers = xdebug_get_headers();
@@ -36,15 +51,13 @@ class ResponseTest extends \Everon\TestCase
         $this->assertEquals('{"data":{"test":"yes"}}', $json);
         $this->assertEquals('application/json', $Response->getContentType());
     }
-    
+
     /**
+     * @dataProvider dataProvider
      * @runInSeparateProcess
      */
-    public function testToText()
+    public function testToText(\Everon\Http\Interfaces\Response $Response)
     {
-        $H = new \Everon\Http\HeaderCollection([]); //phpunit complains about mock file not found
-        $Response = new \Everon\Http\Response('Guid', $H);
-        
         $Response->setData('test');
         $text = $Response->toText();
         $headers = xdebug_get_headers();
@@ -56,14 +69,14 @@ class ResponseTest extends \Everon\TestCase
         $this->assertEquals('text/plain', $Response->getContentType());
     }
     
-    public function dataProviderSSS()
+    public function dataProvider()
     {
         /**
          * @var \Everon\Interfaces\Factory $Factory
          */
-        $HeadersMock = $this->getMock('\Everon\Http\Interfaces\HeaderCollection', [], [], '', false);
         $Factory = $this->buildFactory();
-        $Response = $Factory->buildHttpResponse('guid', $HeadersMock);
+        $Headers = $Factory->buildHttpHeaderCollection([]); //cant use mock, phpunit complains about file not found
+        $Response = $Factory->buildHttpResponse('Guid', $Headers);
 
         return [
             [$Response]
