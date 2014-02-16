@@ -15,7 +15,7 @@ class ManagerTest extends \Everon\TestCase
 {
     public function testConstructor()
     {
-        $Loader = $this->getMock('Everon\Interfaces\ConfigLoader');
+        $Loader = $this->getMock('Everon\Config\Interfaces\Loader');
         $Manager = new \Everon\Config\Manager($Loader);
         $this->assertInstanceOf('Everon\Config\Interfaces\Manager', $Manager);
     }

@@ -18,7 +18,7 @@ class ManagerTest extends \Everon\TestCase
     function testConstructor()
     {
         $ModuleManager = new \Everon\Module\Manager();
-        $this->assertInstanceOf('Everon\Interfaces\ModuleManager', $ModuleManager);
+        $this->assertInstanceOf('Everon\Module\Interfaces\Manager', $ModuleManager);
     }
 
     /**

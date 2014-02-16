@@ -45,7 +45,6 @@ class RouterTest extends \Everon\TestCase
     {
         $Router = $Factory->buildRouter($Config, $Factory->buildRequestValidator());
         $Item = $Router->getRouteByRequest($Request);
-        
         $this->assertInstanceOf('Everon\Config\Interfaces\ItemRouter', $Item);
         $this->assertEquals($Item->getController(), $expected['controller']);
         $this->assertEquals($Item->getAction(), $expected['action']);
@@ -67,6 +66,7 @@ class RouterTest extends \Everon\TestCase
     
     public function dataProvider()
     {
+        
         $data = parse_ini_file($this->getFixtureDirectory().'config'.DIRECTORY_SEPARATOR.'router.ini', true);
         foreach ($data as $name => $item_data) {
             $data[$name][\Everon\Config\Item\Router::PROPERTY_MODULE] = 'Test';
@@ -77,8 +77,10 @@ class RouterTest extends \Everon\TestCase
          */
         $Factory = $this->buildFactory();
         $ConfigLoaderItem = $Factory->buildConfigLoaderItem('router.ini', $data);
-        $RouterConfig = $Factory->buildConfig('Router', $ConfigLoaderItem, function($data){return $data;});
-        
+        $RouterConfig = $Factory->buildConfig('Router', $ConfigLoaderItem, function(&$data){
+            $data['url'] = str_replace('%application.env.url%', '/', $data['url']);
+        });
+
         return [
             [$Factory,
                 $Factory->buildRequest($this->getServerDataForRequest([

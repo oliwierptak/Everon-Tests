@@ -23,7 +23,7 @@ class IniLoaderTest extends \Everon\TestCase
     public function testConstructor()
     {
         $Loader = new \Everon\Config\Loader($this->FrameworkEnvironment->getConfig(), $this->FrameworkEnvironment->getCacheConfig());
-        $this->assertInstanceOf('Everon\Interfaces\ConfigLoader', $Loader);
+        $this->assertInstanceOf('Everon\Config\Interfaces\Loader', $Loader);
         $this->assertEquals($Loader->getConfigDirectory(), $this->FrameworkEnvironment->getConfig());
         $this->assertEquals($Loader->getCacheDirectory(), $this->FrameworkEnvironment->getCacheConfig());
     }
