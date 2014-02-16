@@ -27,7 +27,7 @@ class ItemRouterTest extends \Everon\TestCase
         
         $Item = new \Everon\Config\Item\Router($data);
         
-        $this->assertInstanceOf('Everon\Interfaces\ConfigItemRouter', $Item);
+        $this->assertInstanceOf('Everon\Config\Interfaces\ItemRouter', $Item);
         $this->assertEquals($data['controller'], $Item->getController());
         $this->assertEquals($data['action'], $Item->getAction());
         $this->assertEquals($data['url'], $Item->getUrl());

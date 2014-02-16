@@ -9,20 +9,20 @@
  */
 namespace Everon\Test\Config;
 
-use Everon\Interfaces;
+use Everon\Config;
 
 class ExpressionMatcherTest extends \Everon\TestCase
 {
     public function testConstructor()
     {
         $Matcher = new \Everon\Config\ExpressionMatcher();
-        $this->assertInstanceOf('Everon\Interfaces\ConfigExpressionMatcher', $Matcher);
+        $this->assertInstanceOf('Everon\Config\Interfaces\ExpressionMatcher', $Matcher);
     }
 
     /**
      * @dataProvider dataProvider
      */
-    public function testCreateCompilerAndCompile(Interfaces\ConfigExpressionMatcher $Matcher, array $data)
+    public function testCreateCompilerAndCompile(Config\Interfaces\ExpressionMatcher $Matcher, array $data)
     {
         $data['application']['env']['url'] = '/testme';
         $data['test']['config']['url'] = '%application.env.url%';

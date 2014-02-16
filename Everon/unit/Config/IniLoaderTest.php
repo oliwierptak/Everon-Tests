@@ -9,7 +9,7 @@
  */
 namespace Everon\Test\Config;
 
-use Everon\Interfaces;
+use Everon\Config;
 
 class IniLoaderTest extends \Everon\TestCase
 {
@@ -31,7 +31,7 @@ class IniLoaderTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testLoad(Interfaces\ConfigLoader $ConfigLoader)
+    public function testLoad(Config\Interfaces\Loader $ConfigLoader)
     {
         $config_list = $ConfigLoader->load(false);
         $this->assertInternalType('array', $config_list);
@@ -51,7 +51,7 @@ class IniLoaderTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testLoadWithCache(Interfaces\ConfigLoader $ConfigLoader)
+    public function testLoadWithCache(Config\Interfaces\Loader $ConfigLoader)
     {
         file_put_contents($ConfigLoader->getCacheDirectory().'test.ini.php', "<?php \$cache = array ('test' => 2);");
 
@@ -74,7 +74,7 @@ class IniLoaderTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testRead(Interfaces\ConfigLoader $ConfigLoader)
+    public function testRead(Config\Interfaces\Loader $ConfigLoader)
     {
         $filename = $this->getConfigDirectory().'application.ini';
         $data = $ConfigLoader->read($filename);
@@ -85,7 +85,7 @@ class IniLoaderTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testSaveConfigToCache(Interfaces\ConfigLoader $ConfigLoader)
+    public function testSaveConfigToCache(Config\Interfaces\Loader $ConfigLoader)
     {
         $filename = $this->getConfigCacheDirectory().'application.ini';
         $cache_filename = $this->getConfigCacheDirectory().'application.ini.php';
@@ -110,7 +110,7 @@ class IniLoaderTest extends \Everon\TestCase
      * @expectedException \Everon\Exception\Config
      * @expectedExceptionMessage Unable to save config cache file: "test.ini"
      */
-    public function testSaveConfigToCacheShouldThrowExceptionOnError(Interfaces\ConfigLoader $ConfigLoader)
+    public function testSaveConfigToCacheShouldThrowExceptionOnError(Config\Interfaces\Loader $ConfigLoader)
     {
         $ex = new \Exception();
         $ConfigMock = $this->getMock('Everon\Interfaces\Config', [], [], '', false);

@@ -57,10 +57,10 @@ class FactoryTest extends \Everon\TestCase
      */
     public function testBuildConfigManager(Interfaces\Factory $Factory)
     {
-        $Matcher = $this->getMock('Everon\Interfaces\ConfigExpressionMatcher');
+        $Matcher = $this->getMock('Everon\Config\Interfaces\ExpressionMatcher');
         $Loader = $this->getMock('Everon\Interfaces\ConfigLoader');
         $ConfigManager = $Factory->buildConfigManager($Loader, $Matcher);
-        $this->assertInstanceOf('Everon\Interfaces\ConfigManager', $ConfigManager);
+        $this->assertInstanceOf('Everon\Config\Interfaces\Manager', $ConfigManager);
     }
 
     /**
@@ -107,7 +107,7 @@ class FactoryTest extends \Everon\TestCase
      */
     public function testBuildModel(Interfaces\Factory $Factory)
     {
-        $ConfigManager = $this->getMock('Everon\Interfaces\ConfigManager');
+        $ConfigManager = $this->getMock('Everon\Config\Interfaces\Manager');
         $Factory->getDependencyContainer()->register('ConfigManager', function() use ($ConfigManager) {
             return $ConfigManager;
         });
@@ -126,7 +126,7 @@ class FactoryTest extends \Everon\TestCase
     public function testBuildDomainManager(Interfaces\Factory $Factory)
     {
         $this->markTestSkipped('Not sure about the DomainManager\'s dependencies');
-        $ConfigManager = $this->getMock('Everon\Interfaces\ConfigManager');
+        $ConfigManager = $this->getMock('Everon\Config\Interfaces\Manager');
         $Factory->getDependencyContainer()->register('ConfigManager', function() use ($ConfigManager) {
             return $ConfigManager;
         });
@@ -166,7 +166,7 @@ class FactoryTest extends \Everon\TestCase
             \Everon\Config\Item::PROPERTY_DEFAULT => true,
         ]);
 
-        $this->assertInstanceOf('Everon\Interfaces\ConfigItemRouter', $RouteItem);
+        $this->assertInstanceOf('Everon\Config\Interfaces\ItemRouter', $RouteItem);
     }
 
     /**
@@ -279,7 +279,7 @@ class FactoryTest extends \Everon\TestCase
      */
     public function testBuildConfigManagerShouldThrowExceptionWhenWrongClass(Interfaces\Factory $FactoryMock)
     {
-        $Matcher = $this->getMock('Everon\Interfaces\ConfigExpressionMatcher');
+        $Matcher = $this->getMock('Everon\Config\Interfaces\ExpressionMatcher');
         $Loader = $this->getMock('Everon\Interfaces\ConfigLoader');
         $FactoryMock->buildConfigManager($Loader, $Matcher);
     }

@@ -17,13 +17,13 @@ class ManagerTest extends \Everon\TestCase
     {
         $Loader = $this->getMock('Everon\Interfaces\ConfigLoader');
         $Manager = new \Everon\Config\Manager($Loader);
-        $this->assertInstanceOf('Everon\Interfaces\ConfigManager', $Manager);
+        $this->assertInstanceOf('Everon\Config\Interfaces\Manager', $Manager);
     }
 
     /**
      * @dataProvider dataProvider
      */
-    public function testRegister(\Everon\Interfaces\ConfigManager $ConfigManager, \Everon\Interfaces\Config $Expected)
+    public function testRegister(\Everon\Config\Interfaces\Manager $ConfigManager, \Everon\Interfaces\Config $Expected)
     {
         $count = count($ConfigManager->getConfigs());
         $ConfigManager->unRegister($Expected->getName());
@@ -36,7 +36,7 @@ class ManagerTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testUnRegister(\Everon\Interfaces\ConfigManager $ConfigManager, \Everon\Interfaces\Config $Expected)
+    public function testUnRegister(\Everon\Config\Interfaces\Manager $ConfigManager, \Everon\Interfaces\Config $Expected)
     {
         $count = count($ConfigManager->getConfigs());
         $ConfigManager->unRegister($Expected->getName());
@@ -49,7 +49,7 @@ class ManagerTest extends \Everon\TestCase
      * @expectedException \Everon\Exception\Config
      * @expectedExceptionMessage Config with name: "test" already registered
      */
-    public function testRegisterShouldThrowExceptionWhenConfigAlreadyExists(\Everon\Interfaces\ConfigManager $ConfigManager, \Everon\Interfaces\Config $Expected)
+    public function testRegisterShouldThrowExceptionWhenConfigAlreadyExists(\Everon\Config\Interfaces\Manager $ConfigManager, \Everon\Interfaces\Config $Expected)
     {
         $ConfigManager->register($Expected);
         $ConfigManager->register($Expected);
@@ -58,7 +58,7 @@ class ManagerTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testLoadAndRegisterConfigs(\Everon\Interfaces\ConfigManager $ConfigManager, \Everon\Interfaces\Config $Expected)
+    public function testLoadAndRegisterConfigs(\Everon\Config\Interfaces\Manager $ConfigManager, \Everon\Interfaces\Config $Expected)
     {
         $Config = $ConfigManager->getConfigByName('application');
         $this->assertInstanceOf('Everon\Config', $Config);
@@ -74,7 +74,7 @@ class ManagerTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testSettersAndGetters(\Everon\Interfaces\ConfigManager $ConfigManager, \Everon\Interfaces\Config $Expected)
+    public function testSettersAndGetters(\Everon\Config\Interfaces\Manager $ConfigManager, \Everon\Interfaces\Config $Expected)
     {
         $Config = $ConfigManager->getConfigByName('application');
         $this->assertInstanceOf('Everon\Config', $Config);
@@ -91,7 +91,7 @@ class ManagerTest extends \Everon\TestCase
      * @expectedException \Everon\Exception\Config
      * @expectedExceptionMessage Invalid config name: wrong
      */
-    public function testGetConfigByNameShouldThrowExceptionWhenConfigFileNotFound(\Everon\Interfaces\ConfigManager $ConfigManager, \Everon\Interfaces\Config $Expected)
+    public function testGetConfigByNameShouldThrowExceptionWhenConfigFileNotFound(\Everon\Config\Interfaces\Manager $ConfigManager, \Everon\Interfaces\Config $Expected)
     {
         $Config = $ConfigManager->getConfigByName('wrong');
     }
@@ -99,7 +99,7 @@ class ManagerTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testRegisterWithCache(\Everon\Interfaces\ConfigManager $ConfigManager, \Everon\Interfaces\Config $Expected)
+    public function testRegisterWithCache(\Everon\Config\Interfaces\Manager $ConfigManager, \Everon\Interfaces\Config $Expected)
     {
         $ConfigManager->setIsCachingEnabled(true);
         $ConfigManager->unRegister($Expected->getName());
@@ -111,7 +111,7 @@ class ManagerTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testLoadAndRegisterConfigsWithCache(\Everon\Interfaces\ConfigManager $ConfigManager, \Everon\Interfaces\Config $Expected)
+    public function testLoadAndRegisterConfigsWithCache(\Everon\Config\Interfaces\Manager $ConfigManager, \Everon\Interfaces\Config $Expected)
     {
         $ConfigManager->setIsCachingEnabled(true);
 
@@ -125,7 +125,7 @@ class ManagerTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testGetConfigsWithCache(\Everon\Interfaces\ConfigManager $ConfigManager, \Everon\Interfaces\Config $Expected)
+    public function testGetConfigsWithCache(\Everon\Config\Interfaces\Manager $ConfigManager, \Everon\Interfaces\Config $Expected)
     {
         $ConfigManager->setIsCachingEnabled(true);
 
