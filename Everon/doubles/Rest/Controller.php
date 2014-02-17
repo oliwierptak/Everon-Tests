@@ -7,12 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Everon\Test;
+namespace Everon\Test\Rest;
 
-class MyController extends \Everon\Mvc\Controller implements \Everon\Interfaces\Controller
+class Controller extends \Everon\Mvc\Controller implements \Everon\Rest\Interfaces\Controller
 {
-    public function testOne()
-    {
-        $this->getView()->setOutput('test one');
-    }
+
 }
