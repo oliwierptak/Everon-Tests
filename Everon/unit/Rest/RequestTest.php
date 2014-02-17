@@ -14,8 +14,24 @@ class RequestTest extends \Everon\TestCase
 
     public function testConstructor()
     {
-        $Request = new \Everon\Rest\Request();
-        $this->assertInstanceOf('Everon\Rest\Interfaces\Request', $Request);
+        $Request = new \Everon\Rest\Request([
+            'SERVER_PROTOCOL'=> 'HTTP/1.1',
+            'REQUEST_METHOD'=> 'GET',
+            'REQUEST_URI'=> '/',
+            'QUERY_STRING'=> '?foo=bar',
+            'SERVER_NAME'=> 'everon.nova',
+            'SERVER_PORT'=> 80,
+            'SERVER_ADDR'=> '127.0.0.1',
+            'REMOTE_ADDR'=> '127.0.0.1',
+            'HTTPS'=> 'off',
+        ],[
+            'foo' => 'bar'
+        ],[],[]);
+
+        $this->assertInstanceOf('\Everon\Rest\Interfaces\Request', $Request);
+        $this->assertInternalType('array', $Request->getGetCollection());
+        $this->assertInternalType('array', $Request->getPostCollection());
+        $this->assertInternalType('array', $Request->getFileCollection());
     }
 
     public function dataProvider()
