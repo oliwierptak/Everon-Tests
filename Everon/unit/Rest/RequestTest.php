@@ -29,9 +29,9 @@ class RequestTest extends \Everon\TestCase
         ],[],[]);
 
         $this->assertInstanceOf('\Everon\Rest\Interfaces\Request', $Request);
-        $this->assertInternalType('array', $Request->getGetCollection());
-        $this->assertInternalType('array', $Request->getPostCollection());
-        $this->assertInternalType('array', $Request->getFileCollection());
+        $this->assertInternalType('array', $Request->getGetCollection()->toArray());
+        $this->assertInternalType('array', $Request->getPostCollection()->toArray());
+        $this->assertInternalType('array', $Request->getFileCollection()->toArray());
     }
 
     public function dataProvider()

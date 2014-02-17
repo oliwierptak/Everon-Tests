@@ -35,9 +35,9 @@ class RequestTest extends \Everon\TestCase
         ],[],[]);
         
         $this->assertInstanceOf('\Everon\Interfaces\Request', $Request);
-        $this->assertInternalType('array', $Request->getGetCollection());
-        $this->assertInternalType('array', $Request->getPostCollection());
-        $this->assertInternalType('array', $Request->getFileCollection());        
+        $this->assertInternalType('array', $Request->getGetCollection()->toArray());
+        $this->assertInternalType('array', $Request->getPostCollection()->toArray());
+        $this->assertInternalType('array', $Request->getFileCollection()->toArray());
     }
 
     /**
@@ -69,9 +69,9 @@ class RequestTest extends \Everon\TestCase
         $this->assertEquals($expected['protocol'], $Request->getProtocol());
         $this->assertFalse($Request->isSecure());
         
-        $Request->setPostCollection($Request->getPostCollection());
-        $Request->setGetCollection($Request->getGetCollection());
-        $Request->setFileCollection($Request->getFileCollection());
+        $Request->setPostCollection($Request->getPostCollection()->toArray());
+        $Request->setGetCollection($Request->getGetCollection()->toArray());
+        $Request->setFileCollection($Request->getFileCollection()->toArray());
     }
     
     /**
@@ -81,19 +81,19 @@ class RequestTest extends \Everon\TestCase
     {
         $this->assertFalse($Request->isSecure());
         
-        $Server = $Request->getServerCollection();
+        $Server = $Request->getServerCollection()->toArray();
         $Server['HTTPS'] = 'on';
         $Server['SERVER_PORT'] = 443;
         $Request->setServerCollection($Server);
         $this->assertTrue($Request->isSecure());
 
-        $Server = $Request->getServerCollection();
+        $Server = $Request->getServerCollection()->toArray();
         unset($Server['HTTPS']);
         $Server['SSL_HTTPS'] = 'on';
         $Request->setServerCollection($Server);
         $this->assertTrue($Request->isSecure());
-
-        $Server = $Request->getServerCollection();
+        
+        $Server = $Request->getServerCollection()->toArray();
         unset($Server['HTTPS']);
         unset($Server['SSL_HTTPS']);
         $Server['SERVER_PORT'] = 443;
@@ -139,14 +139,14 @@ class RequestTest extends \Everon\TestCase
     {
         if (static::$pass === 1) {
             $this->assertEquals($expected['url'], $Request->getUrl());
-            $this->assertEquals($expected['post'], $Request->getPostCollection());
+            $this->assertEquals($expected['post'], $Request->getPostCollection()->toArray());
             $this->assertEquals($expected['post']['login'], $Request->getPostParameter('login'));
             $this->assertEquals($expected['post']['password'], $Request->getPostParameter('password'));
         }
         
         if (static::$pass === 2) {
             $this->assertEquals($expected['url'], $Request->getUrl());
-            $this->assertEquals($expected['get'], $Request->getGetCollection());
+            $this->assertEquals($expected['get'], $Request->getGetCollection()->toArray());
             $this->assertEquals($expected['get']['param1'], $Request->getQueryParameter('param1'));
             $this->assertEquals($expected['get']['param2'], $Request->getQueryParameter('param2'));
         }
@@ -166,7 +166,7 @@ class RequestTest extends \Everon\TestCase
      */
     public function testSanitizeInput(\Everon\Interfaces\Request $Request, array $expected)
     {
-        $Server = $Request->getServerCollection();
+        $Server = $Request->getServerCollection()->toArray();
         $Server['REQUEST_URI'] = '<?php //this is wrong; ?>';
         $files = ['test'=> [
             'true' => '<?php phpinfo(); ?>',
@@ -174,7 +174,7 @@ class RequestTest extends \Everon\TestCase
         ]];
 
         $Request->setFileCollection($files);
-        $files = $Request->getFileCollection();
+        $files = $Request->getFileCollection()->toArray();
         $this->assertInternalType('array', $files);
 
         $method = $this->getProtectedMethod('\Everon\Request', 'sanitizeInput');
@@ -188,13 +188,13 @@ class RequestTest extends \Everon\TestCase
      */
     public function testGetHostNameFromGlobals(\Everon\Interfaces\Request $Request, array $expected)
     {
-        $Server = $Request->getServerCollection();
+        $Server = $Request->getServerCollection()->toArray();
         $Server['HTTP_HOST'] = $Server['SERVER_NAME'];
         unset($Server['SERVER_NAME']);
         $Request->setServerCollection($Server);
         $this->assertEquals($expected['path'], $Request->getPath());
 
-        $Server = $Request->getServerCollection();
+        $Server = $Request->getServerCollection()->toArray();
         unset($Server['HTTP_HOST']);
         unset($Server['SERVER_NAME']);
         $Request->setServerCollection($Server);
