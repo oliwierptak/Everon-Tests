@@ -37,9 +37,9 @@ class RequestValidatorTest extends \Everon\TestCase
      */
     public function testValidateShouldThrowExceptionWhenError(Interfaces\RequestValidator $Validator, Config\Interfaces\ItemRouter $RouteItem, Interfaces\Request $Request)
     {
-        $post = $Request->getPostCollection();
-        $post['password'] = '';
-        $Request->setPostCollection($post);
+        $PostCollection = $Request->getPostCollection();
+        $PostCollection->set('password', '');
+        $Request->setPostCollection($PostCollection->toArray());
         
         $result = $Validator->validate($RouteItem, $Request);
         $this->assertInternalType('array', $result);

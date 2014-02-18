@@ -14,7 +14,7 @@ class ApiKeyTest extends \Everon\TestCase
 
     public function testConstructor()
     {
-        $ApiKey = new \Everon\Rest\ApiKey();
+        $ApiKey = new \Everon\Rest\ApiKey('id', 'secret');
         $this->assertInstanceOf('Everon\Rest\Interfaces\ApiKey', $ApiKey);
     }
 

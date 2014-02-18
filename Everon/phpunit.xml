@@ -1,5 +1,5 @@
 <phpunit
-    bootstrap="bootstrap_mvc.php"
+    bootstrap="bootstrap_test.php"
     colors="true"
     stopOnError="true"
     stopOnFailure="true"

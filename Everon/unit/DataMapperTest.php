@@ -165,7 +165,7 @@ class DataMapperTest extends \Everon\TestCase
             ->method('execute')
             ->will($this->returnValue($PdoStatementMock));
 
-        $result = $Mapper->fetchOne(1);
+        $result = $Mapper->fetchOneById(1);
 
         $this->assertInternalType('array', $result);
     }
