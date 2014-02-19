@@ -35,10 +35,8 @@ class ClassLoaderTest extends \Everon\TestCase
 
     /**
      * @dataProvider dataProvider
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessagbe File for class: "test" could not be found
      */
-    public function testLoadShouldThrowExceptionWhenFileWasNotFound(\Everon\Interfaces\ClassLoader $Loader, \Everon\Interfaces\Environment $Environment)
+    public function testLoadShouldNotThrowExceptionWhenFileWasNotFound(\Everon\Interfaces\ClassLoader $Loader, \Everon\Interfaces\Environment $Environment)
     {
         $Loader->load('test_wrong_class');
     }
