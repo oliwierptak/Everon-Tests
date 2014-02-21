@@ -14,7 +14,7 @@ class ResponseTest extends \Everon\TestCase
     public function testConstructor()
     {
         $HeadersMock = $this->getMock('Everon\Http\Interfaces\HeaderCollection', [], [], '', false);
-        $Response = new \Everon\Http\Response('Guid', $HeadersMock);
+        $Response = new \Everon\Http\Response('RequestIdentifier', $HeadersMock);
         $this->assertInstanceOf('Everon\Http\Interfaces\Response', $Response);
     }
 
@@ -28,7 +28,7 @@ class ResponseTest extends \Everon\TestCase
         $html = $Response->toHtml();
         $headers = xdebug_get_headers();
         
-        $this->assertEquals($headers[0], 'EVRID:Guid');
+        $this->assertEquals($headers[0], 'EVRID:RequestIdentifier');
         $this->assertEquals($headers[1], 'content-type: text/html; charset="utf-8"');
         $this->assertInternalType('string', $html);
         $this->assertEquals('<b>test</b>', $html);
@@ -45,7 +45,7 @@ class ResponseTest extends \Everon\TestCase
         $json = $Response->toJson();
         $headers = xdebug_get_headers();
         
-        $this->assertEquals($headers[0], 'EVRID:Guid');
+        $this->assertEquals($headers[0], 'EVRID:RequestIdentifier');
         $this->assertEquals($headers[1], 'content-type: application/json');
         $this->assertInternalType('string', $json);
         $this->assertEquals('{"data":{"test":"yes"}}', $json);
@@ -62,7 +62,7 @@ class ResponseTest extends \Everon\TestCase
         $text = $Response->toText();
         $headers = xdebug_get_headers();
         
-        $this->assertEquals($headers[0], 'EVRID:Guid');
+        $this->assertEquals($headers[0], 'EVRID:RequestIdentifier');
         $this->assertEquals($headers[1], 'content-type: text/plain; charset="utf-8"');
         $this->assertInternalType('string', $text);
         $this->assertEquals('test', $text);
@@ -76,7 +76,7 @@ class ResponseTest extends \Everon\TestCase
          */
         $Factory = $this->buildFactory();
         $Headers = $Factory->buildHttpHeaderCollection([]); //cant use mock, phpunit complains about file not found
-        $Response = $Factory->buildHttpResponse('Guid', $Headers);
+        $Response = $Factory->buildHttpResponse('RequestIdentifier', $Headers);
 
         return [
             [$Response]

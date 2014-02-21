@@ -15,7 +15,7 @@ class ResponseTest extends \Everon\TestCase
     public function testConstructor()
     {
         $HeadersMock = $this->getMock('Everon\Http\HeaderCollection', [], [], '', false);
-        $Response = new \Everon\Rest\Response('Guid', $HeadersMock);
+        $Response = new \Everon\Rest\Response('RequestIdentifier', $HeadersMock);
         $this->assertInstanceOf('Everon\Rest\Interfaces\Response', $Response);
     }
 

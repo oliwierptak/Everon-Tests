@@ -34,9 +34,9 @@ $Container->register('Request', function() use ($Factory) {
 
 $Container->register('Response', function() use ($Factory) {
     $Factory->getDependencyContainer()->monitor('Response', ['Everon\Logger']);
-    $Logger = $Factory->getDependencyContainer()->resolve('Logger');
+    $RequestIdentifier = $Factory->getDependencyContainer()->resolve('RequestIdentifier');
     $Headers = $Factory->buildHttpHeaderCollection([]);
-    return $Factory->buildHttpResponse($Logger->getGuid(), $Headers);
+    return $Factory->buildRestResponse($RequestIdentifier->getValue(), $Headers);
 });
 //replace default Router
 $Container->register('Router', function() use ($Factory) {

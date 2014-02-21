@@ -13,14 +13,14 @@ class ClassLoaderTest extends \Everon\TestCase
 {
     public function setUp()
     {
-        $Loader = new \Everon\ClassLoader();
+        $Loader = new \Everon\ClassLoader(true);
         $Loader->unRegister();
     }
     
     public function testConstructor()
     {
         $ClassMap = new \Everon\ClassMap('');
-        $Loader = new \Everon\ClassLoader($ClassMap);
+        $Loader = new \Everon\ClassLoader(true, $ClassMap);
         $this->assertInstanceOf('Everon\Interfaces\ClassLoader', $Loader);
     }
 
@@ -35,15 +35,17 @@ class ClassLoaderTest extends \Everon\TestCase
 
     /**
      * @dataProvider dataProvider
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage File for class: "test_wrong_class" could not be found
      */
-    public function testLoadShouldNotThrowExceptionWhenFileWasNotFound(\Everon\Interfaces\ClassLoader $Loader, \Everon\Interfaces\Environment $Environment)
+    public function testLoadShouldThrowExceptionWhenFileWasNotFound(\Everon\Interfaces\ClassLoader $Loader, \Everon\Interfaces\Environment $Environment)
     {
         $Loader->load('test_wrong_class');
     }
 
     public function dataProvider()
     {
-        $Loader = new \Everon\ClassLoader(null);
+        $Loader = new \Everon\ClassLoader(true);
         $Environment = $this->FrameworkEnvironment;
         
         return [
