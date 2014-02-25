@@ -14,5 +14,5 @@ interface Manager extends \Everon\Domain\Interfaces\Manager
     /**s
      * @return \Everon\Domain\User\Repository;
      */
-    function getUserRepository();
+    function getAccountRepository();
 }
