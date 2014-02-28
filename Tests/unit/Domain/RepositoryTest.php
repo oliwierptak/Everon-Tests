@@ -85,7 +85,7 @@ class RepositoryTest extends \Everon\TestCase
             ->will($this->returnValue($EntityMock));
         
         $Repository->setMapper($DataMapperMock);
-        $EntityMock = $Repository->fetchEntityById(1);
+        $EntityMock = $Repository->getEntityById(1);
         
         $this->assertInstanceOf('Everon\Domain\Interfaces\Entity', $EntityMock);
     }

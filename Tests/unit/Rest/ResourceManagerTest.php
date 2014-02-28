@@ -14,7 +14,7 @@ class ResourceManagerTest extends \Everon\TestCase
 
     public function testConstructor()
     {
-        $Server = new \Everon\Rest\Resource\Manager();
+        $Server = new \Everon\Rest\Resource\Handler();
         $this->assertInstanceOf('Everon\Rest\Interfaces\ResourceManager', $Server);
     }
 

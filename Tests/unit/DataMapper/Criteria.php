@@ -85,15 +85,15 @@ class CriteriaTest extends \Everon\TestCase
      */
     function testGetOrderBySortSql(Criteria $Criteria)
     {
-        $order_by_sort_sql = $Criteria->getOrderBySortSql();
+        $order_by_sort_sql = $Criteria->getOrderByAndSortSql();
         $this->assertEquals('', $order_by_sort_sql);
 
         $Criteria->orderBy('login');
-        $order_by_sort_sql = $Criteria->getOrderBySortSql();
+        $order_by_sort_sql = $Criteria->getOrderByAndSortSql();
         $this->assertEquals('ORDER BY login ASC', $order_by_sort_sql);
 
         $Criteria->orderBy('id')->sortDesc();
-        $order_by_sort_sql = $Criteria->getOrderBySortSql();
+        $order_by_sort_sql = $Criteria->getOrderByAndSortSql();
         $this->assertEquals('ORDER BY id DESC', $order_by_sort_sql);
     }
 
