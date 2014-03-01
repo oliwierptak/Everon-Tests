@@ -124,7 +124,7 @@ class RepositoryTest extends \Everon\TestCase
 
         $DataMapperMock = $this->getMock('Everon\Interfaces\DataMapper');
         $DataMapperMock->expects($this->once())
-            ->method('getSchemaTable')
+            ->method('getTable')
             ->will($this->returnValue($TableMock));
 
         $entity_data = [
