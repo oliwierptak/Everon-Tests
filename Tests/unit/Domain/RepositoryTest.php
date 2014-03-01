@@ -81,7 +81,7 @@ class RepositoryTest extends \Everon\TestCase
         $EntityMock = $this->getMock('Everon\Domain\Interfaces\Entity');
         $DomainManagerMock = $Repository->getDomainManager();
         $DomainManagerMock->expects($this->once())
-            ->method('getEntity')
+            ->method('buildEntity')
             ->will($this->returnValue($EntityMock));
         
         $Repository->setMapper($DataMapperMock);

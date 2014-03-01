@@ -32,7 +32,7 @@ class ManagerTest extends \Everon\TestCase
             ->will($this->returnValue($EntityMock));
         
         $DomainManager->setFactory($FactoryMock);
-        $Entity = $DomainManager->getEntity('User', 1, []);
+        $Entity = $DomainManager->buildEntity('User', 1, []);
         
         $this->assertInstanceOf('Everon\Domain\Interfaces\Entity', $Entity);
     }
