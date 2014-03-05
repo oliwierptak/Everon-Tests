@@ -9,6 +9,12 @@
  */
 namespace Everon\Test\Domain\User;
 
+use Everon\Domain;
+
 class Repository extends \Everon\Domain\Repository
 {
+    public function buildEntityRelations(Domain\Interfaces\Entity $Entity)
+    {
+        
+    }
 }
