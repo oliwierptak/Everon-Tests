@@ -9,13 +9,13 @@
  */
 namespace Everon\Test\Rest;
 
-class ResourceManagerTest extends \Everon\TestCase
+class ResourceHandlerTest extends \Everon\TestCase
 {
 
     public function testConstructor()
     {
-        $Server = new \Everon\Rest\Resource\Handler();
-        $this->assertInstanceOf('Everon\Rest\Interfaces\ResourceManager', $Server);
+        $Handler = new \Everon\Rest\Resource\Handler('some_url', 'v1', 'url', []);
+        $this->assertInstanceOf('Everon\Rest\Interfaces\ResourceHandler', $Handler);
     }
 
     public function dataProvider()

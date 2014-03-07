@@ -65,18 +65,20 @@ class RepositoryTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testFetchEntityByIdShouldReturnEntity(Repository $Repository, array $data)
+    public function testGetEntityByIdShouldReturnEntity(Repository $Repository, array $data)
     {
+        $TableMock = $this->getMock('Everon\DataMapper\Interfaces\Schema\Table');
+        $TableMock->expects($this->once())
+            ->method('getPk')
+            ->will($this->returnValue('id'));
+        
         $DataMapperMock = $this->getMock('Everon\Interfaces\DataMapper');
         $DataMapperMock->expects($this->once())
             ->method('fetchAll')
             ->will($this->returnValue([$data]));
         $DataMapperMock->expects($this->once())
-            ->method('getAndValidateId')
-            ->will($this->returnValue(1));
-        $DataMapperMock->expects($this->once())
-            ->method('getAndValidateId')
-            ->will($this->returnValue(1));
+            ->method('getTable')
+            ->will($this->returnValue($TableMock));
 
         $EntityMock = $this->getMock('Everon\Domain\Interfaces\Entity');
         $DomainManagerMock = $Repository->getDomainManager();

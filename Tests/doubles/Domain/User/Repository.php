@@ -10,10 +10,11 @@
 namespace Everon\Test\Domain\User;
 
 use Everon\Domain;
+use Everon\DataMapper\Interfaces\Criteria;
 
 class Repository extends \Everon\Domain\Repository
 {
-    public function buildEntityRelations(Domain\Interfaces\Entity $Entity)
+    public function buildEntityRelations(Domain\Interfaces\Entity $Entity, Criteria $Criteria)
     {
         
     }

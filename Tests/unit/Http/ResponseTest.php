@@ -28,8 +28,8 @@ class ResponseTest extends \Everon\TestCase
         $html = $Response->toHtml();
         $headers = xdebug_get_headers();
         
-        $this->assertEquals($headers[0], 'EVRID:RequestIdentifier');
-        $this->assertEquals($headers[1], 'content-type: text/html; charset="utf-8"');
+        $this->assertEquals($headers[0], 'content-type: text/html; charset="utf-8"');
+        $this->assertEquals($headers[1], 'EVRID: RequestIdentifier');
         $this->assertInternalType('string', $html);
         $this->assertEquals('<b>test</b>', $html);
         $this->assertEquals('text/html', $Response->getContentType());
@@ -44,9 +44,9 @@ class ResponseTest extends \Everon\TestCase
         $Response->setData(['test'=>'yes']);
         $json = $Response->toJson();
         $headers = xdebug_get_headers();
-        
-        $this->assertEquals($headers[0], 'EVRID:RequestIdentifier');
-        $this->assertEquals($headers[1], 'content-type: application/json');
+
+        $this->assertEquals($headers[0], 'content-type: application/json');
+        $this->assertEquals($headers[1], 'EVRID: RequestIdentifier');
         $this->assertInternalType('string', $json);
         $this->assertEquals('{"data":{"test":"yes"}}', $json);
         $this->assertEquals('application/json', $Response->getContentType());
@@ -61,9 +61,9 @@ class ResponseTest extends \Everon\TestCase
         $Response->setData('test');
         $text = $Response->toText();
         $headers = xdebug_get_headers();
-        
-        $this->assertEquals($headers[0], 'EVRID:RequestIdentifier');
-        $this->assertEquals($headers[1], 'content-type: text/plain; charset="utf-8"');
+
+        $this->assertEquals($headers[0], 'content-type: text/plain; charset="utf-8"');
+        $this->assertEquals($headers[1], 'EVRID: RequestIdentifier');
         $this->assertInternalType('string', $text);
         $this->assertEquals('test', $text);
         $this->assertEquals('text/plain', $Response->getContentType());

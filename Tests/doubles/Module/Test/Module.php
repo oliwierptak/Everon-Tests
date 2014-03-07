@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Everon\Test\Module\_Core;
+namespace Everon\Test\Module\Test;
 
 class Module extends \Everon\Module
 {

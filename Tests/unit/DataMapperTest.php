@@ -184,10 +184,7 @@ class DataMapperTest extends \Everon\TestCase
             ->method('execute')
             ->will($this->returnValue($PdoStatementMock));
 
-        $Criteria = $this->getMock('Everon\DataMapper\Interfaces\Criteria');
-        $Criteria->expects($this->once())
-            ->method('getWhereSql')
-            ->will($this->returnValue(['sql', []]));
+        $Criteria = new \Everon\DataMapper\Criteria();
         
         $result = $Mapper->fetchAll($Criteria);
         

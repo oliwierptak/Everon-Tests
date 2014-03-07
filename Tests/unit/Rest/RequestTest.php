@@ -26,7 +26,7 @@ class RequestTest extends \Everon\TestCase
             'HTTPS'=> 'off',
         ],[
             'foo' => 'bar'
-        ],[],[]);
+        ],[],[], 'url');
 
         $this->assertInstanceOf('\Everon\Rest\Interfaces\Request', $Request);
         $this->assertInternalType('array', $Request->getGetCollection()->toArray());

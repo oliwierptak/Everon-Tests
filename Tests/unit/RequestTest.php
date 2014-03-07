@@ -115,7 +115,7 @@ class RequestTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      * @expectedException \Everon\Exception\Request
-     * @expectedExceptionMessage Unrecognized http method: "wrong"
+     * @expectedExceptionMessage Unrecognized http method: "WRONG"
      */
     public function testValidateShouldThrowExceptionWhenWrongMethod(\Everon\Interfaces\Request $Request, array $expected)
     {
