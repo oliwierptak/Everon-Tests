@@ -7,6 +7,8 @@ $nesting = implode('..', array_fill(0, 4, DIRECTORY_SEPARATOR));
 $EVERON_ROOT =  realpath(dirname(__FILE__).$nesting).DIRECTORY_SEPARATOR;
 $EVERON_SOURCE_ROOT = implode(DIRECTORY_SEPARATOR, [$EVERON_ROOT, 'vendor', 'everon', 'everon', 'src', 'Everon']).DIRECTORY_SEPARATOR;
 
+@require_once($EVERON_ROOT.'vendor/autoload.php');
+
 require_once(
     implode(DIRECTORY_SEPARATOR,
         [$EVERON_SOURCE_ROOT, 'Config', 'Bootstrap.php'])
