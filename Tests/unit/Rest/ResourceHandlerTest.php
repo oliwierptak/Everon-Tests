@@ -14,7 +14,7 @@ class ResourceHandlerTest extends \Everon\TestCase
 
     public function testConstructor()
     {
-        $Handler = new \Everon\Rest\Resource\Handler('some_url', 'v1', 'url', []);
+        $Handler = new \Everon\Rest\Resource\Handler('some_url', ['v1'], 'url', []);
         $this->assertInstanceOf('Everon\Rest\Interfaces\ResourceHandler', $Handler);
     }
 
