@@ -12,7 +12,7 @@ namespace Everon\Test\Domain\Interfaces;
 interface Manager extends \Everon\Domain\Interfaces\Manager
 {
     /**s
-     * @return \Everon\Domain\User\Repository;
+     * @return \Everon\Test\Domain\User\Repository;
      */
-    function getAccountRepository();
+    function getRestAccountRepository();
 }
