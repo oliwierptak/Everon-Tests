@@ -41,7 +41,7 @@ class DataMapperTest extends \Everon\TestCase
         $Reader = $Factory->buildSchemaReader($PdoAdapter);
         $Schema = $Factory->buildSchema($Reader, $ConnectionManager);
         $Table = $Schema->getTable('user');
-        $Mapper = $Factory->buildDataMapper($Table, $Schema);
+        $Mapper = $Factory->buildDataMapper('User', $Table, $Schema);
         
         $entity_data = [
             'first_name' => 'John',
@@ -239,7 +239,7 @@ class DataMapperTest extends \Everon\TestCase
             ->method('getPk')
             ->will($this->returnValue('id'));
 
-        $Mapper = $this->buildFactory()->buildDataMapper($TableMock, $SchemaMock, 'Everon\Test\DataMapper');
+        $Mapper = $this->buildFactory()->buildDataMapper('User', $TableMock, $SchemaMock, 'Everon\Test\DataMapper');
         
         return [
             [$Mapper, $PdoAdapterMock]
