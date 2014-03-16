@@ -37,18 +37,6 @@ class RouterTest extends \Everon\TestCase
         $Item = $Router->getRouteByRequest($Request);
     }
     
-    
-    /**
-     * @dataProvider dataProvider
-     */
-    public function testGetRouteItemByRequest(\Everon\Interfaces\Factory $Factory, \Everon\Interfaces\Request $Request, \Everon\Config\Router $Config, $expected)
-    {
-        $Router = $Factory->buildRouter($Config, $Factory->buildRequestValidator());
-        $Item = $Router->getRouteByRequest($Request);
-        $this->assertInstanceOf('Everon\Config\Interfaces\ItemRouter', $Item);
-        $this->assertEquals($Item->getController(), $expected['controller']);
-        $this->assertEquals($Item->getAction(), $expected['action']);
-    }
 
     /**
      * @dataProvider dataProvider
