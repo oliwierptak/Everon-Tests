@@ -31,7 +31,7 @@ class ClientTest extends \Everon\TestCase
         $json = json_decode('{"data": {
             "href": "http:\/\/api.nova:80\/v1\/users\/1",
             "id": 1,
-            "email": "bla@bla.com",
+            "email": "test@test.com",
             "password": "easy",
             "userPermissions": {
                 "href": "http:\/\/api.nova:80\/v1\/users\/1\/userPermissions"
@@ -53,16 +53,16 @@ class ClientTest extends \Everon\TestCase
         $CurlAdapterMock = $Factory->buildRestCurlAdapter();
         $Client->setCurlAdapter($CurlAdapterMock);
         $result = $Client->get('users', 1);
+
+        $this->assertEquals($json, $result);
         
         $User = $Client->getDomainManager()->buildEntityFromArray('User', $result['data']);
         $Resource = $Client->getResourceManager()->buildResourceFromEntity($User, 'users', 'v1');
-        $Resource->getDomainEntity()->setEmail('oliwier');
-        sd($Resource, $Resource->getDomainEntity());
+        $Resource->getDomainEntity()->setEmail('foobar');
 
-        $data = $Resource->getDomainEntity()->toArray();
+        $data = $Resource->toArray();
         $Client->put('users', 1, $data);
-        
-        $this->assertEquals($json, $result);
+        $result = $Client->get('users', 1);
     }
 
 
@@ -74,10 +74,10 @@ class ClientTest extends \Everon\TestCase
         $url = $Client->getUrl('users');
         $this->assertEquals('http://api.nova/v1/users', $url);
         
-        $url = $Client->getUrl('users','1');
+        $url = $Client->getUrl('users', '1');
         $this->assertEquals('http://api.nova/v1/users/1', $url);
         
-        $url = $Client->getUrl('users','1','userPermissions');
+        $url = $Client->getUrl('users', '1','userPermissions');
         $this->assertEquals('http://api.nova/v1/users/1/userPermissions', $url);
     }
     
