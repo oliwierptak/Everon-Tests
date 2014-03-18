@@ -9,7 +9,7 @@
  */
 namespace Everon\Test\Rest;
 
-class Controller extends \Everon\Mvc\Controller implements \Everon\Rest\Interfaces\Controller
+class Controller extends \Everon\Rest\Controller implements \Everon\Rest\Interfaces\Controller
 {
 
 }

@@ -24,6 +24,7 @@ if ($Bootstrap->useEveronAutoload()) {
     $Bootstrap->getClassLoader()->add('Everon\DataMapper', $Environment->getDataMapper());
     $Bootstrap->getClassLoader()->add('Everon\Domain', $Environment->getDomain());
     $Bootstrap->getClassLoader()->add('Everon\Module', $Environment->getModule());
+    $Bootstrap->getClassLoader()->add('Everon\Rest', $Environment->getRest());
 }
 
 //cleanup global state after bootstrap, otherwise phpunit will complain, and $backupGlobalsBlacklist does not work
