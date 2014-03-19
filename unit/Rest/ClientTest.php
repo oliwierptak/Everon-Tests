@@ -26,9 +26,9 @@ class ClientTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testMakeRequest(Client $Client)
+    public function testGetRequest(Client $Client)
     {
-        $json = json_decode('{"data": {
+        $json = '{"data": {
             "href": "http:\/\/api.nova:80\/v1\/users\/1",
             "id": 1,
             "email": "test@test.com",
@@ -42,27 +42,17 @@ class ClientTest extends \Everon\TestCase
             "userRoles": {
                 "href": "http:\/\/api.nova:80\/v1\/users\/1\/userRoles"
             }
-        }}', true);
+        }}';
         
         $CurlAdapterMock = $Client->getCurlAdapter();
         $CurlAdapterMock->expects($this->once())
             ->method('get')
             ->will($this->returnValue($json));
 
-        $Factory = $this->buildFactory();
-        $CurlAdapterMock = $Factory->buildRestCurlAdapter();
-        $Client->setCurlAdapter($CurlAdapterMock);
         $result = $Client->get('users', 1);
-
-        $this->assertEquals($json, $result);
         
-        $User = $Client->getDomainManager()->buildEntityFromArray('User', $result['data']);
-        $Resource = $Client->getResourceManager()->buildResourceFromEntity($User, 'users', 'v1');
-        $Resource->getDomainEntity()->setEmail('foobar');
-
-        $data = $Resource->toArray();
-        $Client->put('users', 1, $data);
-        $result = $Client->get('users', 1);
+        $expected = json_decode($json, true);
+        $this->assertEquals($expected, $result);
     }
 
 
