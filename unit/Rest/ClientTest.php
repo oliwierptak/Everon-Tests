@@ -43,7 +43,7 @@ class ClientTest extends \Everon\TestCase
                 "href": "http:\/\/api.nova:80\/v1\/users\/1\/userRoles"
             }
         }}';
-        
+        $expected = json_decode($json, true);
         $CurlAdapterMock = $Client->getCurlAdapter();
         $CurlAdapterMock->expects($this->once())
             ->method('get')
@@ -51,7 +51,6 @@ class ClientTest extends \Everon\TestCase
 
         $result = $Client->get('users', 1);
         
-        $expected = json_decode($json, true);
         $this->assertEquals($expected, $result);
     }
 
