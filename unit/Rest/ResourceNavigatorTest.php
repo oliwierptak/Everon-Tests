@@ -36,6 +36,14 @@ class ResourceNavigatorTest extends \Everon\TestCase
             ->will($this->returnValue('id,-name'));
         $RequestMock->expects($this->at(3))
             ->method('getQueryParameter')
+            ->with('limit')
+            ->will($this->returnValue(null));
+        $RequestMock->expects($this->at(4))
+            ->method('getQueryParameter')
+            ->with('offset')
+            ->will($this->returnValue(null));
+        $RequestMock->expects($this->at(5))
+            ->method('getQueryParameter')
             ->with('collection')
             ->will($this->returnValue(null));
         

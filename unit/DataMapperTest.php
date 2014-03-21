@@ -21,7 +21,7 @@ class DataMapperTest extends \Everon\TestCase
     {
         $SchemaMock = $this->getMock('Everon\DataMapper\Interfaces\Schema');
         $TableMock = $this->getMock('Everon\DataMapper\Interfaces\Schema\Table', [], [],'', false);
-        $DataMapper = new DataMapper\MySql\User($TableMock, $SchemaMock);
+        $DataMapper = new DataMapper\PostgreSql\User($TableMock, $SchemaMock);
         $this->assertInstanceOf('Everon\Interfaces\DataMapper', $DataMapper);
     }
 
@@ -71,80 +71,6 @@ class DataMapperTest extends \Everon\TestCase
         $this->assertCount(10, $all);
     } 
     
-    /**
-     * @dataProvider dataProvider
-     */
-    public function testAddShouldInsertEntity(\Everon\Interfaces\DataMapper $Mapper, $PdoAdapterMock)
-    {
-        $entity_data = [
-            'id' => null,
-            'first_name' => 'John',
-            'last_name' => 'Doe'
-        ];
-        
-        $PdoAdapterMock->expects($this->once())
-            ->method('insert')
-            ->will($this->returnValue(1));
-        
-        $Entity = new \Everon\Test\Domain\User\Entity(null, $entity_data);
-        $id = $Mapper->add($Entity);
-        
-        $this->assertInstanceOf('Everon\Test\Domain\User\Entity', $Entity);
-        $this->assertEquals(null, $Entity->getId());
-        $this->assertEquals(1, $id);
-        $this->assertTrue($Entity->isNew()); //repository should maintain that
-    }
-    
-    /**
-     * @dataProvider dataProvider
-     */
-    public function testSaveShouldUpdateEntity(\Everon\Interfaces\DataMapper $Mapper, $PdoAdapterMock)
-    {
-        $entity_data = [
-            'id' => 1,
-            'first_name' => 'John',
-            'last_name' => 'Doe'
-        ];
-        
-        $PdoAdapterMock->expects($this->once())
-            ->method('update')
-            ->will($this->returnValue(1));
-        
-        $Entity = new \Everon\Test\Domain\User\Entity(1, $entity_data);
-        $result = $Mapper->save($Entity);
-        $Entity->persist($Entity->getId(), $entity_data); //usually called in Repository
-        
-        $this->assertInstanceOf('Everon\Test\Domain\User\Entity', $Entity);
-        $this->assertEquals(1, $Entity->getId());
-        $this->assertEquals(1, $result);
-        $this->assertTrue($Entity->isPersisted());
-    }
-    
-    /**
-     * @dataProvider dataProvider
-     */
-    public function testDeleteShouldRemoveEntity(\Everon\Interfaces\DataMapper $Mapper, $PdoAdapterMock)
-    {
-        $entity_data = [
-            'id' => 1,
-            'first_name' => 'John',
-            'last_name' => 'Doe'
-        ];
-        
-        $PdoAdapterMock->expects($this->once())
-            ->method('delete')
-            ->will($this->returnValue(1));
-        
-        $Entity = new \Everon\Test\Domain\User\Entity(1, $entity_data);
-        $result = $Mapper->delete($Entity);
-        $Entity->delete(); //usually called in Repository
-        
-        $this->assertInstanceOf('Everon\Test\Domain\User\Entity', $Entity);
-        $this->assertNull($Entity->getId());
-        $this->assertEquals(1, $result);
-        $this->assertTrue($Entity->isDeleted());
-    }
-
     /**
      * @dataProvider dataProvider
      */
@@ -217,10 +143,10 @@ class DataMapperTest extends \Everon\TestCase
             ->will($this->returnValue('everon_test'));
         $SchemaMock->expects($this->once())
             ->method('getDriver')
-            ->will($this->returnValue('MySql'));
+            ->will($this->returnValue('PostgreSql'));
         $SchemaMock->expects($this->once())
             ->method('getAdapterName')
-            ->will($this->returnValue('MySql'));
+            ->will($this->returnValue('PostgreSql'));
         $SchemaMock->expects($this->once())
             ->method('getPdoAdapterByName')
             ->will($this->returnValue($PdoAdapterMock));
