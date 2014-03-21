@@ -160,7 +160,7 @@ class ManagerTest extends \Everon\TestCase
         $Environment->setConfig($this->getConfigDirectory());
         $Environment->setCacheConfig($this->getConfigCacheDirectory());
         
-        $FileSystem = $Factory->buildFileSystem($this->FrameworkEnvironment->getTest().'/Everon/Tests/doubles/');
+        $FileSystem = $Factory->buildFileSystem($this->getDoublesDirectory());
         
         $ConfigLoader = $Factory->buildConfigLoader($Environment->getConfig(), $Environment->getCacheConfig());
         $ConfigLoader->setFactory($Factory);
