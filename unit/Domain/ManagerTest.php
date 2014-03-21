@@ -15,8 +15,8 @@ class ManagerTest extends \Everon\TestCase
 {
     public function testConstructor()
     {
-        $ConnectionManagerMock = $this->getMock('Everon\DataMapper\Interfaces\ConnectionManager');
-        $Manager = new \Everon\Test\Domain\Manager($ConnectionManagerMock);
+        $DataMapperManagerMock = $this->getMock('Everon\DataMapper\Interfaces\Manager');
+        $Manager = new \Everon\Test\Domain\Manager($DataMapperManagerMock);
         $this->assertInstanceOf('Everon\Domain\Interfaces\Handler', $Manager);
     }
 
@@ -83,95 +83,54 @@ class ManagerTest extends \Everon\TestCase
      */
     public function testGetRepositoryShouldReturnRepository(\Everon\Domain\Interfaces\Manager $DomainManager)
     {
-        $PdoMock = $this->getMock('Everon\Test\MyPdo');
-        $PdoAdapterMock = $this->getMock('Everon\Interfaces\PdoAdapter');
+        $DataMapperManagerMock = $DomainManager->getDataMapperManager();
         $DataMapperMock = $this->getMock('Everon\Interfaces\DataMapper');
         $SchemaTableMock = $this->getMock('Everon\DataMapper\Interfaces\Schema\Table');
-        $SchemaReaderMock = $this->getMock('Everon\DataMapper\Interfaces\Schema\Reader');
-        
         $SchemaMock = $this->getMock('Everon\DataMapper\Interfaces\Schema');
+        $RepositoryMock = $this->getMock('Everon\Test\Domain\User\Repository', [], [], '', false);
+        $FactoryMock = $this->getMock('Everon\Interfaces\Factory');
+
         $SchemaMock->expects($this->once())
             ->method('getTable')
             ->will($this->returnValue($SchemaTableMock));
-        
-        $RepositoryMock = $this->getMock('Everon\Test\Domain\User\Repository', [], [], '', false);
-        
-        $FactoryMock = $this->getMock('Everon\Interfaces\Factory');
+        $DataMapperManagerMock->expects($this->once())
+            ->method('getSchema')
+            ->will($this->returnValue($SchemaMock));
+
         $FactoryMock->expects($this->once())
             ->method('buildDataMapper')
             ->will($this->returnValue($DataMapperMock));
         $FactoryMock->expects($this->once())
             ->method('buildDomainRepository')
             ->will($this->returnValue($RepositoryMock));
-        $FactoryMock->expects($this->once())
-            ->method('buildPdo')
-            ->will($this->returnValue($PdoMock));
-        $FactoryMock->expects($this->once())
-            ->method('buildPdoAdapter')
-            ->will($this->returnValue($PdoAdapterMock));
-        $FactoryMock->expects($this->once())
-            ->method('buildSchemaReader')
-            ->will($this->returnValue($SchemaReaderMock));
-        $FactoryMock->expects($this->once())
-            ->method('buildSchema')
-            ->will($this->returnValue($SchemaMock));
 
         $DomainManager->setFactory($FactoryMock);
+        $DomainManager->setDataMapperManager($DataMapperManagerMock);
+        
         $Repository = $DomainManager->getRepository('User');
         
         $this->assertInstanceOf('Everon\Test\Domain\User\Repository', $Repository);
     }
-
-    /**
-     * @dataProvider dataProvider
-     */
-    public function testGetSchemaShouldReturnSchema(\Everon\Domain\Interfaces\Manager $DomainManager)
-    {
-        $PdoMock = $this->getMock('Everon\Test\MyPdo');
-        $PdoAdapterMock = $this->getMock('Everon\Interfaces\PdoAdapter');
-        $SchemaReaderMock = $this->getMock('Everon\DataMapper\Interfaces\Schema\Reader');
-        $SchemaMock = $this->getMock('Everon\DataMapper\Interfaces\Schema');
-
-        $FactoryMock = $this->getMock('Everon\Interfaces\Factory');
-        $FactoryMock->expects($this->once())
-            ->method('buildPdo')
-            ->will($this->returnValue($PdoMock));
-        $FactoryMock->expects($this->once())
-            ->method('buildPdoAdapter')
-            ->will($this->returnValue($PdoAdapterMock));
-        $FactoryMock->expects($this->once())
-            ->method('buildSchemaReader')
-            ->will($this->returnValue($SchemaReaderMock));
-        $FactoryMock->expects($this->once())
-            ->method('buildSchema')
-            ->will($this->returnValue($SchemaMock));
-
-        $DomainManager->setFactory($FactoryMock);
-        $Schema = $DomainManager->getSchema('everon_test');
-
-        $this->assertInstanceOf('Everon\DataMapper\Interfaces\Schema', $Schema);
-    }
     
     public function dataProvider()
     {
-        /**
-         * @var \Everon\DataMapper\Interfaces\ConnectionManager $ConnectionManagerMock
-         */
-        $ConnectionMock = $this->getMock('Everon\DataMapper\Interfaces\ConnectionItem');
-        $ConnectionMock->expects($this->once())
-            ->method('toPdo')
-            ->will($this->returnValue(['dsn','user','password','options']));
+        $DataMapperManagerMock = $this->getMock('Everon\DataMapper\Interfaces\Manager');
+        $DomainMapperMock = $this->getMock('Everon\Domain\Interfaces\Mapper');
         
-        $ConnectionManagerMock = $this->getMock('Everon\DataMapper\Interfaces\ConnectionManager');
-        $ConnectionManagerMock->expects($this->once())
-            ->method('getConnectionByName')
-            ->with('schema')
-            ->will($this->returnValue($ConnectionMock));
+        $DomainMapperMock->expects($this->once())
+            ->method('getDataMapperNameByDomain')
+            ->will($this->returnValue('User'));
         
-        $DomainManager = $this->buildFactory()->buildDomainManager($ConnectionManagerMock);
+        $DataMapperManagerMock->expects($this->once())
+            ->method('getDomainMapper')
+            ->will($this->returnValue($DomainMapperMock));
+
+        $DataMapperManagerMock->setDomainMapper($DomainMapperMock);
+        
+        $DomainManager = $this->buildFactory()->buildDomainManager($DataMapperManagerMock);
         
         return [
-            [$DomainManager, $ConnectionManagerMock]
+            [$DomainManager]
         ];
     }
 

@@ -14,22 +14,30 @@ use Everon\Domain\Interfaces;
 
 class EntityTest extends \Everon\TestCase
 {
-    /**
-     * @dataProvider dataProvider
-     */    
-    function testConstructor(Entity $Entity, array $data)
+    function testConstructor()
     {
-        $Entity = new \Everon\Domain\Entity(1, $data);
+        $data = [
+            'id' => 1,
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+            'date_of_birth' => '1990-09-09',
+        ];
+        $Entity = new \Everon\Domain\Entity('id', $data);
         $this->assertInstanceOf('Everon\Domain\Interfaces\Entity', $Entity);
         $this->assertEquals(1, $Entity->getId());
     }
 
-    /**
-     * @dataProvider dataProvider
-     */
-    function testEntityStateShouldBeNewWhenIdNotSet(Entity $Entity, array $data)
+    function testEntityStateShouldBeNewWhenIdNotSet()
     {
-        $Entity = new \Everon\Domain\Entity(null, $data);
+        $data = [
+            'id' => null,
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+            'date_of_birth' => '1990-09-09',
+        ];
+        
+        $Factory = $this->buildFactory();
+        $Entity = $Factory->buildDomainEntity('User', 'id', $data, 'Everon\Test\Domain');
         $this->assertNull($Entity->getId());
         $this->assertTrue($Entity->isNew());
         $this->assertFalse($Entity->isDeleted());
@@ -118,9 +126,9 @@ class EntityTest extends \Everon\TestCase
      */
     function testPersistShouldSetIdAndDataAndMarkAsPersisted(Entity $Entity, array $data)
     {
-        $Entity->persist(12, $data);
+        $Entity->persist($data);
 
-        $this->assertEquals(12, $Entity->getId());
+        $this->assertEquals(1, $Entity->getId());
         $this->assertNull($Entity->getModifiedProperties());
         $this->assertEquals($data, $Entity->getData());
         $this->assertTrue($Entity->isPersisted());
@@ -171,12 +179,14 @@ class EntityTest extends \Everon\TestCase
     function dataProvider()
     {
         $data = [
+            'id' => 1,
             'first_name' => 'John',
             'last_name' => 'Doe',
             'date_of_birth' => '1990-09-09',
         ];
         
-        $Entity = $this->buildFactory()->buildDomainEntity('User', 1, $data, 'Everon\Test\Domain');
+        $Factory = $this->buildFactory();
+        $Entity = $Factory->buildDomainEntity('User', 'id', $data, 'Everon\Test\Domain');
                     
         return [
             [$Entity, $data]

@@ -26,7 +26,7 @@ class RepositoryTest extends \Everon\TestCase
      */
     public function testPersistShouldAddNewEntityAndMarkEntityAsPersisted(Repository $Repository, array $data)
     {
-        $Entity = $this->buildFactory()->buildDomainEntity('User', null, $data, 'Everon\Test\Domain');
+        $Entity = $this->buildFactory()->buildDomainEntity('User', 'id', $data, 'Everon\Test\Domain');
         $Repository->persist($Entity);
         $this->assertTrue($Entity->isPersisted());
     }
@@ -36,7 +36,7 @@ class RepositoryTest extends \Everon\TestCase
      */
     public function testPersistShouldUpdateEntityAndMarkEntityAsPersisted(Repository $Repository, array $data)
     {
-        $Entity = $this->buildFactory()->buildDomainEntity('User', 1, $data, 'Everon\Test\Domain');
+        $Entity = $this->buildFactory()->buildDomainEntity('User', 'id', $data, 'Everon\Test\Domain');
         $Repository->persist($Entity);
         $this->assertTrue($Entity->isPersisted());
     }
@@ -46,7 +46,7 @@ class RepositoryTest extends \Everon\TestCase
      */
     public function testRemoveShouldDeleteEntityAndMarkEntityAsDeleted(Repository $Repository, array $data)
     {
-        $Entity = $this->buildFactory()->buildDomainEntity('User', 1, $data, 'Everon\Test\Domain');
+        $Entity = $this->buildFactory()->buildDomainEntity('User', 'id', $data, 'Everon\Test\Domain');
         $Repository->remove($Entity);
         $this->assertNull($Entity->getId());
         $this->assertTrue($Entity->isDeleted());
@@ -67,6 +67,12 @@ class RepositoryTest extends \Everon\TestCase
      */
     public function testGetEntityByIdShouldReturnEntity(Repository $Repository, array $data)
     {
+        $EntityMock = $this->getMock('Everon\Domain\Interfaces\Entity');
+        $FactoryMock = $this->getMock('Everon\Interfaces\Factory');
+        $FactoryMock->expects($this->once())
+            ->method('buildDomainEntity')
+            ->will($this->returnValue($EntityMock));
+        
         $TableMock = $this->getMock('Everon\DataMapper\Interfaces\Schema\Table');
         $TableMock->expects($this->once())
             ->method('getPk')
@@ -74,19 +80,14 @@ class RepositoryTest extends \Everon\TestCase
         
         $DataMapperMock = $this->getMock('Everon\Interfaces\DataMapper');
         $DataMapperMock->expects($this->once())
-            ->method('fetchAll')
+            ->method('fetchOneById')
             ->will($this->returnValue([$data]));
         $DataMapperMock->expects($this->once())
             ->method('getTable')
             ->will($this->returnValue($TableMock));
 
-        $EntityMock = $this->getMock('Everon\Domain\Interfaces\Entity');
-        $DomainManagerMock = $Repository->getDomainManager();
-        $DomainManagerMock->expects($this->once())
-            ->method('buildEntity')
-            ->will($this->returnValue($EntityMock));
-        
         $Repository->setMapper($DataMapperMock);
+        $Repository->setFactory($FactoryMock);
         $EntityMock = $Repository->getEntityById(1);
         
         $this->assertInstanceOf('Everon\Domain\Interfaces\Entity', $EntityMock);
@@ -130,6 +131,7 @@ class RepositoryTest extends \Everon\TestCase
             ->will($this->returnValue($TableMock));
 
         $entity_data = [
+            'id' => 1,
             'first_name' => 'John',
             'last_name' => 'Doe',
             'date_of_birth' => '1990-09-09',
