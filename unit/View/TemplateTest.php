@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Everon\Test;
+namespace Everon\Test\View;
 
 class TemplateTest extends \Everon\TestCase
 {
@@ -52,7 +52,7 @@ class TemplateTest extends \Everon\TestCase
     }
 
     /**
-     * @expectedException Everon\Exception\Template
+     * @expectedException \Everon\Exception\Template
      * @expectedExceptionMessage Template file: "wrong_file_name.htm" was not found
      */
     public function testValidateTemplateFilenameShouldThrownExceptionWhenFileWasNotFound()

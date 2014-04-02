@@ -17,7 +17,7 @@ class RequestTest extends \Everon\TestCase
         $Request = new \Everon\Rest\Request([
             'SERVER_PROTOCOL'=> 'HTTP/1.1',
             'REQUEST_METHOD'=> 'GET',
-            'REQUEST_URI'=> '/',
+            'REQUEST_URI'=> '/v1/books',
             'QUERY_STRING'=> '?foo=bar',
             'SERVER_NAME'=> 'everon.nova',
             'SERVER_PORT'=> 80,
@@ -28,6 +28,7 @@ class RequestTest extends \Everon\TestCase
             'foo' => 'bar'
         ],[],[], 'url');
 
+        $this->assertEquals('v1', $Request->getVersion());
         $this->assertInstanceOf('\Everon\Rest\Interfaces\Request', $Request);
         $this->assertInternalType('array', $Request->getGetCollection()->toArray());
         $this->assertInternalType('array', $Request->getPostCollection()->toArray());
@@ -36,15 +37,7 @@ class RequestTest extends \Everon\TestCase
 
     public function dataProvider()
     {
-        $filename = $this->getConfigDirectory().'test.ini';
-        $ConfigLoaderItem = new \Everon\Config\Loader\Item($filename, parse_ini_file($filename, true));
-        $Compiler = function(&$item) {};        
-        $Config = new \Everon\Config('test', $ConfigLoaderItem, $Compiler);
-        $Config->setFactory($this->buildFactory());
-        
-        return [
-            [$Config]
-        ];
+
     }
 
 }
