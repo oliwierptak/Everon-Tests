@@ -27,7 +27,7 @@ class RepositoryTest extends \Everon\TestCase
     public function testPersistShouldAddNewEntityAndMarkEntityAsPersisted(Repository $Repository, array $data)
     {
         $Entity = $this->buildFactory()->buildDomainEntity('User', 'id', $data, 'Everon\Test\Domain');
-        $Repository->persist($Entity);
+        $Repository->persist($Entity, 1);
         $this->assertTrue($Entity->isPersisted());
     }
 
@@ -37,7 +37,7 @@ class RepositoryTest extends \Everon\TestCase
     public function testPersistShouldUpdateEntityAndMarkEntityAsPersisted(Repository $Repository, array $data)
     {
         $Entity = $this->buildFactory()->buildDomainEntity('User', 'id', $data, 'Everon\Test\Domain');
-        $Repository->persist($Entity);
+        $Repository->persist($Entity, 1);
         $this->assertTrue($Entity->isPersisted());
     }
     
@@ -47,7 +47,7 @@ class RepositoryTest extends \Everon\TestCase
     public function testRemoveShouldDeleteEntityAndMarkEntityAsDeleted(Repository $Repository, array $data)
     {
         $Entity = $this->buildFactory()->buildDomainEntity('User', 'id', $data, 'Everon\Test\Domain');
-        $Repository->remove($Entity);
+        $Repository->remove($Entity, 1);
         $this->assertNull($Entity->getId());
         $this->assertTrue($Entity->isDeleted());
     }
