@@ -21,7 +21,7 @@ class TemplateContainerTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testConstructFromData(\Everon\View\Template\Container $Container, $expected)
+    public function testConstructFromData(\Everon\View\Template\Container $Container)
     {
         $this->assertInstanceOf('\Everon\View\Template\Container', $Container);
     }
@@ -29,7 +29,7 @@ class TemplateContainerTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testSetAndGet(\Everon\View\Template\Container $Container, $expected)
+    public function testSetAndGet(\Everon\View\Template\Container $Container)
     {
         $Container->set('test', 'This is a test');
         $this->assertEquals('This is a test', $Container->get('test'));
@@ -38,7 +38,7 @@ class TemplateContainerTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testGetDefaultValue(\Everon\View\Template\Container $Container, $expected)
+    public function testGetDefaultValue(\Everon\View\Template\Container $Container)
     {
         $this->assertEquals('nono', $Container->get('NOT_ExiST', 'nono'));
     }
@@ -46,7 +46,7 @@ class TemplateContainerTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testTemplateContent(\Everon\View\Template\Container $Container, $expected)
+    public function testTemplateContent(\Everon\View\Template\Container $Container)
     {
         $Container->setTemplateContent('template_string');
         $this->assertEquals('template_string', $Container->getTemplateContent());
@@ -55,7 +55,7 @@ class TemplateContainerTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testGetToString(\Everon\View\Template\Container $Container, $expected)
+    public function testGetToString(\Everon\View\Template\Container $Container)
     {
         $this->assertEquals((string) $Container, '');
     }
@@ -63,7 +63,7 @@ class TemplateContainerTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testSetAndGetTemplate(\Everon\View\Template\Container $Template, $expected)
+    public function testSetAndGetTemplate(\Everon\View\Template\Container $Template)
     {
         $Include = new \Everon\View\Template\Container('', []);
         $Template->set('test', $Include);
