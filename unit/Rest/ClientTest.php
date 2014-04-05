@@ -83,7 +83,7 @@ class ClientTest extends \Everon\TestCase
             $versioning = $ConfigManager->getConfigValue('rest.versioning');
             $mapping = $ConfigManager->getConfigValue('rest.mapping', []);
             $rest_server_url = $rest['protocol'].$rest['host'].':'.$rest['port'].$rest['url'];
-            return $Factory->buildRestResourceManager($rest_server_url, $versioning['supported_versions'], $versioning['type'], $mapping);
+            return $Factory->buildRestResourceManager($rest_server_url, $versioning['supported_versions'], $versioning['type'], $mapping, 'Everon\Test\Rest\Resource');
         });
         
         $Href = new \Everon\Rest\Resource\Href('http://api.nova/', 'v1', 'url');
