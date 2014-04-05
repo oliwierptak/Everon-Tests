@@ -443,7 +443,7 @@ class FactoryTest extends \Everon\TestCase
     {
         $Factory = $this->buildFactory();
         $Container = $Factory->getDependencyContainer();
-        $ViewManager = $Factory->buildViewManager(['e' => '.htm'], $this->FrameworkEnvironment->getTheme(), $this->FrameworkEnvironment->getCacheView());
+        $ViewManager = $Factory->buildViewManager(['e' => '.htm'], $this->FrameworkEnvironment->getView(), $this->FrameworkEnvironment->getCacheView());
         $Container->register('ViewManager', function() use ($ViewManager) {
             return $ViewManager;
         });
