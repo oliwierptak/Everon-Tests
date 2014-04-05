@@ -98,7 +98,7 @@ class FactoryTest extends \Everon\TestCase
      */
     public function testBuildView(Interfaces\Factory $Factory)
     {
-        $View = $Factory->buildView('MyView', $this->getTemplateDirectory(), [], '.htm','Everon\Test');
+        $View = $Factory->buildView('MyView', $this->getTemplateDirectory(), '.htm','Everon\Test');
         $this->assertInstanceOf('Everon\Interfaces\View', $View);
     }
 
@@ -307,7 +307,7 @@ class FactoryTest extends \Everon\TestCase
      */
     public function testBuildViewShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
-        $Factory->buildView('Wrong', $this->getTemplateDirectory(), [], '.htm', 'Everon\Test');
+        $Factory->buildView('Wrong', $this->getTemplateDirectory(), '.htm', 'Everon\Test');
     }
     
     /**

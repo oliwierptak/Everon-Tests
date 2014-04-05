@@ -72,7 +72,7 @@ class ViewTest extends \Everon\TestCase
     public function dataProvider()
     {
         $Factory = $this->buildFactory();
-        $View = $Factory->buildView('MyView', $this->getTemplateDirectory(), [], '.htm', 'Everon\Test');
+        $View = $Factory->buildView('MyView', $this->getTemplateDirectory(), '.htm', 'Everon\Test');
         
         return [
             [$View]
