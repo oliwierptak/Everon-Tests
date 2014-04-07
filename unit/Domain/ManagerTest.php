@@ -118,7 +118,7 @@ class ManagerTest extends \Everon\TestCase
         $DomainMapperMock = $this->getMock('Everon\Domain\Interfaces\Mapper');
         
         $DomainMapperMock->expects($this->once())
-            ->method('getDataMapperNameByDomain')
+            ->method('getByDomainName')
             ->will($this->returnValue('User'));
         
         $DataMapperManagerMock->expects($this->once())
