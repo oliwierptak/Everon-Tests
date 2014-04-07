@@ -11,7 +11,7 @@ $EVERON_SOURCE_ROOT = implode(DIRECTORY_SEPARATOR, [$EVERON_ROOT, 'vendor', 'eve
 
 require_once(
     implode(DIRECTORY_SEPARATOR,
-        [$EVERON_SOURCE_ROOT, 'Config', 'Bootstrap.php'])
+        [$EVERON_SOURCE_ROOT, 'Config', 'bootstrap.php'])
 );
 
 /**

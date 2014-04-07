@@ -15,7 +15,7 @@ class SessionTest extends \Everon\TestCase
 {
     public function testConstructor()
     {
-        $Session = new \Everon\Http\Session('RequestIdentifier', []);
+        $Session = new \Everon\Http\Session('RequestIdentifier');
         $this->assertInstanceOf('Everon\Http\Interfaces\Session', $Session);
     }
 
@@ -36,7 +36,7 @@ class SessionTest extends \Everon\TestCase
          * @var \Everon\Interfaces\Factory $Factory
          */
         $Factory = $this->buildFactory();
-        $Session = $Factory->buildHttpSession('guid', []);
+        $Session = $Factory->buildHttpSession('guid');
 
         return [
             [$Session]
