@@ -33,7 +33,7 @@ class SessionTest extends \Everon\TestCase
     public function dataProvider()
     {
         /**
-         * @var \Everon\Interfaces\Factory $Factory
+         * @var \Everon\Application\Interfaces\Factory $Factory
          */
         $Factory = $this->buildFactory();
         $Session = $Factory->buildHttpSession('guid');

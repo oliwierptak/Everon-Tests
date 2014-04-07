@@ -19,7 +19,7 @@ class RouterTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testConstructor(\Everon\Interfaces\Factory $Factory, \Everon\Interfaces\Request $Request, \Everon\Config\Router $Config, $expected)
+    public function testConstructor(\Everon\Application\Interfaces\Factory $Factory, \Everon\Interfaces\Request $Request, \Everon\Config\Router $Config, $expected)
     {
         $Router = new \Everon\Router($Config, $Factory->buildRequestValidator());
         $this->assertInstanceOf('\Everon\Interfaces\Router', $Router);
@@ -29,7 +29,7 @@ class RouterTest extends \Everon\TestCase
      * @dataProvider dataProvider
      * @expectedException \Everon\Exception\RouteNotDefined
      */
-    public function testPageNotFound(\Everon\Interfaces\Factory $Factory, \Everon\Interfaces\Request $Request, \Everon\Config\Router $Config, $expected)
+    public function testPageNotFound(\Everon\Application\Interfaces\Factory $Factory, \Everon\Interfaces\Request $Request, \Everon\Config\Router $Config, $expected)
     {
         $Request->setPath('/wrong/page/htm');
         $Router = $Factory->buildRouter($Config, $Factory->buildRequestValidator());
@@ -41,7 +41,7 @@ class RouterTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testGetRouteItemByRequestShouldReturnDefault(\Everon\Interfaces\Factory $Factory, \Everon\Interfaces\Request $Request, \Everon\Config\Router $Config, $expected)
+    public function testGetRouteItemByRequestShouldReturnDefault(\Everon\Application\Interfaces\Factory $Factory, \Everon\Interfaces\Request $Request, \Everon\Config\Router $Config, $expected)
     {
         $Router = $Factory->buildRouter($Config, $Factory->buildRequestValidator());
         $Item = $Router->getRouteByRequest($Request);

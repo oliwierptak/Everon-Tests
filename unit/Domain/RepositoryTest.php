@@ -68,7 +68,7 @@ class RepositoryTest extends \Everon\TestCase
     public function testGetEntityByIdShouldReturnEntity(Repository $Repository, array $data)
     {
         $EntityMock = $this->getMock('Everon\Domain\Interfaces\Entity');
-        $FactoryMock = $this->getMock('Everon\Interfaces\Factory');
+        $FactoryMock = $this->getMock('Everon\Application\Interfaces\Factory');
         $FactoryMock->expects($this->once())
             ->method('buildDomainEntity')
             ->will($this->returnValue($EntityMock));

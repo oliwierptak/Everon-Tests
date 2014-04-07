@@ -17,8 +17,8 @@ class FactoryTest extends \Everon\TestCase
 
     public function testConstructor()
     {
-        $FactoryInstance = new \Everon\Factory(new \Everon\Dependency\Container());
-        $this->assertInstanceOf('Everon\Interfaces\Factory', $FactoryInstance);
+        $FactoryInstance = new \Everon\Application\Factory(new \Everon\Application\Dependency\Container());
+        $this->assertInstanceOf('Everon\Application\Interfaces\Factory', $FactoryInstance);
     }
 
     /**
@@ -255,9 +255,9 @@ class FactoryTest extends \Everon\TestCase
      * @expectedException \Everon\Exception\Factory
      * @expectedExceptionMessage Console initialization error
      */
-    public function testBuildCoreConsoleShouldThrowExceptionWhenWrongClass(Interfaces\Factory $FactoryMock)
+    public function testBuildCoreConsoleShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
-        $FactoryMock->buildConsole();
+        $Factory->buildConsole();
     }
     
     /**
@@ -265,11 +265,11 @@ class FactoryTest extends \Everon\TestCase
      * @expectedException \Everon\Exception\Factory
      * @expectedExceptionMessage Config: "test_config" initialization error
      */
-    public function testBuildConfigShouldThrowExceptionWhenWrongClass(Interfaces\Factory $FactoryMock)
+    public function testBuildConfigShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
         $Compiler = function(){};
         $Item = new \Everon\Config\Loader\Item('wrong_filename', []);
-        $FactoryMock->buildConfig('test_config', $Item, $Compiler);
+        $Factory->buildConfig('test_config', $Item, $Compiler);
     }
     
     /**
@@ -277,11 +277,11 @@ class FactoryTest extends \Everon\TestCase
      * @expectedException \Everon\Exception\Factory
      * @expectedExceptionMessage ConfigManager initialization error
      */
-    public function testBuildConfigManagerShouldThrowExceptionWhenWrongClass(Interfaces\Factory $FactoryMock)
+    public function testBuildConfigManagerShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
         $Matcher = $this->getMock('Everon\Config\Interfaces\ExpressionMatcher');
         $Loader = $this->getMock('Everon\Config\Interfaces\Loader');
-        $FactoryMock->buildConfigManager($Loader, $Matcher);
+        $Factory->buildConfigManager($Loader, $Matcher);
     }
     
     /**
@@ -290,12 +290,12 @@ class FactoryTest extends \Everon\TestCase
      * @expectedExceptionMessage Controller: "Everon\Controller\Test" initialization error.
      * File for class: "Everon\Controller\Test" could not be found
      */
-    public function testBuildControllerShouldThrowExceptionWhenWrongClass(Interfaces\Factory $FactoryMock)
+    public function testBuildControllerShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
         $ViewManager = $this->getMock('Everon\Interfaces\ViewManager');
         $DomainManager = $this->getMock('Everon\Domain\Interfaces\Manager');
         $ModuleMock = $this->getMock('Everon\Interfaces\Module');
-        $FactoryMock->buildController('Test', $ModuleMock);
+        $Factory->buildController('Test', $ModuleMock);
     }
     
     /**
@@ -339,11 +339,11 @@ class FactoryTest extends \Everon\TestCase
      * @expectedException \Everon\Exception\Factory
      * @expectedExceptionMessage Router initialization error
      */
-    public function testBuildRouterShouldThrowExceptionWhenWrongClass(Interfaces\Factory $FactoryMock)
+    public function testBuildRouterShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
         $Config = $this->getMock('Everon\Interfaces\Config');
         $Validator = $this->getMock('Everon\Interfaces\RequestValidator');
-        $FactoryMock->buildRouter($Config, $Validator);
+        $Factory->buildRouter($Config, $Validator);
     }
     
     /**
@@ -351,9 +351,9 @@ class FactoryTest extends \Everon\TestCase
      * @expectedException \Everon\Exception\Factory
      * @expectedExceptionMessage ConfigItemRouter: "test" initialization error
      */
-    public function testBuildRouteItemThrowExceptionWhenWrongClass(Interfaces\Factory $FactoryMock)
+    public function testBuildRouteItemThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
-        $FactoryMock->buildConfigItemRouter('test', []);
+        $Factory->buildConfigItemRouter('test', []);
     }
     
     /**
@@ -361,10 +361,10 @@ class FactoryTest extends \Everon\TestCase
      * @expectedException \Everon\Exception\Factory
      * @expectedExceptionMessage Template initialization error
      */
-    public function testBuildTemplateThrowExceptionWhenWrongClass(Interfaces\Factory $FactoryMock)
+    public function testBuildTemplateThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
         $View = $this->getMock('Everon\Interfaces\View');
-        $FactoryMock->buildTemplate('', []);
+        $Factory->buildTemplate('', []);
     }
     
     /**
@@ -372,9 +372,9 @@ class FactoryTest extends \Everon\TestCase
      * @expectedException \Everon\Exception\Factory
      * @expectedExceptionMessage TemplateContainer initialization error
      */
-    public function testBuildTemplateContainerThrowExceptionWhenWrongClass(Interfaces\Factory $FactoryMock)
+    public function testBuildTemplateContainerThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
-        $FactoryMock->buildTemplateContainer('', []);
+        $Factory->buildTemplateContainer('', []);
     }
     
     /**
@@ -393,9 +393,9 @@ class FactoryTest extends \Everon\TestCase
      * @expectedException \Everon\Exception\Factory
      * @expectedExceptionMessage Logger initialization error
      */
-    public function testBuildLoggerThrowExceptionWhenWrongClass(Interfaces\Factory $FactoryMock)
+    public function testBuildLoggerThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
-        $FactoryMock->buildLogger($this->getLogDirectory(), false);
+        $Factory->buildLogger($this->getLogDirectory(), false);
     }
 
     /**
@@ -403,9 +403,9 @@ class FactoryTest extends \Everon\TestCase
      * @expectedException \Everon\Exception\Factory
      * @expectedExceptionMessage Response initialization error
      */
-    public function testBuildResponseShouldThrowExceptionWhenWrongClass(Interfaces\Factory $FactoryMock)
+    public function testBuildResponseShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
-        $FactoryMock->buildResponse('guid');
+        $Factory->buildResponse('guid');
     }
     
     /**
@@ -413,10 +413,10 @@ class FactoryTest extends \Everon\TestCase
      * @expectedException \Everon\Exception\Factory
      * @expectedExceptionMessage HttpResponse initialization error
      */
-    public function testBuildHttpResponseShouldThrowExceptionWhenWrongClass(Interfaces\Factory $FactoryMock)
+    public function testBuildHttpResponseShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
         $HeadersMock = $this->getMock('Everon\Http\Interfaces\HeaderCollection');
-        $FactoryMock->buildHttpResponse('guid', $HeadersMock);
+        $Factory->buildHttpResponse('guid', $HeadersMock);
     }
     
     /**
@@ -424,9 +424,9 @@ class FactoryTest extends \Everon\TestCase
      * @expectedException \Everon\Exception\Factory
      * @expectedExceptionMessage HttpHeaderCollection initialization error
      */
-    public function testBuildHttpHeaderCollectionShouldThrowExceptionWhenWrongClass(Interfaces\Factory $FactoryMock)
+    public function testBuildHttpHeaderCollectionShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
-        $FactoryMock->buildHttpHeaderCollection();
+        $Factory->buildHttpHeaderCollection();
     }
     
     /**
@@ -434,18 +434,24 @@ class FactoryTest extends \Everon\TestCase
      * @expectedException \Everon\Exception\Factory
      * @expectedExceptionMessage Request initialization error
      */
-    public function testBuildRequestShouldThrowExceptionWhenWrongClass(Interfaces\Factory $FactoryMock)
+    public function testBuildRequestShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
-        $FactoryMock->buildRequest([], [], [], []);
+        $Factory->buildRequest([], [], [], []);
     }
 
     public function dataProvider()
     {
         $Factory = $this->buildFactory();
         $Container = $Factory->getDependencyContainer();
-        $ViewManager = $Factory->buildViewManager(['e' => '.htm'], $this->FrameworkEnvironment->getView(), $this->FrameworkEnvironment->getCacheView());
-        $Container->register('ViewManager', function() use ($ViewManager) {
-            return $ViewManager;
+        $ViewManagerMock = $this->getMock('Everon\Interfaces\ViewManager');
+        $HttpSessionMock = $this->getMock('Everon\Http\Interfaces\Session');
+        
+        $Container->register('ViewManager', function() use ($ViewManagerMock) {
+            return $ViewManagerMock;
+        });
+
+        $Container->register('HttpSession', function() use ($HttpSessionMock) {
+            return $HttpSessionMock;
         });
         
         return [
@@ -455,16 +461,17 @@ class FactoryTest extends \Everon\TestCase
     
     public function dataProviderForExceptions()
     {
-        $FactoryMock = $this->getMockBuilder('Everon\Factory')->disableOriginalConstructor()
-            ->setMethods(['getDependencyContainer'])
-            ->getMock();
+        $DiMock = $this->getMock('Everon\Application\Interfaces\DependencyContainer');
 
-        $FactoryMock->expects($this->once())
-            ->method('getDependencyContainer')
+        $DiMock->expects($this->once())
+            ->method('inject')
             ->will($this->throwException(new \Exception));
+
+        $Factory = $this->buildFactory();
+        $Factory->setDependencyContainer($DiMock);
         
         return [
-            [$FactoryMock]
+            [$Factory]
         ];
     }
 

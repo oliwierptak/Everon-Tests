@@ -51,7 +51,7 @@ class ManagerTest extends \Everon\TestCase
         
         $ModuleMock = $this->getMock('Everon\Interfaces\Module');
         
-        $FactoryMock = $this->getMock('Everon\Interfaces\Factory');
+        $FactoryMock = $this->getMock('Everon\Application\Interfaces\Factory');
         $FactoryMock->expects($this->once())
             ->method('buildModule')
             ->will($this->returnValue($ModuleMock));

@@ -50,7 +50,7 @@ class ManagerTest extends \Everon\TestCase
         
         $EntityMock = $this->getMock('Everon\Domain\Interfaces\Entity');
         
-        $FactoryMock = $this->getMock('Everon\Interfaces\Factory');
+        $FactoryMock = $this->getMock('Everon\Application\Interfaces\Factory');
         $FactoryMock->expects($this->once())
             ->method('buildDomainEntity')
             ->will($this->returnValue($EntityMock));
@@ -67,7 +67,7 @@ class ManagerTest extends \Everon\TestCase
     public function testGetModelShouldReturnModel(\Everon\Domain\Interfaces\Manager $DomainManager)
     {
         $ModelMock = $this->getMock('Everon\Test\Domain\User\Model');
-        $FactoryMock = $this->getMock('Everon\Interfaces\Factory');
+        $FactoryMock = $this->getMock('Everon\Application\Interfaces\Factory');
         $FactoryMock->expects($this->once())
             ->method('buildDomainModel')
             ->will($this->returnValue($ModelMock));
@@ -88,7 +88,7 @@ class ManagerTest extends \Everon\TestCase
         $SchemaTableMock = $this->getMock('Everon\DataMapper\Interfaces\Schema\Table');
         $SchemaMock = $this->getMock('Everon\DataMapper\Interfaces\Schema');
         $RepositoryMock = $this->getMock('Everon\Test\Domain\User\Repository', [], [], '', false);
-        $FactoryMock = $this->getMock('Everon\Interfaces\Factory');
+        $FactoryMock = $this->getMock('Everon\Application\Interfaces\Factory');
 
         $SchemaMock->expects($this->once())
             ->method('getTable')

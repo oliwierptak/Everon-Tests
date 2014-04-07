@@ -75,7 +75,7 @@ class DependencyContainerTest extends \Everon\TestCase
     
     public function dataProvider()
     {
-        $Container = new \Everon\Dependency\Container();
+        $Container = new \Everon\Application\Dependency\Container();
         $Container->register('test', function() {
             return new \stdClass();
         });

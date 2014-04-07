@@ -129,7 +129,7 @@ class IniLoaderTest extends \Everon\TestCase
     public function dataProvider()
     {
         /**
-         * @var \Everon\Interfaces\Factory $Factory
+         * @var \Everon\Application\Interfaces\Factory $Factory
          */
         $Factory = $this->buildFactory();
         $ConfigLoader = $Factory->buildConfigLoader($this->getConfigDirectory(), $this->getConfigCacheDirectory());
