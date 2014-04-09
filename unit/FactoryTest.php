@@ -46,9 +46,27 @@ class FactoryTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
+    public function testBuildConsoleCore(Interfaces\Factory $Factory)
+    {
+        $Core = $Factory->buildConsole();
+        $this->assertInstanceOf('Everon\Interfaces\Core', $Core);
+    }
+
+    /**
+     * @dataProvider dataProvider
+     */
     public function testBuildMvcCore(Interfaces\Factory $Factory)
     {
         $Core = $Factory->buildMvc();
+        $this->assertInstanceOf('Everon\Interfaces\Core', $Core);
+    }
+
+    /**
+     * @dataProvider dataProvider
+     */
+    public function testBuildRestServerCore(Interfaces\Factory $Factory)
+    {
+        $Core = $Factory->buildRestServer();
         $this->assertInstanceOf('Everon\Interfaces\Core', $Core);
     }
 
@@ -253,11 +271,31 @@ class FactoryTest extends \Everon\TestCase
     /**
      * @dataProvider dataProviderForExceptions
      * @expectedException \Everon\Exception\Factory
-     * @expectedExceptionMessage Console initialization error
+     * @expectedExceptionMessage Core: "Console" initialization error
      */
     public function testBuildCoreConsoleShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
         $Factory->buildConsole();
+    }
+
+    /**
+     * @dataProvider dataProviderForExceptions
+     * @expectedException \Everon\Exception\Factory
+     * @expectedExceptionMessage Core: "Mvc" initialization error
+     */
+    public function testBuildCoreMvcShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
+    {
+        $Factory->buildMvc();
+    }
+
+    /**
+     * @dataProvider dataProviderForExceptions
+     * @expectedException \Everon\Exception\Factory
+     * @expectedExceptionMessage Core: "Server" initialization error
+     */
+    public function testBuildCoreRestServerShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
+    {
+        $Factory->buildRestServer();
     }
     
     /**
