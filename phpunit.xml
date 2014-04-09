@@ -27,12 +27,4 @@
         < log type="junit" target="build/logs/junit.xml" logIncompleteSkipped="false"/>
         <log type="testdox-html" target="build/logs/testdox.html"/ -->
     </logging>
-    <testsuites>
-        <testsuite name="Unit">
-            <directory>tests/everon/unit</directory>
-            <file>RequestTest.php</file>
-            <file>RouterTest.php</file>
-        </testsuite>
-    </testsuites>
-
 </phpunit>
