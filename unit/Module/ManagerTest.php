@@ -26,7 +26,7 @@ class ManagerTest extends \Everon\TestCase
      */
     function testGetModuleShouldReturnModule(Module\Interfaces\Manager $ModuleManager)
     {
-        $Module = $ModuleManager->getModule('TestModule');
+        $Module = $ModuleManager->getModule('Test');
         $this->assertInstanceOf('Everon\Interfaces\Module', $Module);
     }
     
@@ -34,6 +34,8 @@ class ManagerTest extends \Everon\TestCase
     {
         $Factory = $this->buildFactory();
         $Container = $Factory->getDependencyContainer();
+        
+        $FactoryWorkerMock = $this->getMock('Everon\Interfaces\FactoryWorker');
 
         $DirMock = $this->getMock('\SplFileInfo', ['isDot', 'getBasename'], [], '', false);
         $DirMock->expects($this->once())
@@ -41,7 +43,10 @@ class ManagerTest extends \Everon\TestCase
             ->will($this->returnValue(false));
         $DirMock->expects($this->any())
             ->method('getBasename')
-            ->will($this->returnValue('TestModule'));
+            ->will($this->returnValue('Test'));
+        $DirMock->expects($this->any())
+            ->method('getPathname')
+            ->will($this->returnValue($this->getDoublesDirectory().'Module'.DIRECTORY_SEPARATOR.'Test'));
         
         
         $FileSystemMock = $this->getMock('Everon\Interfaces\FileSystem');
@@ -55,6 +60,9 @@ class ManagerTest extends \Everon\TestCase
         $FactoryMock->expects($this->once())
             ->method('buildModule')
             ->will($this->returnValue($ModuleMock));
+        $FactoryMock->expects($this->once())
+            ->method('buildFactoryWorker')
+            ->will($this->returnValue($FactoryWorkerMock));
 
         $ViewManagerMock = $this->getMock('Everon\Interfaces\ViewManager');
         $Container->register('ViewManager', function() use ($ViewManagerMock) {
@@ -67,16 +75,16 @@ class ManagerTest extends \Everon\TestCase
         $ConfigManagerMock = $this->getMock('Everon\Config\Interfaces\Manager');
         $ConfigManagerMock->expects($this->once())
             ->method('getConfigValue')
-            ->will($this->returnValue(['TestModule']));
+            ->will($this->returnValue(['Test']));
 
         $ConfigManagerMock->expects($this->at(1))
             ->method('getConfigByName')
-            ->with('TestModule@module')
+            ->with('Test@module')
             ->will($this->returnValue($ModuleConfigMock));
 
         $ConfigManagerMock->expects($this->at(2))
             ->method('getConfigByName')
-            ->with('TestModule@router')
+            ->with('Test@router')
             ->will($this->returnValue($RouterConfigMock));
 
         $ModuleManager = $Factory->buildModuleManager();
