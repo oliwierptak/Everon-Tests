@@ -21,14 +21,8 @@ class ResponseTest extends \Everon\TestCase
 
     public function dataProvider()
     {
-        $filename = $this->getConfigDirectory().'test.ini';
-        $ConfigLoaderItem = new \Everon\Config\Loader\Item($filename, parse_ini_file($filename, true));
-        $Compiler = function(&$item) {};        
-        $Config = new \Everon\Config('test', $ConfigLoaderItem, $Compiler);
-        $Config->setFactory($this->buildFactory());
-        
         return [
-            [$Config]
+            []
         ];
     }
 
