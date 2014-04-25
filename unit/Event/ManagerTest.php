@@ -30,16 +30,16 @@ class ManagerTest extends \Everon\TestCase
         $Manager->registerAfter('test.event', $Context);
         $Manager->registerAfter('test.event', $Context);
         
-        $callbacks = $Manager->getEvents();
+        $events = $Manager->getEvents();
 
-        $this->assertArrayHasKey('test.event', $callbacks);
-        $this->assertArrayHasKey(\Everon\Event\Manager::DISPATCH_BEFORE, $callbacks['test.event']);
-        $this->assertArrayHasKey(\Everon\Event\Manager::DISPATCH_AFTER, $callbacks['test.event']);
+        $this->assertArrayHasKey('test.event', $events);
+        $this->assertArrayHasKey(\Everon\Event\Manager::DISPATCH_BEFORE, $events['test.event']);
+        $this->assertArrayHasKey(\Everon\Event\Manager::DISPATCH_AFTER, $events['test.event']);
         
-        $this->assertCount(4, $callbacks['test.event'][\Everon\Event\Manager::DISPATCH_BEFORE]);
-        $this->assertCount(4, $callbacks['test.event'][\Everon\Event\Manager::DISPATCH_AFTER]);
+        $this->assertCount(4, $events['test.event'][\Everon\Event\Manager::DISPATCH_BEFORE]);
+        $this->assertCount(4, $events['test.event'][\Everon\Event\Manager::DISPATCH_AFTER]);
         
-        $result = $callbacks['test.event'][\Everon\Event\Manager::DISPATCH_BEFORE][1]();
+        $result = $events['test.event'][\Everon\Event\Manager::DISPATCH_BEFORE][1]();
         $this->assertFalse($result);
     }
 
