@@ -22,27 +22,25 @@ class ManagerTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    function testRegisterBefore(\Everon\Event\Interfaces\Manager $Manager)
+    function testRegisterBefore(Interfaces\Manager $Manager, Interfaces\Context $Context)
     {
-        $Callback = function() {
-            return false;
-        };
+        $Manager->registerBefore('test.event', $Context);
+        $Manager->registerBefore('test.event', $Context);
         
-        $Manager->registerBefore('test.event', $Callback);
-        $Manager->registerBefore('test.event', $Callback);
-        $Manager->registerAfter('test.event', $Callback);
-        $Manager->registerAfter('test.event', $Callback);
+        $Manager->registerAfter('test.event', $Context);
+        $Manager->registerAfter('test.event', $Context);
         
-        $Property = $this->getProtectedProperty('Everon\Event\Manager', 'listeners');
-        $listeners = $Property->getValue($Manager);
+        $callbacks = $Manager->getEvents();
+
+        $this->assertArrayHasKey('test.event', $callbacks);
+        $this->assertArrayHasKey(\Everon\Event\Manager::DISPATCH_BEFORE, $callbacks['test.event']);
+        $this->assertArrayHasKey(\Everon\Event\Manager::DISPATCH_AFTER, $callbacks['test.event']);
         
-        s($listeners);
-        $this->assertArrayHasKey('test.event', $listeners);
-        $this->assertArrayHasKey(\Everon\Event\Manager::WHEN_BEFORE, $listeners['test.event']);
-        $this->assertArrayHasKey(\Everon\Event\Manager::WHEN_AFTER, $listeners['test.event']);
+        $this->assertCount(4, $callbacks['test.event'][\Everon\Event\Manager::DISPATCH_BEFORE]);
+        $this->assertCount(4, $callbacks['test.event'][\Everon\Event\Manager::DISPATCH_AFTER]);
         
-        $this->assertCount(2, $listeners['test.event'][\Everon\Event\Manager::WHEN_BEFORE][1]);
-        $this->assertCount(2, $listeners['test.event'][\Everon\Event\Manager::WHEN_AFTER][1]);
+        $result = $callbacks['test.event'][\Everon\Event\Manager::DISPATCH_BEFORE][1]();
+        $this->assertFalse($result);
     }
 
     
@@ -50,9 +48,15 @@ class ManagerTest extends \Everon\TestCase
     {
         $Factory = $this->buildFactory();
         $Manager = $Factory->buildEventManager();
+        
+        $Callback = function() {
+            return false;
+        };
+        
+        $Context = $Factory->buildEventContext($Callback);
 
         return [
-            [$Manager]
+            [$Manager, $Context]
         ];
     }
 }
