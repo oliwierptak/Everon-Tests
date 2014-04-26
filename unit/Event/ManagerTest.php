@@ -60,8 +60,6 @@ class ManagerTest extends \Everon\TestCase
 
     /**
      * @dataProvider dataProvider
-     * @expectedException \Everon\Event\Exception\EventManager
-     * @expectedExceptionMessage I was called first
      */
     function testDispatchBeforeFalseShouldStopPropagation(Interfaces\Manager $Manager, Interfaces\Context $Context)
     {
@@ -75,7 +73,7 @@ class ManagerTest extends \Everon\TestCase
 
         $ContextNew = clone $Context;
         $ContextNew->setCallback(function() {
-            throw new \Everon\Event\Exception\EventManager('I was called first');
+            return false;
         });
         $Manager->registerBefore('test.event', $ContextNew, 1000);
         
