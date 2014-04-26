@@ -69,7 +69,7 @@ class ManagerTest extends \Everon\TestCase
 
         $ContextNew = clone $Context;
         $ContextNew->setCallback(function() {
-            return false;
+            throw new \Everon\Event\Exception\EventManager('I was NEVER called');
         });
         $Manager->registerBefore('test.event', $ContextNew, 10);
 
