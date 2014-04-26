@@ -158,7 +158,7 @@ class ManagerTest extends \Everon\TestCase
             $Compiler
         );
 
-        $Environment = new Environment($this->FrameworkEnvironment->getRoot(), $this->FrameworkEnvironment->getEveronRoot());
+        $Environment = new Environment($this->FrameworkBootstrap->getEnvironment()->getRoot(), $this->FrameworkBootstrap->getEnvironment()->getEveronRoot());
         $Environment->setConfig($this->getConfigDirectory());
         $Environment->setCacheConfig($this->getConfigCacheDirectory());
         
@@ -169,7 +169,6 @@ class ManagerTest extends \Everon\TestCase
         
         $ConfigManager = $Factory->buildConfigManager($ConfigLoader);
         $ConfigManager->setFactory($Factory);
-        $ConfigManager->setEnvironment($Environment);
         $ConfigManager->setFileSystem($FileSystem);
         
         return [

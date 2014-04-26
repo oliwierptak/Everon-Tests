@@ -22,10 +22,10 @@ class IniLoaderTest extends \Everon\TestCase
     
     public function testConstructor()
     {
-        $Loader = new \Everon\Config\Loader($this->FrameworkEnvironment->getConfig(), $this->FrameworkEnvironment->getCacheConfig());
+        $Loader = new \Everon\Config\Loader($this->FrameworkBootstrap->getEnvironment()->getConfig(), $this->FrameworkBootstrap->getEnvironment()->getCacheConfig());
         $this->assertInstanceOf('Everon\Config\Interfaces\Loader', $Loader);
-        $this->assertEquals($Loader->getConfigDirectory(), $this->FrameworkEnvironment->getConfig());
-        $this->assertEquals($Loader->getCacheDirectory(), $this->FrameworkEnvironment->getCacheConfig());
+        $this->assertEquals($Loader->getConfigDirectory(), $this->FrameworkBootstrap->getEnvironment()->getConfig());
+        $this->assertEquals($Loader->getCacheDirectory(), $this->FrameworkBootstrap->getEnvironment()->getCacheConfig());
     }
 
     /**
@@ -37,7 +37,7 @@ class IniLoaderTest extends \Everon\TestCase
         $this->assertInternalType('array', $config_list);
 
         /**
-         * @var Interfaces\ConfigLoaderItem $ConfigItem
+         * @var \Everon\Config\Interfaces\LoaderItem $ConfigItem
          */
         $ConfigItem = $config_list['test']; 
         $config_filename = $ConfigItem->getFilename();
@@ -58,7 +58,7 @@ class IniLoaderTest extends \Everon\TestCase
         $config_list = $ConfigLoader->load(true);
 
         /**
-         * @var Interfaces\ConfigLoaderItem $ConfigItem
+         * @var \Everon\Config\Interfaces\LoaderItem $ConfigItem
          */
         $ConfigItem = $config_list['test'];
         $config_filename = $ConfigItem->getFilename();
