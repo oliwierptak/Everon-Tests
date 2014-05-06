@@ -107,7 +107,7 @@ class RequestValidatorTest extends \Everon\TestCase
             []
         );
 
-        $RouteItem = $Factory->buildConfigItemRouter('test_complex', [
+        $RouteItem = $Factory->buildConfigItem('test_complex', [
             \Everon\Config\Item::PROPERTY_NAME => 'test',
             \Everon\Config\Item\Router::PROPERTY_MODULE => 'test',
             'url' => '/',
@@ -118,7 +118,7 @@ class RequestValidatorTest extends \Everon\TestCase
                 'password' => '[[:alnum:]]{3,22}'
             ],
             \Everon\Config\Item::PROPERTY_DEFAULT => true,
-        ]);
+        ], 'Everon\Config\Item\Router');
         $Validator = new \Everon\RequestValidator();
         
         return [

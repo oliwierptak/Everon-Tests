@@ -173,7 +173,7 @@ class FactoryTest extends \Everon\TestCase
      */
     public function testBuildRouteItem(Interfaces\Factory $Factory)
     {
-        $RouteItem = $Factory->buildConfigItemRouter('test', [
+        $RouteItem = $Factory->buildConfigItem('test', [
             \Everon\Config\Item::PROPERTY_NAME => 'test',
             \Everon\Config\Item\Router::PROPERTY_MODULE => 'test',
             'url' => '/',
@@ -182,7 +182,7 @@ class FactoryTest extends \Everon\TestCase
             'get' => [],
             'post' => [],
             \Everon\Config\Item::PROPERTY_DEFAULT => true,
-        ]);
+        ], 'Everon\Config\Item\Router');
 
         $this->assertInstanceOf('Everon\Config\Interfaces\ItemRouter', $RouteItem);
     }
@@ -391,7 +391,7 @@ class FactoryTest extends \Everon\TestCase
      */
     public function testBuildRouteItemThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
-        $Factory->buildConfigItemRouter('test', []);
+        $Factory->buildConfigItem('test', [], 'Everon\Config\Item\Router');
     }
     
     /**
