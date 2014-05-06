@@ -25,13 +25,13 @@ class WidgetTest extends \Everon\TestCase
     public function testConstructor()
     {
         $ViewWidget = new \Everon\Test\View\Main\Widget\MyWidget();
-        $this->assertInstanceOf('Everon\Interfaces\ViewWidget', $ViewWidget);
+        $this->assertInstanceOf('Everon\View\Interfaces\Widget', $ViewWidget);
     }
 
     /**
      * @dataProvider dataProvider
      */
-    public function testRender(\Everon\Interfaces\ViewWidget $Widget)
+    public function testRender(\Everon\View\Interfaces\Widget $Widget)
     {
         $result = $Widget->render();
         $this->assertEquals('Template data',$result);
@@ -48,7 +48,7 @@ class WidgetTest extends \Everon\TestCase
         });
 
         /**
-         * @var \Everon\Interfaces\ViewWidget $Widget
+         * @var \Everon\View\Interfaces\Widget $Widget
          */
         $Widget = $ViewManager->createWidget('MyWidget', 'Everon\Test\View');
         return [

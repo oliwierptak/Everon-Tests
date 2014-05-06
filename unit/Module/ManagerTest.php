@@ -64,7 +64,7 @@ class ManagerTest extends \Everon\TestCase
             ->method('buildFactoryWorker')
             ->will($this->returnValue($FactoryWorkerMock));
 
-        $ViewManagerMock = $this->getMock('Everon\Interfaces\ViewManager');
+        $ViewManagerMock = $this->getMock('Everon\View\Interfaces\Manager');
         $Container->register('ViewManager', function() use ($ViewManagerMock) {
             return $ViewManagerMock;
         });

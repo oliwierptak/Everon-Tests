@@ -9,7 +9,7 @@
  */
 namespace Everon\Test;
 
-class MyView extends \Everon\View
+class MyView extends \Everon\View\AbstractView
 {
     public function testOne()
     {
