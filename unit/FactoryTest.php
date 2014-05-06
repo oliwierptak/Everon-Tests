@@ -387,7 +387,7 @@ class FactoryTest extends \Everon\TestCase
     /**
      * @dataProvider dataProviderForExceptions
      * @expectedException \Everon\Exception\Factory
-     * @expectedExceptionMessage ConfigItemRouter: "test" initialization error
+     * @expectedExceptionMessage ConfigItem: "Everon\Config\Item\Router[test]" initialization error
      */
     public function testBuildRouteItemThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
