@@ -48,11 +48,12 @@ class ManagerTest extends \Everon\TestCase
      */
     function testDispatch(Interfaces\Manager $Manager, Interfaces\Context $Context)
     {
+        $ControllerMock = $this->getMock('Everon\Interfaces\Controller');
         $Manager->registerBefore('test.event', $Context);
         $Manager->registerAfter('test.event', $Context);
         
-        $result_before = $Manager->dispatchBefore('test.event', $Context);
-        $result_after = $Manager->dispatchAfter('test.event', $Context);
+        $result_before = $Manager->dispatchBefore('test.event', $ControllerMock);
+        $result_after = $Manager->dispatchAfter('test.event', $ControllerMock);
         
         $this->assertTrue($result_before);
         $this->assertTrue($result_after);
@@ -63,6 +64,7 @@ class ManagerTest extends \Everon\TestCase
      */
     function testDispatchBeforeFalseShouldStopPropagation(Interfaces\Manager $Manager, Interfaces\Context $Context)
     {
+        $ControllerMock = $this->getMock('Everon\Interfaces\Controller');
         $Manager->registerBefore('test.event', $Context);
 
         $ContextNew = clone $Context;
@@ -77,7 +79,7 @@ class ManagerTest extends \Everon\TestCase
         });
         $Manager->registerBefore('test.event', $ContextNew, 1000);
         
-        $Manager->dispatchBefore('test.event');
+        $Manager->dispatchBefore('test.event', $ControllerMock);
     }
 
     
@@ -90,7 +92,7 @@ class ManagerTest extends \Everon\TestCase
             return true;
         };
         
-        $Context = $Factory->buildEventContext($Callback);
+        $Context = $Factory->buildEventContext($Callback, $Manager);
 
         return [
             [$Manager, $Context]
