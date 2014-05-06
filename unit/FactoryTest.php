@@ -253,7 +253,7 @@ class FactoryTest extends \Everon\TestCase
             'QUERY_STRING' => '',
         ]);
         
-        $Request = $Factory->buildRequest($server, [], [], []);
+        $Request = $Factory->buildHttpRequest($server, [], [], []);
         $this->assertInstanceOf('Everon\Interfaces\Request', $Request);
     }
 
@@ -271,7 +271,7 @@ class FactoryTest extends \Everon\TestCase
     /**
      * @dataProvider dataProviderForExceptions
      * @expectedException \Everon\Exception\Factory
-     * @expectedExceptionMessage Core: "Console" initialization error
+     * @expectedExceptionMessage Core: "Everon\Console\Core" initialization error.
      */
     public function testBuildCoreConsoleShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
@@ -281,7 +281,7 @@ class FactoryTest extends \Everon\TestCase
     /**
      * @dataProvider dataProviderForExceptions
      * @expectedException \Everon\Exception\Factory
-     * @expectedExceptionMessage Core: "Mvc" initialization error
+     * @expectedExceptionMessage Core: "Everon\Mvc\Core" initialization error.
      */
     public function testBuildCoreMvcShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
@@ -291,7 +291,7 @@ class FactoryTest extends \Everon\TestCase
     /**
      * @dataProvider dataProviderForExceptions
      * @expectedException \Everon\Exception\Factory
-     * @expectedExceptionMessage Core: "Server" initialization error
+     * @expectedExceptionMessage Core: "Everon\Rest\Server" initialization error.
      */
     public function testBuildCoreRestServerShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
@@ -474,7 +474,7 @@ class FactoryTest extends \Everon\TestCase
      */
     public function testBuildRequestShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
-        $Factory->buildRequest([], [], [], []);
+        $Factory->buildHttpRequest([], [], [], []);
     }
 
     public function dataProvider()

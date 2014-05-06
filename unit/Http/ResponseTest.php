@@ -48,7 +48,7 @@ class ResponseTest extends \Everon\TestCase
         $this->assertEquals($headers[0], 'content-type: application/json');
         $this->assertEquals($headers[1], 'EVRID: RequestIdentifier');
         $this->assertInternalType('string', $json);
-        $this->assertEquals('{"data":{"test":"yes"}}', $json);
+        $this->assertEquals('{"test":"yes"}', $json);
         $this->assertEquals('application/json', $Response->getContentType());
     }
 

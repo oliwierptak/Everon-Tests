@@ -11,7 +11,7 @@ namespace Everon\Test\View;
 
 use Everon\Helper;
 
-class ViewTest extends \Everon\TestCase
+class WidgetTest extends \Everon\TestCase
 {
     use Helper\Arrays;
 
@@ -39,7 +39,7 @@ class ViewTest extends \Everon\TestCase
 
     public function dataProvider()
     {
-        $fixture_directory = $this->getFixtureDirectory().'View'.DIRECTORY_SEPARATOR.'Main'.DIRECTORY_SEPARATOR;
+        $fixture_directory = $this->getFixtureDirectory().'View'.DIRECTORY_SEPARATOR;
         $Factory = $this->buildFactory();
         $Container = $Factory->getDependencyContainer();
         $ViewManager = $Factory->buildViewManager(['php' => '.php'], $fixture_directory, $this->getViewCacheDirectory());

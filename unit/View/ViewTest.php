@@ -71,7 +71,15 @@ class ViewTest extends \Everon\TestCase
 
     public function dataProvider()
     {
+        $fixture_directory = $this->getFixtureDirectory().'templates'.DIRECTORY_SEPARATOR.'Main'.DIRECTORY_SEPARATOR;
         $Factory = $this->buildFactory();
+        $Container = $Factory->getDependencyContainer();
+
+        $ViewManager = $Factory->buildViewManager(['php' => '.php'], $fixture_directory, $this->getViewCacheDirectory());
+        $Container->register('ViewManager', function() use ($ViewManager) {
+            return $ViewManager;
+        });
+
         $View = $Factory->buildView('MyView', $this->getTemplateDirectory(), '.htm', 'Everon\Test');
         
         return [
