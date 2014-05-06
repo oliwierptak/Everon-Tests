@@ -20,7 +20,7 @@ class RequestTest extends \Everon\TestCase
     
     public function testConstructor()
     {
-        $Request = new \Everon\Request([
+        $Request = new MyRequest([
             'SERVER_PROTOCOL'=> 'HTTP/1.1',
             'REQUEST_METHOD'=> 'GET',
             'REQUEST_URI'=> '/',
@@ -212,7 +212,7 @@ class RequestTest extends \Everon\TestCase
     public function dataProvider()
     {        
         return [[
-            new \Everon\Request($this->getServerDataForRequest([
+            new MyRequest($this->getServerDataForRequest([
                 'REQUEST_METHOD' => 'POST',
                 'REQUEST_URI' => '/login',
                 'QUERY_STRING' => '']),
@@ -235,7 +235,7 @@ class RequestTest extends \Everon\TestCase
                 'files' => []
             ]
         ],[
-            new \Everon\Request($this->getServerDataForRequest([
+            new MyRequest($this->getServerDataForRequest([
                 'REQUEST_METHOD' => 'GET',
                 'REQUEST_URI' => '/search?param1=val1&param2=val2',
                 'QUERY_STRING' => 'param1=val1&param2=val2']),
