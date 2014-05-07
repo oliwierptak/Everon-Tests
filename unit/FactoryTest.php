@@ -229,8 +229,9 @@ class FactoryTest extends \Everon\TestCase
     public function testBuildHttpResponse(Interfaces\Factory $Factory)
     {
         $HeadersMock = $this->getMock('Everon\Http\Interfaces\HeaderCollection');
-        $Response = $Factory->buildHttpResponse('guid', $HeadersMock);
-       $this->assertInstanceOf('Everon\Http\Interfaces\Response', $Response);
+        $CookiesMock = $this->getMock('Everon\Http\Interfaces\CookieCollection');
+        $Response = $Factory->buildHttpResponse('guid', $HeadersMock, $CookiesMock);
+        $this->assertInstanceOf('Everon\Http\Interfaces\Response', $Response);
     }
     
     /**
@@ -454,7 +455,8 @@ class FactoryTest extends \Everon\TestCase
     public function testBuildHttpResponseShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
         $HeadersMock = $this->getMock('Everon\Http\Interfaces\HeaderCollection');
-        $Factory->buildHttpResponse('guid', $HeadersMock);
+        $CookiesMock = $this->getMock('Everon\Http\Interfaces\CookieCollection');
+        $Response = $Factory->buildHttpResponse('guid', $HeadersMock, $CookiesMock);
     }
     
     /**
