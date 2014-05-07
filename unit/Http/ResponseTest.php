@@ -74,29 +74,8 @@ class ResponseTest extends \Everon\TestCase
      * @dataProvider dataProvider
      * @runInSeparateProcess
      */
-    public function testAddCookie(\Everon\Http\Interfaces\Response $Response)
+    public function AAtestAddCookie(\Everon\Http\Interfaces\Response $Response)
     {
-        /*$CookieMock = $this->getMock('Everon\Http\Interfaces\Cookie', [], [], '', false);
-        $CookieMock->expects($this->once())
-            ->method('getName')
-            ->will($this->returnValue('test'));
-        $CookieMock->expects($this->once())
-            ->method('getValue')
-            ->will($this->returnValue('test it'));
-        $CookieMock->expects($this->once())
-            ->method('getPath')
-            ->will($this->returnValue('/'));
-        $CookieMock->expects($this->once())
-            ->method('getDomain')
-            ->will($this->returnValue('www.example.com'));
-        $CookieMock->expects($this->once())
-            ->method('isSecure')
-            ->will($this->returnValue(false));
-        $CookieMock->expects($this->once())
-            ->method('isHttpOnly')
-            ->will($this->returnValue(false));*/
-        
-        //$Cookie = new \Everon\Http\Cookie('test', 'test it', date('2012-12-01 12:00:00', time()));
         $Cookie = new \Everon\Http\Cookie('test', 'test it', 0);
         
         $Response->addCookie($Cookie);
@@ -113,7 +92,62 @@ class ResponseTest extends \Everon\TestCase
         $this->assertEquals('test', $text);
         $this->assertEquals('text/plain', $Response->getContentType());
     }
-    
+
+    /**
+     * @dataProvider dataProvider
+     * @runInSeparateProcess
+     */
+    public function testDeleteCookie(\Everon\Http\Interfaces\Response $Response)
+    {
+        $Cookie = new \Everon\Http\Cookie('test', 'test it', '+1 year');
+
+        $Response->addCookie($Cookie);
+        $this->assertInstanceOf('Everon\Http\Interfaces\Cookie', $Response->getCookie($Cookie->getName()));
+        
+        $Response->deleteCookie($Cookie);
+
+        $Response->setData('test');
+        $text = $Response->toText();
+
+        $headers = xdebug_get_headers();
+
+        $D = new \DateTime('@'.$Cookie->getExpireDate());
+        $date = $D->format('D, d-M-Y H:i:s').' GMT';
+        
+        $this->assertEquals('Set-Cookie: test=test+it; expires='.$date.'; Max-Age=-31536000; path=/; httponly', $headers[0]);
+        $this->assertEquals('content-type: text/plain; charset="utf-8"', $headers[1]);
+        $this->assertEquals('EVRID: RequestIdentifier', $headers[2]);
+        $this->assertInternalType('string', $text);
+        $this->assertEquals('test', $text);
+        $this->assertEquals('text/plain', $Response->getContentType());
+    }
+
+    /**
+     * @dataProvider dataProvider
+     * @runInSeparateProcess
+     */
+    public function testGetCookie(\Everon\Http\Interfaces\Response $Response)
+    {
+        $Factory = $this->buildFactory();
+        $CookieCollection = $Factory->buildHttpCookieCollection(['test_me' => 'tests it']);
+        $Response->setCookieCollection($CookieCollection);
+        
+        $Cookie = $Response->getCookie('test_me');
+        $this->assertInstanceOf('Everon\Http\Interfaces\Cookie', $Cookie);
+
+        $Response->setData('test');
+        $text = $Response->toText();
+
+        $headers = xdebug_get_headers();
+
+        $this->assertEquals('Set-Cookie: test_me=tests+it; path=/; httponly', $headers[0]);
+        $this->assertEquals('content-type: text/plain; charset="utf-8"', $headers[1]);
+        $this->assertEquals('EVRID: RequestIdentifier', $headers[2]);
+        $this->assertInternalType('string', $text);
+        $this->assertEquals('test', $text);
+        $this->assertEquals('text/plain', $Response->getContentType());
+    }
+
     public function dataProvider()
     {
         /**
@@ -123,6 +157,14 @@ class ResponseTest extends \Everon\TestCase
         $Headers = $Factory->buildHttpHeaderCollection([]); //cant use mock, phpunit complains about file not found
         $Cookies = $Factory->buildHttpCookieCollection([]);
         $Response = $Factory->buildHttpResponse('RequestIdentifier', $Headers, $Cookies);
+
+        $Cookie = new \Everon\Http\Cookie('test_me', 'test it', 0);
+        $FactoryMock = $this->getMock('Everon\Application\Interfaces\Factory', [], [], '', false);
+        $FactoryMock->expects($this->once())
+            ->method('buildHttpCookie')
+            ->will($this->returnValue($Cookie));
+            
+        $Response->setFactory($FactoryMock);
 
         return [
             [$Response]

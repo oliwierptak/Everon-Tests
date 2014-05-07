@@ -36,7 +36,7 @@ class CookieTest extends \Everon\TestCase
      */
     public function testNeverExpire(Cookie $Cookie)
     {
-        $Cookie->setExpireDateFromString('-15 minutes');
+        $Cookie->delete();
         $this->assertTrue($Cookie->hasExpired());
 
         $Cookie->neverExpire();
