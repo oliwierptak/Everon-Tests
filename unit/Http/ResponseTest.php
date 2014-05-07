@@ -111,10 +111,11 @@ class ResponseTest extends \Everon\TestCase
 
         $headers = xdebug_get_headers();
 
-        $D = new \DateTime('@'.$Cookie->getExpireDate());
+        $D = new \DateTime('@'.$Cookie->getExpire());
         $date = $D->format('D, d-M-Y H:i:s').' GMT';
+        $value = urlencode($Cookie->getJsonValue());
         
-        $this->assertEquals('Set-Cookie: test=test+it; expires='.$date.'; Max-Age=-31536000; path=/; httponly', $headers[0]);
+        $this->assertEquals('Set-Cookie: test='.$value.'; expires='.$date.'; Max-Age=-31536000; path=/; httponly', $headers[0]);
         $this->assertEquals('content-type: text/plain; charset="utf-8"', $headers[1]);
         $this->assertEquals('EVRID: RequestIdentifier', $headers[2]);
         $this->assertInternalType('string', $text);
@@ -140,7 +141,9 @@ class ResponseTest extends \Everon\TestCase
 
         $headers = xdebug_get_headers();
 
-        $this->assertEquals('Set-Cookie: test_me=tests+it; path=/; httponly', $headers[0]);
+        $value = urlencode($Cookie->getJsonValue());
+
+        $this->assertEquals('Set-Cookie: test_me='.$value.'; path=/; httponly', $headers[0]);
         $this->assertEquals('content-type: text/plain; charset="utf-8"', $headers[1]);
         $this->assertEquals('EVRID: RequestIdentifier', $headers[2]);
         $this->assertInternalType('string', $text);
