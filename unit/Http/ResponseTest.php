@@ -78,7 +78,7 @@ class ResponseTest extends \Everon\TestCase
     {
         $Cookie = new \Everon\Http\Cookie('test', 'test it', 0);
         
-        $Response->addCookie($Cookie);
+        $Response->setCookie($Cookie);
 
         $Response->setData('test');
         $text = $Response->toText();
@@ -101,7 +101,7 @@ class ResponseTest extends \Everon\TestCase
     {
         $Cookie = new \Everon\Http\Cookie('test', 'test it', '+1 year');
 
-        $Response->addCookie($Cookie);
+        $Response->setCookie($Cookie);
         $this->assertInstanceOf('Everon\Http\Interfaces\Cookie', $Response->getCookie($Cookie->getName()));
         
         $Response->deleteCookie($Cookie);
@@ -113,9 +113,8 @@ class ResponseTest extends \Everon\TestCase
 
         $D = new \DateTime('@'.$Cookie->getExpire());
         $date = $D->format('D, d-M-Y H:i:s').' GMT';
-        $value = urlencode($Cookie->getJsonValue());
         
-        $this->assertEquals('Set-Cookie: test='.$value.'; expires='.$date.'; Max-Age=-31536000; path=/; httponly', $headers[0]);
+        $this->assertEquals('Set-Cookie: test=test+it; expires='.$date.'; Max-Age=-31536000; path=/; httponly', $headers[0]);
         $this->assertEquals('content-type: text/plain; charset="utf-8"', $headers[1]);
         $this->assertEquals('EVRID: RequestIdentifier', $headers[2]);
         $this->assertInternalType('string', $text);
@@ -130,7 +129,7 @@ class ResponseTest extends \Everon\TestCase
     public function testGetCookie(\Everon\Http\Interfaces\Response $Response)
     {
         $Factory = $this->buildFactory();
-        $CookieCollection = $Factory->buildHttpCookieCollection(['test_me' => 'tests it']);
+        $CookieCollection = $Factory->buildHttpCookieCollection(['test_me' => 'test it']);
         $Response->setCookieCollection($CookieCollection);
         
         $Cookie = $Response->getCookie('test_me');
@@ -141,9 +140,7 @@ class ResponseTest extends \Everon\TestCase
 
         $headers = xdebug_get_headers();
 
-        $value = urlencode($Cookie->getJsonValue());
-
-        $this->assertEquals('Set-Cookie: test_me='.$value.'; path=/; httponly', $headers[0]);
+        $this->assertEquals('Set-Cookie: test_me=test+it; path=/; httponly', $headers[0]);
         $this->assertEquals('content-type: text/plain; charset="utf-8"', $headers[1]);
         $this->assertEquals('EVRID: RequestIdentifier', $headers[2]);
         $this->assertInternalType('string', $text);
