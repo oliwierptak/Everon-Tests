@@ -66,7 +66,7 @@ class RouterTest extends \Everon\TestCase
         $Factory = $this->buildFactory();
         $ConfigLoaderItem = $Factory->buildConfigLoaderItem('router.ini', $data);
         $RouterConfig = $Factory->buildConfig('Router', $ConfigLoaderItem, function(&$data){
-            $data['url'] = str_replace('%application.env.url%', '/', $data['url']);
+            $data['url'] = str_replace('%application.url.app%', '/', $data['url']);
         });
 
         return [

@@ -25,7 +25,7 @@ class ExpressionMatcherTest extends \Everon\TestCase
     public function testCreateCompilerAndCompile(Config\Interfaces\ExpressionMatcher $Matcher, array $data)
     {
         $data['application']['env']['url'] = '/testme';
-        $data['test']['config']['url'] = '%application.env.url%';
+        $data['test']['config']['url'] = '%application.url.app%';
         $Compiler = $Matcher->getCompiler($data);
         $Compiler($data);        
         $this->assertEquals($data['test']['config']['url'], $data['application']['env']['url']);
