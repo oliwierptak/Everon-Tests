@@ -11,7 +11,7 @@ namespace Everon\Test\View;
 
 use Everon\Helper;
 
-class ViewTest extends \Everon\TestCase
+class WidgetTest extends \Everon\TestCase
 {
     use Helper\Arrays;
 
@@ -25,13 +25,13 @@ class ViewTest extends \Everon\TestCase
     public function testConstructor()
     {
         $ViewWidget = new \Everon\Test\View\Main\Widget\MyWidget();
-        $this->assertInstanceOf('Everon\Interfaces\ViewWidget', $ViewWidget);
+        $this->assertInstanceOf('Everon\View\Interfaces\Widget', $ViewWidget);
     }
 
     /**
      * @dataProvider dataProvider
      */
-    public function testRender(\Everon\Interfaces\ViewWidget $Widget)
+    public function testRender(\Everon\View\Interfaces\Widget $Widget)
     {
         $result = $Widget->render();
         $this->assertEquals('Template data',$result);
@@ -39,7 +39,7 @@ class ViewTest extends \Everon\TestCase
 
     public function dataProvider()
     {
-        $fixture_directory = $this->getFixtureDirectory().'View'.DIRECTORY_SEPARATOR.'Main'.DIRECTORY_SEPARATOR;
+        $fixture_directory = $this->getFixtureDirectory().'View'.DIRECTORY_SEPARATOR;
         $Factory = $this->buildFactory();
         $Container = $Factory->getDependencyContainer();
         $ViewManager = $Factory->buildViewManager(['php' => '.php'], $fixture_directory, $this->getViewCacheDirectory());
@@ -48,7 +48,7 @@ class ViewTest extends \Everon\TestCase
         });
 
         /**
-         * @var \Everon\Interfaces\ViewWidget $Widget
+         * @var \Everon\View\Interfaces\Widget $Widget
          */
         $Widget = $ViewManager->createWidget('MyWidget', 'Everon\Test\View');
         return [

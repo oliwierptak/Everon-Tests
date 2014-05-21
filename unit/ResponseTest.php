@@ -28,7 +28,7 @@ class ResponseTest extends \Everon\TestCase
         $json = $Response->toJson();
         
         $this->assertInternalType('string', $json);
-        $this->assertEquals('{"data":{"test":"yes"}}', $json);
+        $this->assertEquals('{"test":"yes"}', $json);
     }
 
     /**

@@ -11,8 +11,8 @@ namespace Everon\Test\View\Main\Widget;
 
 class MyWidget extends \Everon\View\Widget
 {
-    public function getData()
+    protected function populate()
     {
-        return ['templateParameter' => 'Template data'];
+        $this->data = ['templateParameter' => 'Template data'];
     }
 }

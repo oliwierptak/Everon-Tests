@@ -96,7 +96,7 @@ class FactoryTest extends \Everon\TestCase
             return $RouterMock;
         });
         
-        $ViewManagerMock = $this->getMock('Everon\Interfaces\ViewManager');
+        $ViewManagerMock = $this->getMock('Everon\View\Interfaces\Manager');
         $Factory->getDependencyContainer()->register('ViewManager', function() use ($ViewManagerMock) {
             return $ViewManagerMock;
         });
@@ -117,7 +117,7 @@ class FactoryTest extends \Everon\TestCase
     public function testBuildView(Interfaces\Factory $Factory)
     {
         $View = $Factory->buildView('MyView', $this->getTemplateDirectory(), '.htm','Everon\Test');
-        $this->assertInstanceOf('Everon\Interfaces\View', $View);
+        $this->assertInstanceOf('Everon\View\Interfaces\View', $View);
     }
 
     /**
@@ -173,7 +173,7 @@ class FactoryTest extends \Everon\TestCase
      */
     public function testBuildRouteItem(Interfaces\Factory $Factory)
     {
-        $RouteItem = $Factory->buildConfigItemRouter('test', [
+        $RouteItem = $Factory->buildConfigItem('test', [
             \Everon\Config\Item::PROPERTY_NAME => 'test',
             \Everon\Config\Item\Router::PROPERTY_MODULE => 'test',
             'url' => '/',
@@ -182,7 +182,7 @@ class FactoryTest extends \Everon\TestCase
             'get' => [],
             'post' => [],
             \Everon\Config\Item::PROPERTY_DEFAULT => true,
-        ]);
+        ], 'Everon\Config\Item\Router');
 
         $this->assertInstanceOf('Everon\Config\Interfaces\ItemRouter', $RouteItem);
     }
@@ -193,7 +193,7 @@ class FactoryTest extends \Everon\TestCase
     public function testBuildTemplate(Interfaces\Factory $Factory)
     {
         $Template = $Factory->buildTemplate('', []);
-        $this->assertInstanceOf('Everon\Interfaces\TemplateContainer', $Template);
+        $this->assertInstanceOf('Everon\View\Interfaces\TemplateContainer', $Template);
     }
 
     /**
@@ -202,7 +202,7 @@ class FactoryTest extends \Everon\TestCase
     public function testBuildTemplateContainer(Interfaces\Factory $Factory)
     {
         $TemplateContainer = $Factory->buildTemplateContainer('', []);
-        $this->assertInstanceOf('Everon\Interfaces\TemplateContainer', $TemplateContainer);
+        $this->assertInstanceOf('Everon\View\Interfaces\TemplateContainer', $TemplateContainer);
     }
 
     /**
@@ -229,8 +229,9 @@ class FactoryTest extends \Everon\TestCase
     public function testBuildHttpResponse(Interfaces\Factory $Factory)
     {
         $HeadersMock = $this->getMock('Everon\Http\Interfaces\HeaderCollection');
-        $Response = $Factory->buildHttpResponse('guid', $HeadersMock);
-       $this->assertInstanceOf('Everon\Http\Interfaces\Response', $Response);
+        $CookiesMock = $this->getMock('Everon\Http\Interfaces\CookieCollection');
+        $Response = $Factory->buildHttpResponse('guid', $HeadersMock, $CookiesMock);
+        $this->assertInstanceOf('Everon\Http\Interfaces\Response', $Response);
     }
     
     /**
@@ -253,7 +254,7 @@ class FactoryTest extends \Everon\TestCase
             'QUERY_STRING' => '',
         ]);
         
-        $Request = $Factory->buildRequest($server, [], [], []);
+        $Request = $Factory->buildHttpRequest($server, [], [], []);
         $this->assertInstanceOf('Everon\Interfaces\Request', $Request);
     }
 
@@ -271,7 +272,7 @@ class FactoryTest extends \Everon\TestCase
     /**
      * @dataProvider dataProviderForExceptions
      * @expectedException \Everon\Exception\Factory
-     * @expectedExceptionMessage Core: "Console" initialization error
+     * @expectedExceptionMessage Core: "Everon\Console\Core" initialization error.
      */
     public function testBuildCoreConsoleShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
@@ -281,7 +282,7 @@ class FactoryTest extends \Everon\TestCase
     /**
      * @dataProvider dataProviderForExceptions
      * @expectedException \Everon\Exception\Factory
-     * @expectedExceptionMessage Core: "Mvc" initialization error
+     * @expectedExceptionMessage Core: "Everon\Mvc\Core" initialization error.
      */
     public function testBuildCoreMvcShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
@@ -291,7 +292,7 @@ class FactoryTest extends \Everon\TestCase
     /**
      * @dataProvider dataProviderForExceptions
      * @expectedException \Everon\Exception\Factory
-     * @expectedExceptionMessage Core: "Server" initialization error
+     * @expectedExceptionMessage Core: "Everon\Rest\Server" initialization error.
      */
     public function testBuildCoreRestServerShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
@@ -330,7 +331,7 @@ class FactoryTest extends \Everon\TestCase
      */
     public function testBuildControllerShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
-        $ViewManager = $this->getMock('Everon\Interfaces\ViewManager');
+        $ViewManager = $this->getMock('Everon\View\Interfaces\Manager');
         $DomainManager = $this->getMock('Everon\Domain\Interfaces\Manager');
         $ModuleMock = $this->getMock('Everon\Interfaces\Module');
         $Factory->buildController('Test', $ModuleMock);
@@ -387,11 +388,11 @@ class FactoryTest extends \Everon\TestCase
     /**
      * @dataProvider dataProviderForExceptions
      * @expectedException \Everon\Exception\Factory
-     * @expectedExceptionMessage ConfigItemRouter: "test" initialization error
+     * @expectedExceptionMessage ConfigItem: "Everon\Config\Item\Router[test]" initialization error
      */
     public function testBuildRouteItemThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
-        $Factory->buildConfigItemRouter('test', []);
+        $Factory->buildConfigItem('test', [], 'Everon\Config\Item\Router');
     }
     
     /**
@@ -401,7 +402,7 @@ class FactoryTest extends \Everon\TestCase
      */
     public function testBuildTemplateThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
-        $View = $this->getMock('Everon\Interfaces\View');
+        $View = $this->getMock('Everon\View\Interfaces\View');
         $Factory->buildTemplate('', []);
     }
     
@@ -454,7 +455,8 @@ class FactoryTest extends \Everon\TestCase
     public function testBuildHttpResponseShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
         $HeadersMock = $this->getMock('Everon\Http\Interfaces\HeaderCollection');
-        $Factory->buildHttpResponse('guid', $HeadersMock);
+        $CookiesMock = $this->getMock('Everon\Http\Interfaces\CookieCollection');
+        $Response = $Factory->buildHttpResponse('guid', $HeadersMock, $CookiesMock);
     }
     
     /**
@@ -474,14 +476,14 @@ class FactoryTest extends \Everon\TestCase
      */
     public function testBuildRequestShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
-        $Factory->buildRequest([], [], [], []);
+        $Factory->buildHttpRequest([], [], [], []);
     }
 
     public function dataProvider()
     {
         $Factory = $this->buildFactory();
         $Container = $Factory->getDependencyContainer();
-        $ViewManagerMock = $this->getMock('Everon\Interfaces\ViewManager');
+        $ViewManagerMock = $this->getMock('Everon\View\Interfaces\Manager');
         $HttpSessionMock = $this->getMock('Everon\Http\Interfaces\Session');
         
         $Container->register('ViewManager', function() use ($ViewManagerMock) {

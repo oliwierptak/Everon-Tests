@@ -66,12 +66,12 @@ class RouterTest extends \Everon\TestCase
         $Factory = $this->buildFactory();
         $ConfigLoaderItem = $Factory->buildConfigLoaderItem('router.ini', $data);
         $RouterConfig = $Factory->buildConfig('Router', $ConfigLoaderItem, function(&$data){
-            $data['url'] = str_replace('%application.env.url%', '/', $data['url']);
+            $data['url'] = str_replace('%application.url.app%', '/', $data['url']);
         });
 
         return [
             [$Factory,
-                $Factory->buildRequest($this->getServerDataForRequest([
+                $Factory->buildHttpRequest($this->getServerDataForRequest([
                     'REQUEST_METHOD' => 'GET',
                     'REQUEST_URI' => '/',
                     'QUERY_STRING' => '',
@@ -83,7 +83,7 @@ class RouterTest extends \Everon\TestCase
                 $RouterConfig, 
                 ['controller'=>'\Everon\Test\MyController', 'action'=>'one']],
             [$Factory,
-                $Factory->buildRequest($this->getServerDataForRequest([
+                $Factory->buildHttpRequest($this->getServerDataForRequest([
                     'REQUEST_METHOD' => 'POST',
                     'REQUEST_URI' => '/one/two',
                     'QUERY_STRING' => '',
@@ -95,7 +95,7 @@ class RouterTest extends \Everon\TestCase
                 $RouterConfig, 
                 ['controller'=>'\Everon\Test\MyController', 'action'=>'two']],
             [$Factory,
-                $Factory->buildRequest($this->getServerDataForRequest([
+                $Factory->buildHttpRequest($this->getServerDataForRequest([
                     'REQUEST_METHOD' => 'POST',
                     'REQUEST_URI' => '/login/submit/session/adf24ds34/redirect/account%5Csummary?and=something&else=2457',
                     'QUERY_STRING' => 'and=something&else=2457',

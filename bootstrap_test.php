@@ -12,6 +12,7 @@ require_once(
         [$EVERON_SOURCE_ROOT, 'Config', '_bootstrap.php'])
 );
 
+
 /**
  * @var Bootstrap $Bootstrap
  * @var Interfaces\Environment $Environment

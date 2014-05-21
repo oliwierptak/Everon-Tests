@@ -9,10 +9,6 @@
  */
 namespace Everon\Test;
 
-class MyView extends \Everon\View\AbstractView
+class MyRequest extends \Everon\Http\Request
 {
-    public function testOne()
-    {
-        $this->setContainer('view action test one');
-    }
 }
