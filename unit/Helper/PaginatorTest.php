@@ -71,6 +71,20 @@ class PaginatorTest extends \Everon\TestCase
         $this->assertEquals(3, $Paginator->getPageCount());
         $this->assertEquals(2, $Paginator->getCurrentPage());
     }
+
+    /**
+     * @dataProvider dataProvider
+     */
+    public function testSetOffsetShouldNotBeBiggerThenTotal(Interfaces\Paginator $Paginator)
+    {
+        $this->assertEquals(3, $Paginator->getPageCount());
+
+        $Paginator->setOffset(100);
+        $Paginator->setLimit(-1);
+
+        $this->assertEquals(3, $Paginator->getPageCount());
+        $this->assertEquals(3, $Paginator->getCurrentPage());
+    }
     
     public function dataProvider()
     {
