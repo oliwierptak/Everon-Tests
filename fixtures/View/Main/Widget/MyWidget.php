@@ -9,7 +9,7 @@
  */
 namespace Everon\Test\View\Main\Widget;
 
-class MyWidget extends \Everon\View\Widget
+class MyAbstractWidget extends \Everon\View\AbstractWidget
 {
     protected function populate()
     {
