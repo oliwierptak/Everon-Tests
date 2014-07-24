@@ -11,7 +11,7 @@ namespace Everon\Test\View;
 
 class TemplateTest extends \Everon\TestCase
 {
-    use \Everon\Helper\Date;
+    use \Everon\Helper\DateFormatter;
     
     protected static $template_filename1 = '';
     protected static $template_filename2 = '';
@@ -63,8 +63,8 @@ class TemplateTest extends \Everon\TestCase
 
     public function dataProvider()
     {
-        static::$template_filename1 = $this->getTmpDirectory().'template_1_'.$this->dateAsTime(time()).'.htm';
-        static::$template_filename2 = $this->getTmpDirectory().'template_2_'.$this->dateAsTime(time()).'.htm';
+        static::$template_filename1 = $this->getTmpDirectory().'template_1_'.$this->dateAsTime().'.htm';
+        static::$template_filename2 = $this->getTmpDirectory().'template_2_'.$this->dateAsTime().'.htm';
 
         return [
             [new \Everon\View\Template(static::$template_filename1, ['test.world' => 'World']),
