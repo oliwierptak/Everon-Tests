@@ -9,6 +9,6 @@
  */
 namespace Everon\Test\Module\Test;
 
-class Module extends \Everon\Module
+class Module extends \Everon\Module\AbstractModule
 {
 }

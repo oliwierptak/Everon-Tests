@@ -18,7 +18,7 @@ class ModuleTest extends \Everon\TestCase
     public function testConstructor()
     {
         $ConfigMock = $this->getMock('Everon\Interfaces\Config');
-        $Module = new Module\Test\Module('test', 'directory', $ConfigMock, $ConfigMock);
+        $Module = new Module\Test\AbstractModule('test', 'directory', $ConfigMock, $ConfigMock);
         $this->assertInstanceOf('Everon\Interfaces\Module', $Module);
     }
     
