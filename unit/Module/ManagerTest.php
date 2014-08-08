@@ -17,14 +17,14 @@ class ManagerTest extends \Everon\TestCase
     
     function testConstructor()
     {
-        $ModuleManager = new \Everon\Module\Manager();
+        $ModuleManager = new \Everon\Module\Handler();
         $this->assertInstanceOf('Everon\Module\Interfaces\Manager', $ModuleManager);
     }
 
     /**
      * @dataProvider dataProvider
      */
-    function testGetModuleShouldReturnModule(Module\Interfaces\Manager $ModuleManager)
+    function testGetModuleShouldReturnModule(Module\Interfaces\Handler $ModuleManager)
     {
         $Module = $ModuleManager->getModule('Test');
         $this->assertInstanceOf('Everon\Interfaces\Module', $Module);
