@@ -13,6 +13,6 @@ class Manager extends \Everon\Domain\Handler
 {
     public function getUserRepository()
     {
-        return $this->getRepository('User');
+        return $this->getRepositoryByName('User');
     }
 }

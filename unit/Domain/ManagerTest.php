@@ -73,7 +73,7 @@ class ManagerTest extends \Everon\TestCase
             ->will($this->returnValue($ModelMock));
 
         $DomainManager->setFactory($FactoryMock);
-        $Model = $DomainManager->getModel('User');
+        $Model = $DomainManager->getModelByName('User');
         
         $this->assertInstanceOf('Everon\Test\Domain\User\Model', $Model);
     }
@@ -107,7 +107,7 @@ class ManagerTest extends \Everon\TestCase
         $DomainManager->setFactory($FactoryMock);
         $DomainManager->setDataMapperManager($DataMapperManagerMock);
         
-        $Repository = $DomainManager->getRepository('User');
+        $Repository = $DomainManager->getRepositoryByName('User');
         
         $this->assertInstanceOf('Everon\Test\Domain\User\Repository', $Repository);
     }
