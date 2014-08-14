@@ -9,7 +9,7 @@
  */
 namespace Everon\Test\Rest\Resource;
 
-class Manager extends \Everon\Rest\Resource\Handler implements \Everon\Rest\Interfaces\ResourceManager
+class Manager extends \Everon\Rest\Resource\Handler implements \Everon\Rest\Interfaces\ResourceHandler
 {
 
 }
