@@ -14,6 +14,8 @@ use Everon\Helper;
 
 class FilterTest extends \Everon\TestCase
 {
+    protected $json_data = null;
+    
     protected function setUp()
     {
         $this->json_data = '%5B%7B"column"%3A"customer_id"%2C"value"%3A1%2C"operator"%3A"%3D"%7D%2C%7B"column"%3A"customer_id"%2C"value"%3A1%2C"operator"%3A"%3D"%7D%5D';
@@ -33,8 +35,8 @@ class FilterTest extends \Everon\TestCase
      */
     public function testGetFilterCollectionShouldReturnEmptyFilterCollection(\Everon\Rest\Interfaces\Filter $Filter)
     {
-//        $this->assertInstanceOf('Everon\Interfaces\Collection', $Filter->getFilterCollection());
-//        $this->assertTrue($Filter->getFilterCollection()->isEmpty());
+        $this->assertInstanceOf('Everon\Interfaces\Collection', $Filter->getFilterCollection());
+        $this->assertTrue($Filter->getFilterCollection()->isEmpty());
     }
 
     /**
@@ -72,21 +74,21 @@ class FilterTest extends \Everon\TestCase
 
     /**
      * @dataProvider dataProvider
+     * @expectedException \Everon\Rest\Exception\Filter
+     * @expectedExceptionMessage Invalid operator type: "NOT IS"
      */
     public function testTotallyWrongOperatorType(\Everon\Rest\Interfaces\Filter $Filter)
     {
-
-//        $Filter->setFilterDefinition(new Helper\Collection([
-//            [
-//                'column'=>'test',
-//                'operator'=>'NOT IS',
-//                'value'=>null,
-//            ]
-//        ]));
-
-
-//        $this->assertInstanceOf('Everon\Interfaces\Collection', $Filter->getFilterCollection());
-       // $this->assertTrue($Filter->getFilterCollection()->isEmpty());
+        $Filter->setFilterDefinition(new Helper\Collection([
+            [
+                'column'=>'test',
+                'operator'=>'NOT IS',
+                'value'=>null,
+            ]
+        ]));
+        
+        $this->assertInstanceOf('Everon\Interfaces\Collection', $Filter->getFilterCollection());
+        $this->assertTrue($Filter->getFilterCollection()->isEmpty());
     }
 
     /**
@@ -114,29 +116,12 @@ class FilterTest extends \Everon\TestCase
                 'glue'=>'AND'
             ]
         ]));
+        
         $Filter->assignToCriteria($Criteria);
+        $this->assertEquals('NOT BETWEEN a AND b', $Criteria->getWhere()['user_kolom']);
     }
-
-    /**
-     * @dataProvider dataProvider
-     */
-    public function testNullValuesPerOperator(\Everon\Rest\Interfaces\Filter $Filter)
-    {
-
-        $Filter->setFilterDefinition(new Helper\Collection([
-            [
-                'column'=>'userId',
-                'operator'=>'IS NOT',
-                'value'=>null,
-                'glue'=>'AND'
-            ]
-        ]));
-        $list = $Filter->convertToCriteriaCollection();
-
-        $this->assertFalse($list->isEmpty());
-    }
-
-
+    
+    
     public function dataProvider()
     {
         $Factory = $this->buildFactory();
