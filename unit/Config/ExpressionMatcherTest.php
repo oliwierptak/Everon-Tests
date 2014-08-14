@@ -24,11 +24,11 @@ class ExpressionMatcherTest extends \Everon\TestCase
      */
     public function testCreateCompilerAndCompile(Config\Interfaces\ExpressionMatcher $Matcher, array $data)
     {
-        $data['application']['env']['url'] = '/testme';
-        $data['test']['config']['url'] = '%application.url.app%';
+        $data['application']['url']['app'] = 'testme';
+        $data['test']['url']['app'] = '%application.url.app%';
         $Compiler = $Matcher->getCompiler($data);
         $Compiler($data);        
-        $this->assertEquals($data['test']['config']['url'], $data['application']['env']['url']);
+        $this->assertEquals($data['test']['url']['app'], $data['application']['url']['app']);
     }
 
     public function dataProvider()

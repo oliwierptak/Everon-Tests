@@ -106,7 +106,7 @@ class FactoryTest extends \Everon\TestCase
             return $DomainManagerMock;
         });
 
-        $ModuleMock = $this->getMock('Everon\Interfaces\Module');
+        $ModuleMock = $this->getMock('Everon\Module\Interfaces\Module');
         $Controller = $Factory->buildController('MyController', $ModuleMock, 'Everon\Test');
         $this->assertInstanceOf('Everon\Interfaces\Controller', $Controller);
     }
@@ -333,7 +333,7 @@ class FactoryTest extends \Everon\TestCase
     {
         $ViewManager = $this->getMock('Everon\View\Interfaces\Manager');
         $DomainManager = $this->getMock('Everon\Domain\Interfaces\Manager');
-        $ModuleMock = $this->getMock('Everon\Interfaces\Module');
+        $ModuleMock = $this->getMock('Everon\Module\Interfaces\Module');
         $Factory->buildController('Test', $ModuleMock);
     }
     

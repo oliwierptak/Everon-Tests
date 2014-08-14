@@ -91,7 +91,7 @@ class ManagerTest extends \Everon\TestCase
         $FactoryMock = $this->getMock('Everon\Application\Interfaces\Factory');
 
         $SchemaMock->expects($this->once())
-            ->method('getTable')
+            ->method('getTableByName')
             ->will($this->returnValue($SchemaTableMock));
         $DataMapperManagerMock->expects($this->once())
             ->method('getSchema')
@@ -118,8 +118,8 @@ class ManagerTest extends \Everon\TestCase
         $DomainMapperMock = $this->getMock('Everon\Domain\Interfaces\Mapper');
         
         $DomainMapperMock->expects($this->once())
-            ->method('getByDomainName')
-            ->will($this->returnValue('User'));
+            ->method('getTableName')
+            ->will($this->returnValue('users'));
         
         $DataMapperManagerMock->expects($this->once())
             ->method('getDomainMapper')

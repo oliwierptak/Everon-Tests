@@ -1,6 +1,6 @@
 <?php
 
-namespace Everon\Module\Test\Controller;
+namespace Everon\Test\Module\Foo\Controller;
 
 use Everon\Interfaces;
 

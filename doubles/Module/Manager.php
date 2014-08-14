@@ -9,6 +9,6 @@
  */
 namespace Everon\Test\Module;
 
-class Manager extends \Everon\Module\Handler
+class Manager extends \Everon\Module\Manager
 {
 }

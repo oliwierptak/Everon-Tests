@@ -14,7 +14,7 @@ class ControllerTest extends \Everon\TestCase
 
     public function testConstructor()
     {
-        $ModuleMock = $this->getMock('Everon\Interfaces\Module');
+        $ModuleMock = $this->getMock('Everon\Module\Interfaces\Module');
         $Controller = new \Everon\Test\Rest\Controller($ModuleMock);
         $this->assertInstanceOf('Everon\Rest\Interfaces\Controller', $Controller);
     }

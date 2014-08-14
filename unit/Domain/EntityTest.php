@@ -117,7 +117,7 @@ class EntityTest extends \Everon\TestCase
         
         $this->assertNull($Entity->getId());
         $this->assertNull($Entity->getModifiedProperties());
-        $this->assertNull($Entity->getData());
+        $this->assertEmpty($Entity->getData());
         $this->assertTrue($Entity->isDeleted());
     }
 

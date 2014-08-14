@@ -82,7 +82,7 @@ class RepositoryTest extends \Everon\TestCase
         $DataMapperMock->expects($this->once())
             ->method('fetchOneByCriteria')
             ->will($this->returnValue([$data]));
-        $DataMapperMock->expects($this->exactly(2))
+        $DataMapperMock->expects($this->exactly(3))
             ->method('getTable')
             ->will($this->returnValue($TableMock));
 
@@ -126,7 +126,7 @@ class RepositoryTest extends \Everon\TestCase
             ->will($this->returnValue('test_table'));
 
         $DataMapperMock = $this->getMock('Everon\Interfaces\DataMapper');
-        $DataMapperMock->expects($this->once())
+        $DataMapperMock->expects($this->exactly(2))
             ->method('getTable')
             ->will($this->returnValue($TableMock));
 
