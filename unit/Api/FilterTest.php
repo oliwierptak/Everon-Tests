@@ -24,7 +24,7 @@ class FilterTest extends \Everon\TestCase
         $json = urldecode($this->json_data);
         $json = json_decode($json);
 
-        $Filter = new \Everon\Rest\Filter(new Helper\Collection($json));g:q
+        $Filter = new \Everon\Rest\Filter(new Helper\Collection($json));
         $this->assertInstanceOf('\Everon\Rest\Interfaces\Filter', $Filter);
     }
 
