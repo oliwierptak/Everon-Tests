@@ -39,57 +39,6 @@ class FilterTest extends \Everon\TestCase
         $this->assertTrue($Filter->getFilterCollection()->isEmpty());
     }
 
-    /**
-     * @dataProvider dataProvider
-     */
-    public function testGetFilterCollectionShouldInitFilterCollection(\Everon\Rest\Interfaces\Filter $Filter)
-    {
-        $this->assertInstanceOf('Everon\Interfaces\Collection', $Filter->getFilterCollection());
-        $this->assertTrue($Filter->getFilterCollection()->isEmpty());
-
-
-        $Filter->setFilterDefinition(new Helper\Collection([
-            [
-                'column'=>'test',
-                'operator'=>'=',
-                'value'=>'%stst%',
-            ],
-            [
-                'column'=>'datetime',
-                'operator'=>'NOT IN',
-                'value'=>[new \DateTime(),new \DateTime(),new \DateTime()],
-               // 'glue'=>'OR'
-            ],
-            [
-                'column'=>'datetime',
-                'operator'=>'BETWEEN',
-                'value'=>[new \DateTime(),new \DateTime()],
-                'glue'=>'AND'
-            ]
-        ]));
-
-
-        $this->assertFalse($Filter->getFilterCollection()->isEmpty());
-    }
-
-    /**
-     * @dataProvider dataProvider
-     * @expectedException \Everon\Rest\Exception\Filter
-     * @expectedExceptionMessage Invalid operator type: "NOT IS"
-     */
-    public function testTotallyWrongOperatorType(\Everon\Rest\Interfaces\Filter $Filter)
-    {
-        $Filter->setFilterDefinition(new Helper\Collection([
-            [
-                'column'=>'test',
-                'operator'=>'NOT IS',
-                'value'=>null,
-            ]
-        ]));
-        
-        $this->assertInstanceOf('Everon\Interfaces\Collection', $Filter->getFilterCollection());
-        $this->assertTrue($Filter->getFilterCollection()->isEmpty());
-    }
 
     /**
      * @dataProvider dataProvider
@@ -107,18 +56,18 @@ class FilterTest extends \Everon\TestCase
                 'column'=>'datetime',
                 'operator'=>'IN',
                 'value'=>[new \DateTime(),new \DateTime(),new \DateTime()],
-                 'glue'=>'OR'
             ],
             [
                 'column'=>'datetime',
                 'operator'=>'NOT IN',
                 'value'=>[new \DateTime(),new \DateTime()],
-                'glue'=>'AND'
+                'column_glue'=>'AND',
+
             ]
         ]));
-        
+
         $Filter->assignToCriteria($Criteria);
-        $this->assertEquals('NOT BETWEEN a AND b', $Criteria->getWhere()['user_kolom']);
+        $this->assertFalse($Criteria->getWhereSql()->isEmpty());
     }
     
     
