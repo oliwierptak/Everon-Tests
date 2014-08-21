@@ -88,7 +88,7 @@ class CriteriaTest extends \Everon\TestCase
         $order_by_sort_sql = $Criteria->getOrderByAndSortSql();
         $this->assertEquals('', $order_by_sort_sql);
 
-        $Criteria->orderBy('login');
+        $Criteria->orderBy(['login' => 'ASC']);
         $order_by_sort_sql = $Criteria->getOrderByAndSortSql();
         $this->assertEquals('ORDER BY login ASC', $order_by_sort_sql);
 
