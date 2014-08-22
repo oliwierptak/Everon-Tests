@@ -96,7 +96,7 @@ class PaginatorTest extends \Everon\TestCase
         $this->assertEquals(3, $Paginator->getPageCount());
         $this->assertEquals(1, $Paginator->getCurrentPage());
     }
-    
+
     public function dataProvider()
     {
         $Paginator = new \Everon\Helper\Paginator(30, 0, 10);
