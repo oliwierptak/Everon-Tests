@@ -18,19 +18,41 @@ class RelationTest extends \Everon\TestCase
 
     /*
      * Foo is owning side
-     * Foo has one Bar
+     * Foo has many Bars
+     * Bar has one Foo
+     * 
      * Bar->foo_id = Foo.id 
+     * 
+     * FooBarLog is another table where we record when particular foo and bar were linked together; only one of those links
+     * can be marked as primary, hence the is_primary column.
+     * 
+     * The owning side is picked by convenience.
+     * 
+     * Foo has many Bars
+     * Bar has many Foos
+     * 
+     * FooBarLog.id = autoincrement
+     * FooBarLog.date_created = timestamp
+     * FooBarLog.is_primary = bool
+     * FooBarLog->foo_id = Foo.id
+     * FooBarLog->bar_id = Bar.id
+     * 
      */
     
     /*
-    In Foo
+    In Foo Entity:
         'Bar' => [
             'type' => Domain\Relation::MANY_TO_ONE,
             'mapped_by' => 'id',
             'inversed_by' => 'foo_id'
+        ],
+        'FooBarLog' => [
+            'type' => Domain\Relation::MANY_TO_MANY,
+            'mapped_by' => 'todo',
+            'inversed_by' => 'todo'
         ]
     
-    In Bar
+    In Bar Entity:
         'Foo' => [
             'type' => Domain\Relation::ONE_TO_MANY,
             'mapped_by' => 'foo_id',
@@ -57,7 +79,7 @@ class RelationTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testValidateManyToOne(\Everon\Interfaces\Factory $Factory)
+    public function testManyToOne(\Everon\Interfaces\Factory $Factory)
     {
         //USER
         $UserColumn = \Mockery::mock('Everon\DataMapper\Schema\Column');
@@ -114,28 +136,12 @@ class RelationTest extends \Everon\TestCase
         $FactoryMock->shouldReceive('buildDomainRepository')->with('User', $UserDataMapper)->once()->andReturn($UserRepository);
         $FactoryMock->shouldReceive('buildDomainRepository')->with('Ticket', $TicketDataMapper)->once()->andReturn($TicketRepository);
 
-        /*
-        In Foo
-            'Bar' => [
-                'type' => Domain\Relation::MANY_TO_ONE,
-                'mapped_by' => 'id',
-                'inversed_by' => 'foo_id'
-            ]
-        
-        In Bar
-            'Foo' => [
-                'type' => Domain\Relation::ONE_TO_MANY,
-                'mapped_by' => 'foo_id',
-                'inversed_by' => 'id'
-            ]
-         */        
-        
         $TicketMapper = $Factory->buildDomainRelationMapper(Domain\Relation::MANY_TO_ONE, 'Ticket', null, 'id', 'user_id');
 
         $TicketRelationForUser = $Factory->buildDomainRelation('Ticket', $OwnerEntity, $TicketMapper);
-
         $TicketRelationForUser->getDomainManager()->getDataMapperManager()->setSchema($SchemaMock);
         $TicketRelationForUser->getDomainManager()->setFactory($FactoryMock);
+        
         
         $this->assertInstanceOf('Everon\Domain\Interfaces\Relation', $TicketRelationForUser);
         
