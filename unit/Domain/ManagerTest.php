@@ -23,47 +23,6 @@ class ManagerTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function SKIP_testBuildEntityShouldReturnEntity(\Everon\Domain\Interfaces\Manager $DomainManager)
-    {
-        $TableMock = $this->getMock('Everon\DataMapper\Interfaces\Schema\Table');
-        $TableMock->expects($this->once())
-            ->method('getPk')
-            ->will($this->returnValue('id'));
-        
-        $MapperMock = $this->getMock('Everon\Interfaces\DataMapper');
-        $MapperMock->expects($this->exactly(0))
-            ->method('getAndValidateId')
-            ->will($this->returnValue(1));
-        $MapperMock->expects($this->once())
-            ->method('getTable')
-            ->will($this->returnValue($TableMock));
-        
-        $RepositoryMock = $this->getMock('Everon\Domain\Interfaces\Repository');
-        $RepositoryMock->expects($this->once())
-            ->method('getName')
-            ->will($this->returnValue('User'));
-        $RepositoryMock->expects($this->exactly(1))
-            ->method('getMapper')
-            ->will($this->returnValue($MapperMock));
-        $RepositoryMock->expects($this->once())
-            ->method('buildEntityRelations');
-        
-        $EntityMock = $this->getMock('Everon\Domain\Interfaces\Entity');
-        
-        $FactoryMock = $this->getMock('Everon\Application\Interfaces\Factory');
-        $FactoryMock->expects($this->once())
-            ->method('buildDomainEntity')
-            ->will($this->returnValue($EntityMock));
-        
-        $DomainManager->setFactory($FactoryMock);
-        $Entity = $DomainManager->buildEntity($RepositoryMock, 1, []);
-        
-        $this->assertInstanceOf('Everon\Domain\Interfaces\Entity', $Entity);
-    }
-
-    /**
-     * @dataProvider dataProvider
-     */
     public function testGetModelShouldReturnModel(\Everon\Domain\Interfaces\Manager $DomainManager)
     {
         $ModelMock = $this->getMock('Everon\Test\Domain\User\Model');

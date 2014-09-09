@@ -68,21 +68,39 @@ class RepositoryTest extends \Everon\TestCase
     public function testGetEntityByIdShouldReturnEntity(Repository $Repository, array $data)
     {
         $EntityMock = $this->getMock('Everon\Domain\Interfaces\Entity');
+        $EntityMock->expects($this->once())
+            ->method('getRelationDefinition')
+            ->will($this->returnValue([]));
+        $EntityMock->expects($this->once())
+            ->method('getRelationCollection')
+            ->will($this->returnValue([]));
+        
         $FactoryMock = $this->getMock('Everon\Application\Interfaces\Factory');
         $FactoryMock->expects($this->once())
             ->method('buildDomainEntity')
             ->will($this->returnValue($EntityMock));
+
+        $ColumnMock = $this->getMock('Everon\DataMapper\Interfaces\Schema\Column');
+        $ColumnMock->expects($this->any())
+            ->method('isPk')
+            ->will($this->returnValue(false));
+        $ColumnMock->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('test'));
         
         $TableMock = $this->getMock('Everon\DataMapper\Interfaces\Schema\Table');
         $TableMock->expects($this->exactly(2))
             ->method('getPk')
             ->will($this->returnValue('id'));
+        $TableMock->expects($this->any())
+            ->method('getColumns')
+            ->will($this->returnValue([$ColumnMock]));
         
         $DataMapperMock = $this->getMock('Everon\Interfaces\DataMapper');
         $DataMapperMock->expects($this->once())
             ->method('fetchOneByCriteria')
             ->will($this->returnValue([$data]));
-        $DataMapperMock->expects($this->exactly(3))
+        $DataMapperMock->expects($this->any())
             ->method('getTable')
             ->will($this->returnValue($TableMock));
 
