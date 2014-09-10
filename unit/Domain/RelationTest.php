@@ -13,88 +13,108 @@ use Everon\Domain;
 
 class RelationTest extends \Everon\TestCase
 {
-    protected $owning_domain_name = 'Foo';
-    protected $domain_name = 'Bar';
+    protected $owning_domain_name = 'User';
+    protected $domain_name = 'Account';
 
     /*
      * For ONE TO ONE and MANY TO MANY 
      * mapped_by = null means it's owning side
      * inverted_by = null means it's belonging to side
      * 
-     * ONE TO ONE
-     * Foo is owning side
-     * One Foo has one Bar
-     * One Bar belongs to one Foo
+     * bidirectional/unidirectional aspect is defined by either lack or presence of the relation definition between
+     * owning and belonging to sides.
      * 
-     * Foo->id = Bar.foo_id
+     * ONE TO ONE (bidirectional)
+     * User is owning side
+     * One User has one Account
+     * 
+     * User->id = Account.user_id
+     * 
+     * ONE TO ONE (bidirectional)
+     * User is owning side
+     * One Account belongs to one User
+     * 
+     * Account.user_id = User->id 
      * 
      * 
-     * ONE TO MANY
-     * Foo is owning side
-     * One Foo has many Bars
-     * Many Bars belong to one Foo
+     * ONE TO MANY (bidirectional)
+     * User is owning side
+     * One User has many Accounts
      * 
-     * Foo->id = Bar.foo_id
+     * User->id = Account.user_id
      * 
      * 
-     * MANY TO ONE
-     * Foo is owning side
-     * Foo has many Bars
-     * Many Bars belong to one Foo
+     * MANY TO ONE (bidirectional)
+     * User is owning side
+     * Many Accounts belong to one User
      * 
-     * Bar->foo_id = Foo.id 
+     * Account->user_id = User.id 
      * 
      * 
      * MANY TO MANY
-     * Owning side is determined by mapped_by / inversed_by configuration.
-     * The owning side is picked by convenience.
+     * Student is the owning side
+     * Many Students have many Courses
+     * Many Courses belong to many Students
      * 
-     * Many Foo have many Bars
-     * Many Bar belong to many Foos
+     * Owning side is configured by mapped_by / inversed_by properties.
+     * mapped_by set to null means it's the owning side, inversed_by set to null means it's the belonging to side.
+     * The owning side is picked by convenience / requirement or it can be set by using unidirectional 
+     * relation definition.
      * 
-     * FooBarLog.id = autoincrement
-     * FooBarLog.date_created = timestamp
-     * FooBarLog.is_primary = bool
-     * FooBarLog->foo_id = Foo.id
-     * FooBarLog->bar_id = Bar.id
+     * Example of join table:
+     * 
+     * StudentCourseLog.id = autoincrement
+     * StudentCourseLog->student_id = Student.id
+     * StudentCourseLog->course_id = Course.id
+     * StudentCourseLog.date_attended = timestamp
+     * StudentCourseLog.grade = int
      * 
      */
     
     /*
-    In Foo Entity (parent):
-        'Bar' => [
-            'type' => Domain\Relation::MANY_TO_ONE, //Many Bars belongs to one Foo
+    In User Entity (parent):
+        'Account' => [
+            'type' => Domain\Relation::MANY_TO_ONE, //Many Accounts belongs to one User
             'mapped_by' => 'id',
-            'inversed_by' => 'foo_id'
+            'inversed_by' => 'user_id'
         ],
-        'BarOneToOneBelonging' => [
-            'type' => Domain\Relation::ONE_TO_ONE, //One Bar belongs to one Foo
+        'AccountOneToOneBelonging' => [
+            'type' => Domain\Relation::ONE_TO_ONE, //One Account belongs to one User
             'mapped_by' => null,
-            'inversed_by' => 'foo_id',
+            'inversed_by' => 'user_id',
             'column' => 'id',
         ],
-        'FooBarLog' => [
-            'type' => Domain\Relation::MANY_TO_MANY, //Many Bars belong to many Foos
+        'AccountManyToManyBelonging' => [
+            'type' => Domain\Relation::MANY_TO_MANY, //Many Accounts belong to many Users
             'mapped_by' => null,
-            'inversed_by' => 'foo_id',
+            'inversed_by' => 'user_id',
             'column' => 'id',
+        ],
+        'AccountManyToManyWithJoinTableOwning' => [
+            'type' => Domain\Relation::MANY_TO_MANY, //Many Accounts belong to many Users
+            'mapped_by' => null,
+            'inversed_by' => 'user_id',
+            'column' => 'id',
+            'join_tables' => [
+                [ 'name' => '' ] 
+            ]
         ]
     
-    In Bar Entity (child):
-        'Foo' => [
-            'type' => Domain\Relation::ONE_TO_MANY, //One Foo has many Bars
-            'mapped_by' => 'foo_id',
+    In Account Entity (child):
+        'User' => [
+            'type' => Domain\Relation::ONE_TO_MANY, //One User has many Accounts
+            'mapped_by' => 'user_id',
             'inversed_by' => 'id'
         ],
-        'FooOneToOneOwning' => [
-            'type' => Domain\Relation::ONE_TO_ONE, //One Foo has one Bar
-            'mapped_by' => 'foo_id',
+        'UserOneToOneOwning' => [
+            'type' => Domain\Relation::ONE_TO_ONE, //One User has one Account
+            'mapped_by' => 'user_id',
             'inversed_by' => null,
             'column' => 'id'
         ],
-        'FooBarLog' => [
-            'type' => Domain\Relation::MANY_TO_MANY, //Many Foos have many Bars
-            'mapped_by' => 'foo_id',
+        'UserManyToManyOwning' => [
+            'type' => Domain\Relation::MANY_TO_MANY, //Many Users have many Accounts
+            'mapped_by' => 'user_id',
             'inversed_by' => null,
             'column' => 'id'
         ]    
@@ -126,13 +146,13 @@ class RelationTest extends \Everon\TestCase
         $UserColumn->shouldReceive('isNullable')->once()->andReturn(true);
         
         $UserTable = \Mockery::mock('Everon\DataMapper\Schema\Table');
-        //$FooTable->shouldReceive('getName')->once()->andReturn('foo');
-        //$FooTable->shouldReceive('getFullName')->once()->andReturn('foo');
-        //$FooTable->shouldReceive('getForeignKeys')->once()->andReturn([]);
+        //$UserTable->shouldReceive('getName')->once()->andReturn('foo');
+        //$UserTable->shouldReceive('getFullName')->once()->andReturn('foo');
+        //$UserTable->shouldReceive('getForeignKeys')->once()->andReturn([]);
         $UserTable->shouldReceive('validateId')->with(1)->once();
 
         $UserDataMapper = \Mockery::mock('Everon\Interfaces\DataMapper');
-        //$FooDataMapper->shouldReceive('getTable')->once()->andReturn($FooTable);
+        //$UserDataMapper->shouldReceive('getTable')->once()->andReturn($UserTable);
         
         $UserRepository = \Mockery::mock('Everon\Domain\Interfaces\Repository');
         $UserRepository->shouldReceive('getMapper')->once()->andReturn($UserDataMapper);
@@ -165,7 +185,7 @@ class RelationTest extends \Everon\TestCase
         //OWNER ENTITY
         $OwnerEntity = \Mockery::mock('Everon\Domain\Interfaces\Entity');
         $OwnerEntity->shouldReceive('getDomainName')->twice()->andReturn('User');
-        //$OwnerEntity->shouldReceive('getValueByName')->with('foo_id')->once()->andReturn(1);
+        //$OwnerEntity->shouldReceive('getValueByName')->with('user_id')->once()->andReturn(1);
         $OwnerEntity->shouldReceive('getValueByName')->with('id')->once()->andReturn(1);
 
 
