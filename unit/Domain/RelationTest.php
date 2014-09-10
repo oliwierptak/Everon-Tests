@@ -24,7 +24,7 @@ class RelationTest extends \Everon\TestCase
     bidirectional/unidirectional aspect is defined by either lack or presence of the relation definition between
     owning and belonging to sides.
     
-    Use column property to change the name of the column the relation is referenced by.
+    The column property is used to change the name of the column the relation is referenced by.
     By default the primary key is used.
     
     In this example User is referenced by its id (primary key) in the Account table. The Account remembers its users
@@ -83,9 +83,9 @@ class RelationTest extends \Everon\TestCase
     In User Entity:
         'Account' => [
             'type' => Domain\Relation::ONE_TO_ONE,
-            'mapped_by' => null, //One Account belongs to one User
-            'inversed_by' => 'user_id',
-            'column' => 'id', //if different from pk
+            'mapped_by' => null, //foreign key in User
+            'inversed_by' => 'user_id', //Column in Account
+            'column' => 'id', //Column in User (optional)
         ]
     
     
@@ -94,8 +94,8 @@ class RelationTest extends \Everon\TestCase
     In Account Entity:
         'User' => [
             'type' => Domain\Relation::ONE_TO_ONE,
-            'mapped_by' => 'user_id', //One User has one Account
-            'inversed_by' => 'id',
+            'mapped_by' => 'user_id', //foreign key in Account
+            'inversed_by' => 'id', //Column in User (optional)
         ]
     
     
@@ -151,10 +151,12 @@ class RelationTest extends \Everon\TestCase
      
     In Student Entity:
         'Course' => [
-            'type' => Domain\Relation::MANY_TO_MANY, //Many Courses belongs to many Students
-            'mapped_by' => null,
-            'inversed_by' => 'student_id',
-            'join_table' => 'StudentCourseLog' //SELECT * FROM Course WHERE Course.id IN (SELECT course_id FROM StudentCourseLog WHERE student_id = Student.id)
+            'type' => Domain\Relation::MANY_TO_MANY,
+            'mapped_by' => 'course_id', //Column in join_table
+            'inversed_by' => 'id', //Column in Course
+            'join_table' => 'StudentCourseLog' //SELECT * FROM Course WHERE Course.id IN (SELECT course_id FROM StudentCourseLog WHERE student_id = Student.id),
+            'join_on' => 'student_id',
+            'column' => 'id' //Column in Student
         ]
     
     
@@ -162,10 +164,12 @@ class RelationTest extends \Everon\TestCase
     
     In Course Entity:
         'Student' => [
-            'type' => Domain\Relation::MANY_TO_MANY, //Many Students have many Courses
-            'mapped_by' => 'course_id',
-            'inversed_by' => null,
-            'join_table' => 'StudentCourseLog' //SELECT * FROM Student WHERE Student.id IN (SELECT student_id FROM StudentCourseLog WHERE course_id = Course.id)
+            'type' => Domain\Relation::MANY_TO_MANY,
+            'mapped_by' => 'student_id', //Column in join_table
+            'inversed_by' => 'id', //Column in Student
+            'join_table' => 'StudentCourseLog' //SELECT * FROM Student WHERE Student.id IN (SELECT student_id FROM StudentCourseLog WHERE course_id = Course.id),
+             'join_on' => 'course_id',
+            'column' => 'id' //Column in Course
         ]
 
      */
