@@ -156,7 +156,7 @@ class RelationTest extends \Everon\TestCase
             'type' => Domain\Relation::MANY_TO_MANY, //Many Courses belongs to many Students
             'mapped_by' => null,
             'inversed_by' => 'student_id',
-            'join_table' => 'StudentCourseLog' //WHERE StudentCourseLog.student_id = Student.id
+            'join_table' => 'StudentCourseLog' //SELECT * FROM Student WHERE Student.id IN (SELECT student_id FROM StudentCourseLog WHERE student_id = Student.id)
         ]
     
     
@@ -167,7 +167,7 @@ class RelationTest extends \Everon\TestCase
             'type' => Domain\Relation::MANY_TO_MANY, //Many Students have many Courses
             'mapped_by' => 'course_id',
             'inversed_by' => null,
-            'join_table' => 'StudentCourseLog' //WHERE StudentCourseLog.course_id = Course.id
+            'join_table' => 'StudentCourseLog' //SELECT * FROM Course WHERE Course.id IN (SELECT course_id FROM StudentCourseLog WHERE course_id = Course.id)
         ]
 
      */
