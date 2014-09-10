@@ -21,28 +21,36 @@ class RelationTest extends \Everon\TestCase
      * mapped_by = null means it's owning side
      * inverted_by = null means it's belonging to side
      * 
-     * ONE TO MANY
+     * ONE TO ONE
      * Foo is owning side
-     * Foo has many Bars
-     * Bar has one Foo
+     * One Foo has one Bar
+     * One Bar belongs to one Foo
      * 
      * Foo->id = Bar.foo_id
+     * 
+     * 
+     * ONE TO MANY
+     * Foo is owning side
+     * One Foo has many Bars
+     * Many Bars belong to one Foo
+     * 
+     * Foo->id = Bar.foo_id
+     * 
      * 
      * MANY TO ONE
      * Foo is owning side
      * Foo has many Bars
-     * Bar has one Foo
+     * Many Bars belong to one Foo
      * 
      * Bar->foo_id = Foo.id 
      * 
-     * MANY TO MANY
-     * FooBarLog is another table where we record when particular foo and bar were linked together; only one of those links
-     * can be marked as primary, hence the is_primary column.
      * 
+     * MANY TO MANY
+     * Owning side is determined by mapped_by / inversed_by configuration.
      * The owning side is picked by convenience.
      * 
-     * Foo has many Bars
-     * Bar has many Foos
+     * Many Foo have many Bars
+     * Many Bar belong to many Foos
      * 
      * FooBarLog.id = autoincrement
      * FooBarLog.date_created = timestamp
