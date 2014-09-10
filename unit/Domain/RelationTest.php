@@ -24,27 +24,33 @@ class RelationTest extends \Everon\TestCase
     bidirectional/unidirectional aspect is defined by either lack or presence of the relation definition between
     owning and belonging to sides.
     
-    ONE TO ONE (bidirectional)
+    Use column property to change the name of the column the relation is referenced by.
+    By default the primary key is used.
+    
+    In this example User is referenced by its id (primary key) in the Account table. The Account remembers its users
+    in its user_id column.
+    
+    ONE TO ONE (User)
     User is owning side
     One User has one Account
     
     User->id = Account.user_id
     
-    ONE TO ONE (bidirectional)
+    ONE TO ONE (Account)
     User is owning side
     One Account belongs to one User
     
     Account.user_id = User->id 
     
     
-    ONE TO MANY (bidirectional)
+    ONE TO MANY (User)
     User is owning side
     One User has many Accounts
     
     User->id = Account.user_id
     
     
-    MANY TO ONE (bidirectional)
+    MANY TO ONE (Account)
     User is owning side
     Many Accounts belong to one User
     
@@ -61,14 +67,7 @@ class RelationTest extends \Everon\TestCase
     The owning side is picked by convenience / requirement or it can be set by using unidirectional 
     relation definition.
     
-    Example of join table:
-    
-    StudentCourseLog.id = int
-    StudentCourseLog->student_id = Student.id
-    StudentCourseLog->course_id = Course.id
-    StudentCourseLog.date_attended = timestamp
-    StudentCourseLog.grade = int
-    
+    EXAMPLES:
     
     ONE TO ONE
     --------------------------------------------------------------------------------------------------------------------
@@ -76,18 +75,17 @@ class RelationTest extends \Everon\TestCase
     
     User.id = int
     
-    Account.id = int
-    Account.user_id = int
+    Account.user_id = User.id
  
 
     = One User has One Account 
      
     In User Entity:
         'Account' => [
-            'type' => Domain\Relation::ONE_TO_ONE, //One Account belongs to one User
-            'mapped_by' => null,
+            'type' => Domain\Relation::ONE_TO_ONE,
+            'mapped_by' => null, //One Account belongs to one User
             'inversed_by' => 'user_id',
-            'column' => 'id',
+            'column' => 'id', //if different from pk
         ]
     
     
@@ -95,40 +93,40 @@ class RelationTest extends \Everon\TestCase
     
     In Account Entity:
         'User' => [
-            'type' => Domain\Relation::ONE_TO_ONE, //One User has one Account
-            'mapped_by' => 'user_id',
-            'inversed_by' => null,
-            'column' => 'id'
+            'type' => Domain\Relation::ONE_TO_ONE,
+            'mapped_by' => 'user_id', //One User has one Account
+            'inversed_by' => 'id',
         ]
     
+    
    
-    ONE TO MANY
+    ONE TO MANY and MANY TO ONE
     --------------------------------------------------------------------------------------------------------------------
     TABLES:
     
     User.id = int
     
-    Account.id = int
-    Account.user_id = int
+    Account.user_id = User.id
     
     
     = One User has Many Accounts 
      
     In User Entity:
         'Account' => [
-            'type' => Domain\Relation::MANY_TO_ONE, //Many Accounts belongs to one User
-            'mapped_by' => 'id',
-            'inversed_by' => 'user_id'
+            'type' => Domain\Relation::ONE_TO_MANY,
+            'mapped_by' => null, //foreign key in User
+            'inversed_by' => 'user_id', //Column in Account
+            'column' => 'id' //Column in User
         ]
     
     
-    = One Account belongs to One User (Account.user_id points to User.id)
+    = Many Accounts belongs to One User
     
     In Account Entity:
         'User' => [
-            'type' => Domain\Relation::ONE_TO_MANY, //One User has many Accounts
-            'mapped_by' => 'user_id',
-            'inversed_by' => 'id'
+            'type' => Domain\Relation::MANY_TO_ONE,
+            'mapped_by' => 'user_id', //foreign key in Account
+            'inversed_by' => 'id', //Column in User
         ]
     
     
