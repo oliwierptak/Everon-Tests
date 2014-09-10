@@ -17,107 +17,159 @@ class RelationTest extends \Everon\TestCase
     protected $domain_name = 'Account';
 
     /*
-     * For ONE TO ONE and MANY TO MANY 
-     * mapped_by = null means it's owning side
-     * inverted_by = null means it's belonging to side
-     * 
-     * bidirectional/unidirectional aspect is defined by either lack or presence of the relation definition between
-     * owning and belonging to sides.
-     * 
-     * ONE TO ONE (bidirectional)
-     * User is owning side
-     * One User has one Account
-     * 
-     * User->id = Account.user_id
-     * 
-     * ONE TO ONE (bidirectional)
-     * User is owning side
-     * One Account belongs to one User
-     * 
-     * Account.user_id = User->id 
-     * 
-     * 
-     * ONE TO MANY (bidirectional)
-     * User is owning side
-     * One User has many Accounts
-     * 
-     * User->id = Account.user_id
-     * 
-     * 
-     * MANY TO ONE (bidirectional)
-     * User is owning side
-     * Many Accounts belong to one User
-     * 
-     * Account->user_id = User.id 
-     * 
-     * 
-     * MANY TO MANY
-     * Student is the owning side
-     * Many Students have many Courses
-     * Many Courses belong to many Students
-     * 
-     * Owning side is configured by mapped_by / inversed_by properties.
-     * mapped_by set to null means it's the owning side, inversed_by set to null means it's the belonging to side.
-     * The owning side is picked by convenience / requirement or it can be set by using unidirectional 
-     * relation definition.
-     * 
-     * Example of join table:
-     * 
-     * StudentCourseLog.id = autoincrement
-     * StudentCourseLog->student_id = Student.id
-     * StudentCourseLog->course_id = Course.id
-     * StudentCourseLog.date_attended = timestamp
-     * StudentCourseLog.grade = int
-     * 
-     */
+    For ONE TO ONE and MANY TO MANY 
+    mapped_by = null means it's owning side
+    inverted_by = null means it's belonging to side
     
-    /*
-    In User Entity (parent):
+    bidirectional/unidirectional aspect is defined by either lack or presence of the relation definition between
+    owning and belonging to sides.
+    
+    ONE TO ONE (bidirectional)
+    User is owning side
+    One User has one Account
+    
+    User->id = Account.user_id
+    
+    ONE TO ONE (bidirectional)
+    User is owning side
+    One Account belongs to one User
+    
+    Account.user_id = User->id 
+    
+    
+    ONE TO MANY (bidirectional)
+    User is owning side
+    One User has many Accounts
+    
+    User->id = Account.user_id
+    
+    
+    MANY TO ONE (bidirectional)
+    User is owning side
+    Many Accounts belong to one User
+    
+    Account->user_id = User.id 
+    
+    
+    MANY TO MANY
+    Student is the owning side
+    Many Students have many Courses
+    Many Courses belong to many Students
+    
+    Owning side is configured by mapped_by / inversed_by properties.
+    mapped_by set to null means it's the owning side, inversed_by set to null means it's the belonging to side.
+    The owning side is picked by convenience / requirement or it can be set by using unidirectional 
+    relation definition.
+    
+    Example of join table:
+    
+    StudentCourseLog.id = int
+    StudentCourseLog->student_id = Student.id
+    StudentCourseLog->course_id = Course.id
+    StudentCourseLog.date_attended = timestamp
+    StudentCourseLog.grade = int
+    
+    
+    ONE TO ONE
+    --------------------------------------------------------------------------------------------------------------------
+    TABLES:
+    
+    User.id = int
+    
+    Account.id = int
+    Account.user_id = int
+ 
+
+    = One User has One Account 
+     
+    In User Entity:
         'Account' => [
-            'type' => Domain\Relation::MANY_TO_ONE, //Many Accounts belongs to one User
-            'mapped_by' => 'id',
-            'inversed_by' => 'user_id'
-        ],
-        'AccountOneToOneBelonging' => [
             'type' => Domain\Relation::ONE_TO_ONE, //One Account belongs to one User
             'mapped_by' => null,
             'inversed_by' => 'user_id',
             'column' => 'id',
-        ],
-        'AccountManyToManyBelonging' => [
-            'type' => Domain\Relation::MANY_TO_MANY, //Many Accounts belong to many Users
-            'mapped_by' => null,
-            'inversed_by' => 'user_id',
-            'column' => 'id',
-        ],
-        'AccountManyToManyWithJoinTableOwning' => [
-            'type' => Domain\Relation::MANY_TO_MANY, //Many Accounts belong to many Users
-            'mapped_by' => null,
-            'inversed_by' => 'user_id',
-            'column' => 'id',
-            'join_tables' => [
-                [ 'name' => '' ] 
-            ]
         ]
     
-    In Account Entity (child):
+    
+    = One Account belongs to One User (Account.user_id points to User.id)
+    
+    In Account Entity:
         'User' => [
-            'type' => Domain\Relation::ONE_TO_MANY, //One User has many Accounts
-            'mapped_by' => 'user_id',
-            'inversed_by' => 'id'
-        ],
-        'UserOneToOneOwning' => [
             'type' => Domain\Relation::ONE_TO_ONE, //One User has one Account
             'mapped_by' => 'user_id',
             'inversed_by' => null,
             'column' => 'id'
-        ],
-        'UserManyToManyOwning' => [
-            'type' => Domain\Relation::MANY_TO_MANY, //Many Users have many Accounts
+        ]
+    
+   
+    ONE TO MANY
+    --------------------------------------------------------------------------------------------------------------------
+    TABLES:
+    
+    User.id = int
+    
+    Account.id = int
+    Account.user_id = int
+    
+    
+    = One User has Many Accounts 
+     
+    In User Entity:
+        'Account' => [
+            'type' => Domain\Relation::MANY_TO_ONE, //Many Accounts belongs to one User
+            'mapped_by' => 'id',
+            'inversed_by' => 'user_id'
+        ]
+    
+    
+    = One Account belongs to One User (Account.user_id points to User.id)
+    
+    In Account Entity:
+        'User' => [
+            'type' => Domain\Relation::ONE_TO_MANY, //One User has many Accounts
             'mapped_by' => 'user_id',
+            'inversed_by' => 'id'
+        ]
+    
+    
+        
+    MANY TO MANY
+    --------------------------------------------------------------------------------------------------------------------
+    TABLES:
+    
+    Student.id = int
+    
+    Course.id = int
+    
+    StudentCourseLog.id = int
+    StudentCourseLog->student_id = Student.id
+    StudentCourseLog->course_id = Course.id
+    StudentCourseLog.date_attended = timestamp
+    StudentCourseLog.grade = int
+    
+    
+    
+    = Many Students have Many Courses 
+     
+    In Student Entity:
+        'Course' => [
+            'type' => Domain\Relation::MANY_TO_MANY, //Many Courses belongs to many Students
+            'mapped_by' => null,
+            'inversed_by' => 'student_id',
+            'join_table' => 'StudentCourseLog' //WHERE StudentCourseLog.student_id = Student.id
+        ]
+    
+    
+    = Many Courses belongs to Many Students
+    
+    In Course Entity:
+        'Student' => [
+            'type' => Domain\Relation::MANY_TO_MANY, //Many Students have many Courses
+            'mapped_by' => 'course_id',
             'inversed_by' => null,
-            'column' => 'id'
-        ]    
+            'join_table' => 'StudentCourseLog' //WHERE StudentCourseLog.course_id = Course.id
+        ]
+
      */
 
     public function testConstructor()
