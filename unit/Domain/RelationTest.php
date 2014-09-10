@@ -17,12 +17,25 @@ class RelationTest extends \Everon\TestCase
     protected $domain_name = 'Bar';
 
     /*
+     * For ONE TO ONE and MANY TO MANY 
+     * mapped_by = null means it's owning side
+     * inverted_by = null means it's belonging to side
+     * 
+     * ONE TO MANY
+     * Foo is owning side
+     * Foo has many Bars
+     * Bar has one Foo
+     * 
+     * Foo->id = Bar.foo_id
+     * 
+     * MANY TO ONE
      * Foo is owning side
      * Foo has many Bars
      * Bar has one Foo
      * 
      * Bar->foo_id = Foo.id 
      * 
+     * MANY TO MANY
      * FooBarLog is another table where we record when particular foo and bar were linked together; only one of those links
      * can be marked as primary, hence the is_primary column.
      * 
@@ -40,24 +53,43 @@ class RelationTest extends \Everon\TestCase
      */
     
     /*
-    In Foo Entity:
+    In Foo Entity (parent):
         'Bar' => [
-            'type' => Domain\Relation::MANY_TO_ONE,
+            'type' => Domain\Relation::MANY_TO_ONE, //Many Bars belongs to one Foo
             'mapped_by' => 'id',
             'inversed_by' => 'foo_id'
         ],
+        'BarOneToOneBelonging' => [
+            'type' => Domain\Relation::ONE_TO_ONE, //One Bar belongs to one Foo
+            'mapped_by' => null,
+            'inversed_by' => 'foo_id',
+            'column' => 'id',
+        ],
         'FooBarLog' => [
-            'type' => Domain\Relation::MANY_TO_MANY,
-            'mapped_by' => 'todo',
-            'inversed_by' => 'todo'
+            'type' => Domain\Relation::MANY_TO_MANY, //Many Bars belong to many Foos
+            'mapped_by' => null,
+            'inversed_by' => 'foo_id',
+            'column' => 'id',
         ]
     
-    In Bar Entity:
+    In Bar Entity (child):
         'Foo' => [
-            'type' => Domain\Relation::ONE_TO_MANY,
+            'type' => Domain\Relation::ONE_TO_MANY, //One Foo has many Bars
             'mapped_by' => 'foo_id',
             'inversed_by' => 'id'
-        ]
+        ],
+        'FooOneToOneOwning' => [
+            'type' => Domain\Relation::ONE_TO_ONE, //One Foo has one Bar
+            'mapped_by' => 'foo_id',
+            'inversed_by' => null,
+            'column' => 'id'
+        ],
+        'FooBarLog' => [
+            'type' => Domain\Relation::MANY_TO_MANY, //Many Foos have many Bars
+            'mapped_by' => 'foo_id',
+            'inversed_by' => null,
+            'column' => 'id'
+        ]    
      */
 
     public function testConstructor()
@@ -79,7 +111,7 @@ class RelationTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testManyToOne(\Everon\Interfaces\Factory $Factory)
+    public function testGetDataInManyToOne(\Everon\Interfaces\Factory $Factory)
     {
         //USER
         $UserColumn = \Mockery::mock('Everon\DataMapper\Schema\Column');
