@@ -171,6 +171,8 @@ class RelationTest extends \Everon\TestCase
              'join_on' => 'course_id',
             'column' => 'id' //Column in Course
         ]
+    
+    //$this->sql = $this->getDataMapper()->getJoinSql('t.*', 's_customers.customer', 's_customers.customer_user_rel cur', 't.id', 'cur.customer_id');
 
      */
 
@@ -214,7 +216,7 @@ class RelationTest extends \Everon\TestCase
         $UserForeignKey = \Mockery::mock('Everon\DataMapper\Schema\ForeignKey');
         $UserForeignKey->shouldReceive('getFullTableName')->once()->andReturn('s_users.user');
 
-        //TICKET
+        //ACCOUNT
         $TicketTable = \Mockery::mock('Everon\DataMapper\Schema\Table');
         //$TicketTable->shouldReceive('getName')->once()->andReturn('bar');
         $TicketTable->shouldReceive('getFullName')->once()->andReturn('s_misc.ticket');
