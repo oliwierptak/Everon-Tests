@@ -48,11 +48,9 @@ class CriteriaTest extends \Everon\TestCase
 
         $Criteria->where(['first_name' => 'John']);
         $Criteria->where(['last_name' => 'Doe']);
-        $where = $Criteria->getWhereSql();
-        $this->assertInternalType('array', $where);
+        $params = $Criteria->getWhere();
         
-        list($where_sql, $params) = $where;
-        $this->assertEquals('1=1 AND last_name => :last_name AND first_name => :first_name', $where_sql);
+        $this->assertEquals('WHERE (1=1 AND last_name = :last_name AND first_name = :first_name)', trim((string) $Criteria));
         $this->assertInternalType('array', $params);
         $this->assertEquals($params['first_name'], 'John');
         $this->assertEquals($params['last_name'], 'Doe');
@@ -92,7 +90,7 @@ class CriteriaTest extends \Everon\TestCase
         $order_by_sort_sql = $Criteria->getOrderByAndSortSql();
         $this->assertEquals('ORDER BY login ASC', $order_by_sort_sql);
 
-        $Criteria->orderBy('id')->sortDesc();
+        $Criteria->orderBy(['id' => 'DESC']);
         $order_by_sort_sql = $Criteria->getOrderByAndSortSql();
         $this->assertEquals('ORDER BY id DESC', $order_by_sort_sql);
     }
