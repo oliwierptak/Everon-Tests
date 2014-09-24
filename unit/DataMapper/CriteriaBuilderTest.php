@@ -24,32 +24,34 @@ class CriteriaBuilderTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    function testWhere(\Everon\DataMapper\Interfaces\Criteria\Builder $CriteriaBuilder)
+    function testWhereOrAndShouldBuildCriteria(\Everon\DataMapper\Interfaces\Criteria\Builder $CriteriaBuilder)
     {
-        $CriteriaBuilder->_or('id', 'in', [1,2,3])->_and('name', '!=', 'john');
-        $CriteriaBuilder->_or('name', 'ilike', 'Neth')->_or('code', 'ilike', 'Neht');
-
-        $CriteriaBuilder->_and(function($Builder){
-            $Builder->_or('id', 'in', [1,2,3])->_and('name', '!=', 'john');
-        });
-
-        $CriteriaBuilder->_or(function($Builder){
-            $Builder->_or('id', 'in', [1,2,3])->_and('name', '!=', 'john');
-        });
+        $CriteriaBuilder->_or('id', 'IN', [1,2,3])->_or('id', 'NOT IN', [4,5,6]);
+        $CriteriaBuilder->_and('name', '!=', 'foo')->_and('name', '!=', 'bar');
+        
+        $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria', $CriteriaBuilder->getCriteriaAnd());
+        $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria', $CriteriaBuilder->getCriteriaOr());
+        
+        $this->assertCount(2, $CriteriaBuilder->getCriteriaAnd()->toArray());
+        $this->assertCount(2, $CriteriaBuilder->getCriteriaOr()->toArray());
     }
 
     function dataProvider()
     {
-        $filter = [
-            'where' => [],
-            'limit' => 10,
-            'offset' => 0,
-        ];
+        $Factory = $this->buildFactory();
+        $CriteriaBuilder = $Factory->buildCriteriaBuilder();
 
-        $CriteriaBuilder = new \Everon\DataMapper\Criteria\Builder();
+
+        /*        $CriteriaBuilder->_and(function($Builder){
+                    $Builder->_or('id', 'in', [1,2,3])->_and('name', '!=', 'john');
+                });
+        
+                $CriteriaBuilder->_or(function($Builder){
+                    $Builder->_or('id', 'in', [1,2,3])->_and('name', '!=', 'john');
+                });*/
         
         return [
-            [$CriteriaBuilder, $filter]
+            [$CriteriaBuilder]
         ];
     }
 
