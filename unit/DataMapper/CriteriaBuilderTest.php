@@ -29,12 +29,12 @@ class CriteriaBuilderTest extends \Everon\TestCase
         $CriteriaBuilder->_or('id', 'in', [1,2,3])->_and('name', '!=', 'john');
         $CriteriaBuilder->_or('name', 'ilike', 'Neth')->_or('code', 'ilike', 'Neht');
 
-        $CriteriaBuilder->_and(function($Criteria){
-            $Criteria->_or('id', 'in', [1,2,3])->_and('name', '!=', 'john');
+        $CriteriaBuilder->_and(function($Builder){
+            $Builder->_or('id', 'in', [1,2,3])->_and('name', '!=', 'john');
         });
 
-        $CriteriaBuilder->_or(function($Criteria){
-            $Criteria->_or('id', 'in', [1,2,3])->_and('name', '!=', 'john');
+        $CriteriaBuilder->_or(function($Builder){
+            $Builder->_or('id', 'in', [1,2,3])->_and('name', '!=', 'john');
         });
     }
 
