@@ -26,14 +26,31 @@ class CriteriaBuilderTest extends \Everon\TestCase
      */
     function testWhereOrAndShouldBuildCriteria(\Everon\DataMapper\Interfaces\Criteria\Builder $CriteriaBuilder)
     {
-        $CriteriaBuilder->_or('id', 'IN', [1,2,3])->_or('id', 'NOT IN', [4,5,6]);
-        $CriteriaBuilder->_and('name', '!=', 'foo')->_and('name', '!=', 'bar');
+        $CriteriaBuilder->orWhere('id', 'IN', [1,2,3])->orWhere('id', 'NOT IN', [4,5,6]);
+        $CriteriaBuilder->andWhere('name', '!=', 'foo')->andWhere('name', '!=', 'bar');
         
         $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria', $CriteriaBuilder->getCriteriaAnd());
         $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria', $CriteriaBuilder->getCriteriaOr());
         
         $this->assertCount(2, $CriteriaBuilder->getCriteriaAnd()->toArray());
         $this->assertCount(2, $CriteriaBuilder->getCriteriaOr()->toArray());
+    }
+
+    /**
+     * @dataProvider dataProvider
+     */
+    function testToSqlShouldReturnValidSqlPart(\Everon\DataMapper\Interfaces\Criteria\Builder $CriteriaBuilder)
+    {
+        $CriteriaBuilder->orWhere('id', 'IN', [1,2,3])->orWhere('id', 'NOT IN', [4,5,6]);
+        $CriteriaBuilder->andWhere('name', '!=', 'foo')->andWhere('name', '!=', 'bar');
+
+        $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria', $CriteriaBuilder->getCriteriaAnd());
+        $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria', $CriteriaBuilder->getCriteriaOr());
+
+        $this->assertCount(2, $CriteriaBuilder->getCriteriaAnd()->toArray());
+        $this->assertCount(2, $CriteriaBuilder->getCriteriaOr()->toArray());
+        
+        $CriteriaBuilder->toSql();
     }
 
     function dataProvider()
