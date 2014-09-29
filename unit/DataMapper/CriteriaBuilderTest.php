@@ -30,10 +30,10 @@ class CriteriaBuilderTest extends \Everon\TestCase
         $CriteriaBuilder->andWhere('name', '!=', 'foo')->andWhere('name', '!=', 'bar');
         
         $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria', $CriteriaBuilder->getCriteriaAnd());
-        $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria', $CriteriaBuilder->getCriteriaOr());
+        $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria', $CriteriaBuilder->getCriteria());
         
         $this->assertCount(2, $CriteriaBuilder->getCriteriaAnd()->toArray());
-        $this->assertCount(2, $CriteriaBuilder->getCriteriaOr()->toArray());
+        $this->assertCount(2, $CriteriaBuilder->getCriteria()->toArray());
     }
 
     /**
@@ -43,12 +43,13 @@ class CriteriaBuilderTest extends \Everon\TestCase
     {
         $CriteriaBuilder->orWhere('id', 'IN', [1,2,3])->orWhere('id', 'NOT IN', [4,5,6]);
         $CriteriaBuilder->andWhere('name', '!=', 'foo')->andWhere('name', '!=', 'bar');
+        $CriteriaBuilder->andWhere('name', '!=', 'foo')->orWhere('title', 'IS', null);
 
         $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria', $CriteriaBuilder->getCriteriaAnd());
-        $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria', $CriteriaBuilder->getCriteriaOr());
+        $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria', $CriteriaBuilder->getCriteria());
 
         $this->assertCount(2, $CriteriaBuilder->getCriteriaAnd()->toArray());
-        $this->assertCount(2, $CriteriaBuilder->getCriteriaOr()->toArray());
+        $this->assertCount(2, $CriteriaBuilder->getCriteria()->toArray());
         
         $CriteriaBuilder->toSql();
     }
