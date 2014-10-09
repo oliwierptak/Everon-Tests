@@ -13,6 +13,11 @@ use Everon\DataMapper\Criteria;
 use Everon\Interfaces;
 use Everon\Helper;
 
+function mt_rand($min=1, $max=1000)
+{
+    return 100;
+}
+
 class CriteriaBuilderTest extends \Everon\TestCase
 {
     function testConstructor()
@@ -45,28 +50,33 @@ class CriteriaBuilderTest extends \Everon\TestCase
         $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria', $CriteriaBuilder->getCurrentCriteria());
         $this->assertCount(3, $CriteriaBuilder->getCurrentCriteria()->toArray());
 
-        $CriteriaBuilder->where('modified', 'IS', null);
+        $CriteriaBuilder->where('modified', 'IS', null)->andWhere('name', '!=', null)->orWhere('id', '=', 55);
         $CriteriaBuilder->glueByOr();
         $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria', $CriteriaBuilder->getCurrentCriteria());
-        $this->assertCount(1, $CriteriaBuilder->getCurrentCriteria()->toArray());
+        $this->assertCount(3, $CriteriaBuilder->getCurrentCriteria()->toArray());
 
-        $sql = $CriteriaBuilder->toSql();
-        $this->assertEquals('((id IN (1,2,3)) OR (id NOT IN (4,5,6)) AND (name = :name)) OR (modified IS NULL)', $sql);
+        $SqlPart = $CriteriaBuilder->toSqlPart();
+        
+        preg_match_all('@:([a-zA-Z]+)_(\d+)@', $SqlPart->getSql(), $jesus_fucking_christ);
+        $jesus_fucking_christ = $jesus_fucking_christ[0];
+        
+        //strips : in front
+        array_walk($jesus_fucking_christ, function(&$item){
+            $item = substr($item, 1, strlen($item));
+        });
+        
+        foreach ($jesus_fucking_christ as $key) {
+            $this->assertTrue(array_key_exists($key, $SqlPart->getParameters()));
+        }
+        
+        $this->assertEquals(count($SqlPart->getParameters()), count($jesus_fucking_christ));
+        //$this->assertEquals('((id IN (1,2,3)) OR (id NOT IN (4,5,6)) AND (name = :name)) OR (modified IS NULL)', $sql);
     }
 
     function dataProvider()
     {
         $Factory = $this->buildFactory();
         $CriteriaBuilder = $Factory->buildCriteriaBuilder();
-
-
-        /*        $CriteriaBuilder->_and(function($Builder){
-                    $Builder->_or('id', 'in', [1,2,3])->_and('name', '!=', 'john');
-                });
-        
-                $CriteriaBuilder->_or(function($Builder){
-                    $Builder->_or('id', 'in', [1,2,3])->_and('name', '!=', 'john');
-                });*/
 
         return [
             [$CriteriaBuilder]
