@@ -38,7 +38,6 @@ class CriteriaBuilderTest extends \Everon\TestCase
         $CriteriaBuilder->where('name', '!=', 'foo')->andWhere('name', '!=', 'bar');
         $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria', $CriteriaBuilder->getCurrentCriteria());
         $this->assertCount(2, $CriteriaBuilder->getCurrentCriteria()->toArray());
-
     }
 
     /**
@@ -57,19 +56,19 @@ class CriteriaBuilderTest extends \Everon\TestCase
 
         $SqlPart = $CriteriaBuilder->toSqlPart();
         
-        preg_match_all('@:([a-zA-Z]+)_(\d+)@', $SqlPart->getSql(), $jesus_fucking_christ);
-        $jesus_fucking_christ = $jesus_fucking_christ[0];
+        preg_match_all('@:([a-zA-Z]+)_(\d+)@', $SqlPart->getSql(), $sql_parameters);
+        $sql_parameters = $sql_parameters[0];
         
         //strips : in front
-        array_walk($jesus_fucking_christ, function(&$item){
+        array_walk($sql_parameters, function(&$item){
             $item = substr($item, 1, strlen($item));
         });
         
-        foreach ($jesus_fucking_christ as $key) {
+        foreach ($sql_parameters as $key) {
             $this->assertTrue(array_key_exists($key, $SqlPart->getParameters()));
         }
         
-        $this->assertEquals(count($SqlPart->getParameters()), count($jesus_fucking_christ));
+        $this->assertEquals(count($SqlPart->getParameters()), count($sql_parameters));
         //$this->assertEquals('((id IN (1,2,3)) OR (id NOT IN (4,5,6)) AND (name = :name)) OR (modified IS NULL)', $sql);
     }
 
