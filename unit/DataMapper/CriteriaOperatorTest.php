@@ -15,7 +15,12 @@ use Everon\Helper;
 
 class CriteriaOperatorTest extends \Everon\TestCase
 {
-    function testConstructor()
+    protected $column = 'foo';
+    protected $placeholder = ':foo_76548';
+    protected $placeholder_as_paramter = 'foo_76548';
+    protected $value = 'bar';
+    
+    public function testConstructor()
     {
         $Operator = new \Everon\DataMapper\Criteria\Operator\Equal();
         $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria\Operator', $Operator);
@@ -24,11 +29,21 @@ class CriteriaOperatorTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    function testWhereOrAndShouldBuildCriteria(\Everon\DataMapper\Interfaces\Criteria\Operator $Operator)
+    public function testToSqlPartDataShouldReturnSqlPartAndParameters(\Everon\DataMapper\Interfaces\Criteria\Operator $Operator)
     {
+        $Criterium = \Mockery::mock('Everon\DataMapper\Criteria\Criterium');
+        $Criterium->shouldReceive('getColumn')->once()->andReturn($this->column);
+        $Criterium->shouldReceive('getPlaceholder')->once()->andReturn($this->placeholder);
+        $Criterium->shouldReceive('getPlaceholderAsParameter')->once()->andReturn($this->placeholder_as_paramter);
+        $Criterium->shouldReceive('getValue')->twice()->andReturn($this->value);
+
+        list($sql, $parameters) = $Operator->toSqlPartData($Criterium);
+        
+        $this->assertEquals('foo = :foo_76548', $sql);
+        $this->assertEquals(['foo_76548' => 'bar'], $parameters);
     }
 
-    function dataProvider()
+    public function dataProvider()
     {
         $Factory = $this->buildFactory();
         $CriteriaBuilder = $Factory->buildCriteriaOperator('Equal');
