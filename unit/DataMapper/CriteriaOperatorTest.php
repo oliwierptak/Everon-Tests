@@ -212,7 +212,7 @@ class CriteriaOperatorTest extends \Everon\TestCase
         preg_match_all('@:([a-zA-Z]+)_(\d+)@', $sql, $sql_parameters);
         $sql_parameters = $sql_parameters[0];
 
-        $sql_to_compare = 'NOT BETWEEN '.trim(implode(' AND ', array_values($sql_parameters))); //BETWEEN :foo_414533573 AND :foo_1406630365
+        $sql_to_compare = 'NOT BETWEEN '.trim(implode(' AND ', array_values($sql_parameters))); //NOT BETWEEN :foo_414533573 AND :foo_1406630365
 
         //strips : in front
         array_walk($sql_parameters, function(&$item){

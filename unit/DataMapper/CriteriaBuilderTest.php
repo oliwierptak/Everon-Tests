@@ -50,6 +50,7 @@ class CriteriaBuilderTest extends \Everon\TestCase
         $this->assertCount(3, $CriteriaBuilder->getCurrentCriteria()->toArray());
 
         $SqlPart = $CriteriaBuilder->toSqlPart();
+        s($SqlPart);
         
         preg_match_all('@:([a-zA-Z]+)_(\d+)@', $SqlPart->getSql(), $sql_parameters);
         $sql_parameters = $sql_parameters[0];
@@ -65,16 +66,16 @@ class CriteriaBuilderTest extends \Everon\TestCase
         
         $this->assertEquals(count($SqlPart->getParameters()), count($sql_parameters));
         /*
-            sql: (id IN (:id_1081915057,:id_1052744513,:id_1359948893) AND id NOT IN (:id_349904367,:id_880096498,:id_1251203133) AND name = :name_1369439063) OR (modified IS NULL AND name IS NOT NULL AND id = :id_176496691)
+            sql: (id IN (:id_843451778,:id_897328169,:id_1377365551) OR id NOT IN (:id_1260952006,:id_519145813,:id_1367241593) AND name = :name_1178871152) OR (modified IS NULL AND name IS NOT NULL OR id = :id_895877163)
             parameters -> array(8) [
-            'name_1369439063' => string (3) "foo"
-            'id_349904367' => integer 4
-            'id_880096498' => integer 5
-            'id_1251203133' => integer 6
-            'id_1081915057' => integer 1
-            'id_1052744513' => integer 2
-            'id_1359948893' => integer 3
-            'id_176496691' => integer 55
+                'name_1178871152' => string (3) "foo"
+                'id_1260952006' => integer 4
+                'id_519145813' => integer 5
+                'id_1367241593' => integer 6
+                'id_843451778' => integer 1
+                'id_897328169' => integer 2
+                'id_1377365551' => integer 3
+                'id_895877163' => integer 55
         */
     }
 
