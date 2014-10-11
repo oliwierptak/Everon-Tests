@@ -17,7 +17,7 @@ class CriteriaOperatorTest extends \Everon\TestCase
 {
     protected $column = 'foo';
     protected $placeholder = ':foo_76548';
-    protected $placeholder_as_paramter = 'foo_76548';
+    protected $placeholder_as_parameter = 'foo_76548';
     protected $value = 'bar';
     
     public function testConstructor()
@@ -34,7 +34,7 @@ class CriteriaOperatorTest extends \Everon\TestCase
         $Criterium = \Mockery::mock('Everon\DataMapper\Criteria\Criterium');
         $Criterium->shouldReceive('getColumn')->once()->andReturn($this->column);
         $Criterium->shouldReceive('getPlaceholder')->once()->andReturn($this->placeholder);
-        $Criterium->shouldReceive('getPlaceholderAsParameter')->once()->andReturn($this->placeholder_as_paramter);
+        $Criterium->shouldReceive('getPlaceholderAsParameter')->once()->andReturn($this->placeholder_as_parameter);
         $Criterium->shouldReceive('getValue')->twice()->andReturn($this->value);
 
         list($sql, $parameters) = $Operator->toSqlPartData($Criterium);

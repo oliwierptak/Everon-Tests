@@ -13,11 +13,6 @@ use Everon\DataMapper\Criteria;
 use Everon\Interfaces;
 use Everon\Helper;
 
-function mt_rand($min=1, $max=1000)
-{
-    return 100;
-}
-
 class CriteriaBuilderTest extends \Everon\TestCase
 {
     function testConstructor()
@@ -68,8 +63,20 @@ class CriteriaBuilderTest extends \Everon\TestCase
             $this->assertTrue(array_key_exists($key, $SqlPart->getParameters()));
         }
         
+        sd($SqlPart);
         $this->assertEquals(count($SqlPart->getParameters()), count($sql_parameters));
-        //$this->assertEquals('((id IN (1,2,3)) OR (id NOT IN (4,5,6)) AND (name = :name)) OR (modified IS NULL)', $sql);
+        /*
+            sql: (id IN (:id_1081915057,:id_1052744513,:id_1359948893) AND id NOT IN (:id_349904367,:id_880096498,:id_1251203133) AND name = :name_1369439063) OR (modified IS NULL AND name IS NOT NULL AND id = :id_176496691)
+            parameters -> array(8) [
+            'name_1369439063' => string (3) "foo"
+            'id_349904367' => integer 4
+            'id_880096498' => integer 5
+            'id_1251203133' => integer 6
+            'id_1081915057' => integer 1
+            'id_1052744513' => integer 2
+            'id_1359948893' => integer 3
+            'id_176496691' => integer 55
+        */
     }
 
     function dataProvider()

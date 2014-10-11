@@ -15,13 +15,13 @@ use Everon\Helper;
 
 class CriteriaTest extends \Everon\TestCase
 {
-    function testConstructor()
+    public function testConstructor()
     {
         $Criteria = new \Everon\DataMapper\Criteria();
         $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria', $Criteria);
     }
 
-    function dataProvider()
+    public function dataProvider()
     {
         $Criteria = new \Everon\DataMapper\Criteria();
         
