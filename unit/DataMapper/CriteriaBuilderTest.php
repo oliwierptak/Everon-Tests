@@ -50,7 +50,6 @@ class CriteriaBuilderTest extends \Everon\TestCase
         $this->assertCount(3, $CriteriaBuilder->getCurrentCriteria()->toArray());
 
         $SqlPart = $CriteriaBuilder->toSqlPart();
-        s($SqlPart);
         
         preg_match_all('@:([a-zA-Z]+)_(\d+)@', $SqlPart->getSql(), $sql_parameters);
         $sql_parameters = $sql_parameters[0];
