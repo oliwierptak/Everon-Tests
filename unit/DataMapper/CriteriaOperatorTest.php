@@ -103,6 +103,23 @@ class CriteriaOperatorTest extends \Everon\TestCase
         $this->assertEquals([$key => 'bar'], $parameters);
     }
 
+    public function testToSqlPartDataShouldReturnSqlPartAndParametersGreaterThen()
+    {
+        $Factory = $this->buildFactory();
+        $Operator = $Factory->buildCriteriaOperator('GreaterThen');
+
+        $Criterium = \Mockery::mock('Everon\DataMapper\Criteria\Criterium');
+        $Criterium->shouldReceive('getColumn')->once()->andReturn($this->column);
+        $Criterium->shouldReceive('getPlaceholder')->once()->andReturn($this->placeholder);
+        $Criterium->shouldReceive('getPlaceholderAsParameter')->once()->andReturn($this->placeholder_as_parameter);
+        $Criterium->shouldReceive('getValue')->twice()->andReturn($this->value);
+
+        list($sql, $parameters) = $Operator->toSqlPartData($Criterium);
+
+        $this->assertEquals('foo > :foo_76548', $sql);
+        $this->assertEquals(['foo_76548' => 'bar'], $parameters);
+    }
+
     public function testToSqlPartDataShouldReturnSqlPartAndParametersGreaterOrEqual()
     {
         $Factory = $this->buildFactory();
@@ -118,6 +135,94 @@ class CriteriaOperatorTest extends \Everon\TestCase
 
         $this->assertEquals('foo >= :foo_76548', $sql);
         $this->assertEquals(['foo_76548' => 'bar'], $parameters);
+    }
+
+    public function testToSqlPartDataShouldReturnSqlPartAndParametersSmallerThen()
+    {
+        $Factory = $this->buildFactory();
+        $Operator = $Factory->buildCriteriaOperator('SmallerThen');
+
+        $Criterium = \Mockery::mock('Everon\DataMapper\Criteria\Criterium');
+        $Criterium->shouldReceive('getColumn')->once()->andReturn($this->column);
+        $Criterium->shouldReceive('getPlaceholder')->once()->andReturn($this->placeholder);
+        $Criterium->shouldReceive('getPlaceholderAsParameter')->once()->andReturn($this->placeholder_as_parameter);
+        $Criterium->shouldReceive('getValue')->twice()->andReturn($this->value);
+
+        list($sql, $parameters) = $Operator->toSqlPartData($Criterium);
+
+        $this->assertEquals('foo < :foo_76548', $sql);
+        $this->assertEquals(['foo_76548' => 'bar'], $parameters);
+    }
+
+    public function testToSqlPartDataShouldReturnSqlPartAndParametersSmallerOrEqual()
+    {
+        $Factory = $this->buildFactory();
+        $Operator = $Factory->buildCriteriaOperator('SmallerOrEqual');
+
+        $Criterium = \Mockery::mock('Everon\DataMapper\Criteria\Criterium');
+        $Criterium->shouldReceive('getColumn')->once()->andReturn($this->column);
+        $Criterium->shouldReceive('getPlaceholder')->once()->andReturn($this->placeholder);
+        $Criterium->shouldReceive('getPlaceholderAsParameter')->once()->andReturn($this->placeholder_as_parameter);
+        $Criterium->shouldReceive('getValue')->twice()->andReturn($this->value);
+
+        list($sql, $parameters) = $Operator->toSqlPartData($Criterium);
+
+        $this->assertEquals('foo <= :foo_76548', $sql);
+        $this->assertEquals(['foo_76548' => 'bar'], $parameters);
+    }
+
+    public function testToSqlPartDataShouldReturnSqlPartAndParametersBetween()
+    {
+        $Factory = $this->buildFactory();
+        $Operator = $Factory->buildCriteriaOperator('Between');
+
+        $Criterium = \Mockery::mock('Everon\DataMapper\Criteria\Criterium');
+        $Criterium->shouldReceive('getColumn')->twice()->andReturn($this->column);
+        $Criterium->shouldReceive('getValue')->once()->andReturn(['2000-01-01', '2000-01-31']);
+
+        list($sql, $parameters) = $Operator->toSqlPartData($Criterium);
+
+        preg_match_all('@:([a-zA-Z]+)_(\d+)@', $sql, $sql_parameters);
+        $sql_parameters = $sql_parameters[0];
+
+        $sql_to_compare = 'BETWEEN '.trim(implode(' AND ', array_values($sql_parameters))); //BETWEEN :foo_414533573 AND :foo_1406630365
+
+        //strips : in front
+        array_walk($sql_parameters, function(&$item){
+            $item = substr($item, 1, strlen($item));
+        });
+        
+        $parameters_to_compare = array_combine(array_values($sql_parameters), ['2000-01-01', '2000-01-31']);
+
+        $this->assertEquals($sql_to_compare, $sql);
+        $this->assertEquals($parameters_to_compare, $parameters);
+    }
+
+    public function testToSqlPartDataShouldReturnSqlPartAndParametersNotBetween()
+    {
+        $Factory = $this->buildFactory();
+        $Operator = $Factory->buildCriteriaOperator('NotBetween');
+
+        $Criterium = \Mockery::mock('Everon\DataMapper\Criteria\Criterium');
+        $Criterium->shouldReceive('getColumn')->twice()->andReturn($this->column);
+        $Criterium->shouldReceive('getValue')->once()->andReturn(['2000-01-01', '2000-01-31']);
+
+        list($sql, $parameters) = $Operator->toSqlPartData($Criterium);
+
+        preg_match_all('@:([a-zA-Z]+)_(\d+)@', $sql, $sql_parameters);
+        $sql_parameters = $sql_parameters[0];
+
+        $sql_to_compare = 'NOT BETWEEN '.trim(implode(' AND ', array_values($sql_parameters))); //BETWEEN :foo_414533573 AND :foo_1406630365
+
+        //strips : in front
+        array_walk($sql_parameters, function(&$item){
+            $item = substr($item, 1, strlen($item));
+        });
+
+        $parameters_to_compare = array_combine(array_values($sql_parameters), ['2000-01-01', '2000-01-31']);
+
+        $this->assertEquals($sql_to_compare, $sql);
+        $this->assertEquals($parameters_to_compare, $parameters);
     }
 
     public function dataProvider()
