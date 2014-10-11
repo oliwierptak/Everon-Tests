@@ -63,7 +63,6 @@ class CriteriaBuilderTest extends \Everon\TestCase
             $this->assertTrue(array_key_exists($key, $SqlPart->getParameters()));
         }
         
-        sd($SqlPart);
         $this->assertEquals(count($SqlPart->getParameters()), count($sql_parameters));
         /*
             sql: (id IN (:id_1081915057,:id_1052744513,:id_1359948893) AND id NOT IN (:id_349904367,:id_880096498,:id_1251203133) AND name = :name_1369439063) OR (modified IS NULL AND name IS NOT NULL AND id = :id_176496691)
