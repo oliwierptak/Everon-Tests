@@ -10,7 +10,7 @@
 namespace Everon\Test\Domain\User;
 
 use Everon\Domain;
-use Everon\DataMapper\Interfaces\Criteria;
+use Everon\DataMapper\Interfaces\CriteriaOLD;
 
 class Repository extends \Everon\Domain\Repository
 {

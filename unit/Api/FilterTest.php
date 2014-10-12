@@ -9,7 +9,7 @@
  */
 namespace Everon\Test;
 
-use Everon\DataMapper\Interfaces\Criteria;
+use Everon\DataMapper\Interfaces\CriteriaOLD;
 use Everon\Helper;
 
 class FilterTest extends \Everon\TestCase
