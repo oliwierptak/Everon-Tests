@@ -9,7 +9,6 @@
  */
 namespace Everon\Test\Module;
 
-use Everon\Module;
 use Everon\Exception;
 
 class ManagerTest extends \Everon\TestCase
@@ -24,7 +23,7 @@ class ManagerTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    function testGetModuleShouldReturnModule(Module\Interfaces\Handler $ModuleManager)
+    function testGetModuleShouldReturnModule(\Everon\Module\Interfaces\Handler $ModuleManager)
     {
         $Module = $ModuleManager->getModuleByName('Foo');
         $this->assertInstanceOf('Everon\Module\Interfaces\Module', $Module);
