@@ -9,7 +9,7 @@
  */
 namespace Everon\Test\DataMapper;
 
-use Everon\DataMapper\Criteria;
+use Everon\DataMapper\CriteriaOLD;
 use Everon\Interfaces;
 use Everon\Helper;
 
@@ -19,14 +19,14 @@ class CriteriaTest extends \Everon\TestCase
     
     function testConstructor()
     {
-        $Criteria = new \Everon\DataMapper\Criteria();
+        $Criteria = new \Everon\DataMapper\CriteriaOLD();
         $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria', $Criteria);
     }
 
     /**
      * @dataProvider dataProvider
      */
-    function testWhere(Criteria $Criteria)
+    function testWhere(CriteriaOLD $Criteria)
     {
         $Criteria->where(['first_name' => 'John']);
         $Criteria->where(['last_name' => 'Doe']);
@@ -41,7 +41,7 @@ class CriteriaTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */ 
-    function testGetWhereToSql(Criteria $Criteria)
+    function testGetWhereToSql(CriteriaOLD $Criteria)
     {
         $where = $Criteria->getWhereSql();
         $this->assertEquals('', $where);
@@ -61,7 +61,7 @@ class CriteriaTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    function testGetOffsetLimitSql(Criteria $Criteria)
+    function testGetOffsetLimitSql(CriteriaOLD $Criteria)
     {
         $offset_limit_sql = $Criteria->getOffsetLimitSql();
         $this->assertEquals('', $offset_limit_sql);
@@ -83,7 +83,7 @@ class CriteriaTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    function testGetOrderBySortSql(Criteria $Criteria)
+    function testGetOrderBySortSql(CriteriaOLD $Criteria)
     {
         $order_by_sort_sql = $Criteria->getOrderByAndSortSql();
         $this->assertEquals('', $order_by_sort_sql);
@@ -105,7 +105,7 @@ class CriteriaTest extends \Everon\TestCase
             'offset' => 0,
         ];
 
-        $Criteria = new \Everon\DataMapper\Criteria();
+        $Criteria = new \Everon\DataMapper\CriteriaOLD();
         
         return [
             [$Criteria, $filter]

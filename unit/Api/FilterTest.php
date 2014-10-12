@@ -45,7 +45,7 @@ class FilterTest extends \Everon\TestCase
      */
     public function testApplyToCriteriaShouldNotReturnEmptyCollection(\Everon\Rest\Interfaces\Filter $Filter)
     {
-        $Criteria = new \Everon\DataMapper\Criteria();
+        $Criteria = new \Everon\DataMapper\CriteriaOLD();
         $Filter->setFilterDefinition(new Helper\Collection([
             [
                 'column'=>'user.kolom',
