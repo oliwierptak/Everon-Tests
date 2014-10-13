@@ -32,8 +32,6 @@ class RequestValidatorTest extends \Everon\TestCase
     
     /**
      * @dataProvider dataProvider
-     * @expectedException \Everon\Exception\InvalidRoute
-     * @expectedExceptionMessage Invalid required parameter: "password" for route: "test_complex"
      */
     public function testValidateShouldThrowExceptionWhenError(Interfaces\RequestValidator $Validator, Config\Interfaces\ItemRouter $RouteItem, Interfaces\Request $Request)
     {
@@ -42,7 +40,21 @@ class RequestValidatorTest extends \Everon\TestCase
         $Request->setPostCollection($PostCollection->toArray());
         
         $result = $Validator->validate($RouteItem, $Request);
+        $errors = $Validator->getErrors();
+        
         $this->assertInternalType('array', $result);
+        $this->assertEquals([
+            [],
+            [],
+            [
+                'token' => 3,
+                'username' => 'test'
+            ]
+        ], $result);
+        
+        $this->assertEquals([
+            'password' => 'Invalid parameter: "password" for route: "test_complex"'
+        ], $errors);
     }
     
     /**

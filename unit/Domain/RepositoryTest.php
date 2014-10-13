@@ -72,7 +72,7 @@ class RepositoryTest extends \Everon\TestCase
             ->method('getRelationDefinition')
             ->will($this->returnValue([]));
         $EntityMock->expects($this->once())
-            ->method('getRelationCollection')
+            ->method('setRelationCollection')
             ->will($this->returnValue([]));
         
         $FactoryMock = $this->getMock('Everon\Application\Interfaces\Factory');

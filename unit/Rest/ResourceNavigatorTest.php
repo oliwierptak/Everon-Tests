@@ -23,26 +23,30 @@ class ResourceNavigatorTest extends \Everon\TestCase
     {
         $RequestMock = $this->getMock('Everon\Rest\Interfaces\Request');
         $RequestMock->expects($this->at(0))
-            ->method('getQueryParameter')
+            ->method('getGetParameter')
             ->with('fields')
             ->will($this->returnValue('id,name,date_added'));
         $RequestMock->expects($this->at(1))
-            ->method('getQueryParameter')
+            ->method('getGetParameter')
             ->with('expand')
             ->will($this->returnValue('test,me'));
         $RequestMock->expects($this->at(2))
-            ->method('getQueryParameter')
-            ->with('order_by')
-            ->will($this->returnValue('id,-name'));
-        $RequestMock->expects($this->at(3))
-            ->method('getQueryParameter')
-            ->with('limit')
+            ->method('getGetParameter')
+            ->with('limit', 10)
             ->will($this->returnValue(null));
-        $RequestMock->expects($this->at(4))
-            ->method('getQueryParameter')
+        $RequestMock->expects($this->at(3))
+            ->method('getGetParameter')
             ->with('offset')
             ->will($this->returnValue(null));
+        $RequestMock->expects($this->at(4))
+            ->method('getGetParameter')
+            ->with('filters')
+            ->will($this->returnValue(null));
         $RequestMock->expects($this->at(5))
+            ->method('getGetParameter')
+            ->with('order_by')
+            ->will($this->returnValue('id,-name'));
+        $RequestMock->expects($this->at(6))
             ->method('getQueryParameter')
             ->with('collection')
             ->will($this->returnValue(null));
@@ -52,7 +56,6 @@ class ResourceNavigatorTest extends \Everon\TestCase
         $this->assertInstanceOf('Everon\Rest\Interfaces\ResourceNavigator', $Navigator);
         $this->assertEquals(['test', 'me'], $Navigator->getExpand());
         $this->assertEquals(['id','name', 'date_added'], $Navigator->getFields());
-        $this->assertEquals(['id','name'], $Navigator->getOrderBy());
         $this->assertEquals(['id'=>'ASC', 'name'=>'DESC'], $Navigator->getOrderBy());
     }
 
