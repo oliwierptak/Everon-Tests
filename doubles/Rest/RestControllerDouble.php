@@ -7,9 +7,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Everon\Test\Rest;
+namespace Everon\Rest;
 
-class Controller extends \Everon\Rest\Controller implements \Everon\Rest\Interfaces\Controller
+class RestControllerDouble extends \Everon\Rest\Controller
 {
-
+    public function foo()
+    {
+        
+    }
 }

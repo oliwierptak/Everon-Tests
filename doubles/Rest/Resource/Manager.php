@@ -7,9 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Everon\Test\Rest\Resource;
+namespace Everon\Rest\Resource;
 
-class Manager extends \Everon\Rest\Resource\Handler implements \Everon\Rest\Interfaces\ResourceHandler
+class Manager extends \Everon\Rest\Resource\Handler
 {
 
 }

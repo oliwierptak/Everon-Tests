@@ -53,8 +53,7 @@ class ClientTest extends \Everon\TestCase
         
         $this->assertEquals($expected, $result);
     }
-
-
+    
     /**
      * @dataProvider dataProvider
      */
@@ -76,7 +75,6 @@ class ClientTest extends \Everon\TestCase
         $Container = $Factory->getDependencyContainer();
 
         $ResourceManager = \Mockery::mock('Everon\Rest\Interfaces\ResourceManager');
-
         $Container->register('ResourceManager', function() use ($ResourceManager) {
             return $ResourceManager;
         });
