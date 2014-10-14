@@ -13,19 +13,16 @@ use Everon\Rest\Interfaces;
 
 class ControllerTest extends \Everon\TestCase
 {
-    protected $api_version = 'v1';
-    
-    protected $module_name = 'Rest';
-    
     protected $resource_data = [
         'href' => 'http://api.localhost/v1/foobars'
     ];
-    
+    protected $api_version = 'v1';
+    protected $module_name = 'Rest';
     protected $user_id = 1;
-    
+    protected $collection_name = 'barbarfoofoos';
     protected $resource_id = 1;
     protected $resource_name = 'foobars';
-    protected $resource_url = 'http://api.localhost/v1/foobars';
+    protected $resource_url = 'http://api.localhost/v1/foobars/barbarfoofoos';
     
 
     public function testConstructor()
@@ -96,7 +93,7 @@ class ControllerTest extends \Everon\TestCase
 
         $Response = $Controller->getResponse();
         $Response->shouldReceive('setData')->once()->with($Resource);
-        $Response->shouldReceive('setStatusCode')->once(201);
+        $Response->shouldReceive('setStatusCode')->once()->with(201);
         $Response->shouldReceive('setHeader')->once()->with('Location', $this->resource_url);
         
         $ResourceManager = $Controller->getResourceManager();
@@ -128,7 +125,7 @@ class ControllerTest extends \Everon\TestCase
 
         $Response = $Controller->getResponse();
         $Response->shouldReceive('setData')->once()->with($Resource);
-        $Response->shouldReceive('setStatusCode')->once(200);
+        $Response->shouldReceive('setStatusCode')->once()->with(200);
 
         $ResourceManager = $Controller->getResourceManager();
         $ResourceManager->shouldReceive('save')->once()->with("v1", "foobars", $this->resource_id, $resource_data_to_add, $this->user_id)->andReturn($Resource);
@@ -150,7 +147,7 @@ class ControllerTest extends \Everon\TestCase
 
         $Response = $Controller->getResponse();
         $Response->shouldReceive('setData')->once()->with($Resource);
-        $Response->shouldReceive('setStatusCode')->once(204);
+        $Response->shouldReceive('setStatusCode')->once()->with(204);
 
         $ResourceManager = $Controller->getResourceManager();
         $ResourceManager->shouldReceive('delete')->once()->with("v1", "foobars", $this->resource_id, $this->user_id)->andReturn($Resource);
@@ -228,6 +225,144 @@ class ControllerTest extends \Everon\TestCase
         $ResourceManager->shouldReceive('getResource')->once()->with("v1", "foobars", $this->resource_id, $Navigator)->andReturn($Resource);
 
         $Controller->getResourceFromRequest();
+    }
+
+    /**
+     * @dataProvider dataProvider
+     */
+    public function testAddResourceCollectionFromRequest(Interfaces\Controller $Controller)
+    {
+        $collection_data_to_add = [[
+            'id' => null,
+            'email' => 'test@foo.bar',
+            'password' => 'foobar'
+        ],[
+            'id' => null,
+            'email' => 'bar@test.bar',
+            'password' => 'testr'
+        ]];
+
+        $Href = \Mockery::mock('Everon\Rest\Interfaces\Href');
+        $Href->shouldReceive('getUrl')->once()->with()->andReturn($this->resource_url);
+
+        $Resource = \Mockery::mock('Everon\Rest\Interfaces\Resource');
+        $Resource->shouldReceive('getHref')->once()->with()->andReturn($Href);
+
+        $PostCollection = \Mockery::mock('Everon\Interfaces\Collection');
+        $PostCollection->shouldReceive('toArray')->once()->with(true)->andReturn($collection_data_to_add);
+
+        $Request = $Controller->getRequest();
+        $Request->shouldReceive('getVersion')->once()->with()->andReturn($this->api_version);
+        $Request->shouldReceive('getPostCollection')->once()->with()->andReturn($PostCollection);
+        $Request->shouldReceive('getQueryParameter')->once()->with('resource', null)->andReturn($this->resource_name);
+        $Request->shouldReceive('getQueryParameter')->once()->with('resource_id', null)->andReturn($this->resource_id);
+        $Request->shouldReceive('getQueryParameter')->once()->with('collection', null)->andReturn($this->collection_name);
+
+        $Response = $Controller->getResponse();
+        $Response->shouldReceive('setData')->once()->with($Resource);
+        $Response->shouldReceive('setStatusCode')->once()->with(201);
+        $Response->shouldReceive('setHeader')->once()->with('Location', $this->resource_url);
+
+        $ResourceManager = $Controller->getResourceManager();
+        $ResourceManager->shouldReceive('addCollection')->once()->with("v1", "foobars", $this->resource_id, $this->collection_name, $collection_data_to_add, $this->user_id)->andReturn($Resource);
+
+        $Controller->addResourceCollectionFromRequest();
+    }
+
+    /**
+     * @dataProvider dataProvider
+     */
+    public function testSaveResourceCollectionFromRequest(Interfaces\Controller $Controller)
+    {
+        $collection_data_to_add = [[
+            'id' => 1,
+            'email' => 'test@foo.bar',
+            'password' => 'foobar'
+        ],[
+            'id' => 2,
+            'email' => 'bar@test.bar',
+            'password' => 'testr'
+        ]];
+        $Resource = \Mockery::mock('Everon\Rest\Interfaces\Resource');
+
+        $PostCollection = \Mockery::mock('Everon\Interfaces\Collection');
+        $PostCollection->shouldReceive('toArray')->once()->with(true)->andReturn($collection_data_to_add);
+
+        $Request = $Controller->getRequest();
+        $Request->shouldReceive('getVersion')->once()->with()->andReturn($this->api_version);
+        $Request->shouldReceive('getPostCollection')->once()->with()->andReturn($PostCollection);
+        $Request->shouldReceive('getQueryParameter')->once()->with('resource', null)->andReturn($this->resource_name);
+        $Request->shouldReceive('getQueryParameter')->once()->with('resource_id', null)->andReturn($this->resource_id);
+        $Request->shouldReceive('getQueryParameter')->once()->with('collection', null)->andReturn($this->collection_name);
+
+        $Response = $Controller->getResponse();
+        $Response->shouldReceive('setData')->once()->with($Resource);
+        $Response->shouldReceive('setStatusCode')->once()->with(200);
+        $Response->shouldReceive('setHeader')->once()->with('Location', $this->resource_url);
+
+        $ResourceManager = $Controller->getResourceManager();
+        $ResourceManager->shouldReceive('saveCollection')->once()->with("v1", "foobars", $this->resource_id, $this->collection_name, $collection_data_to_add, $this->user_id)->andReturn($Resource);
+
+        $Controller->saveResourceCollectionFromRequest();
+    }
+
+    /**
+     * @dataProvider dataProvider
+     */
+    public function testDeleteResourceCollectionFromRequest(Interfaces\Controller $Controller)
+    {
+        $collection_data_to_add = [[
+            'id' => 1,
+            'email' => 'test@foo.bar',
+            'password' => 'foobar'
+        ],[
+            'id' => 2,
+            'email' => 'bar@test.bar',
+            'password' => 'testr'
+        ]];
+        $Resource = \Mockery::mock('Everon\Rest\Interfaces\Resource');
+
+        $PostCollection = \Mockery::mock('Everon\Interfaces\Collection');
+        $PostCollection->shouldReceive('toArray')->once()->with(true)->andReturn($collection_data_to_add);
+
+        $Request = $Controller->getRequest();
+        $Request->shouldReceive('getVersion')->once()->with()->andReturn($this->api_version);
+        $Request->shouldReceive('getPostCollection')->once()->with()->andReturn($PostCollection);
+        $Request->shouldReceive('getQueryParameter')->once()->with('resource', null)->andReturn($this->resource_name);
+        $Request->shouldReceive('getQueryParameter')->once()->with('resource_id', null)->andReturn($this->resource_id);
+        $Request->shouldReceive('getQueryParameter')->once()->with('collection', null)->andReturn($this->collection_name);
+
+        $Response = $Controller->getResponse();
+        $Response->shouldReceive('setData')->once()->with($Resource);
+        $Response->shouldReceive('setStatusCode')->once()->with(204);
+        $Response->shouldReceive('setHeader')->once()->with('Location', $this->resource_url);
+
+        $ResourceManager = $Controller->getResourceManager();
+        $ResourceManager->shouldReceive('deleteCollection')->once()->with("v1", "foobars", $this->resource_id, $this->collection_name, $collection_data_to_add, $this->user_id)->andReturn($Resource);
+
+        $Controller->deleteResourceCollectionFromRequest();
+    }
+
+    /**
+     * @dataProvider dataProvider
+     */
+    public function testShowException(Interfaces\Controller $Controller)
+    {
+        $this->expectOutputString('{"error":"Moar error info"}');
+        
+        $code = 500;
+        $message = 'Moar error info';
+
+        $Exception = new \Everon\Http\Exception((new \Everon\Http\Message\InternalServerError($message)));
+        
+        $Response = $Controller->getResponse();
+        $Response->shouldReceive('wasStatusSet')->once()->with()->andReturn(true);
+        $Response->shouldReceive('setData')->once()->with(['error' => $message]);
+        $Response->shouldReceive('setStatusCode')->once()->with($code);
+        $Response->shouldReceive('setStatusMessage')->once()->with($message);
+        $Response->shouldReceive('toJson')->once()->with()->andReturn(json_encode(['error' => $message]));
+
+        $Controller->showException($Exception);
     }
 
     public function dataProvider()
