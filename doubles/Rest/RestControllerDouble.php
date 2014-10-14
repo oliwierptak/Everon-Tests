@@ -11,7 +11,7 @@ namespace Everon\Rest;
 
 class RestControllerDouble extends \Everon\Rest\Controller
 {
-    public function foo()
+    public function foobar()
     {
         
     }
