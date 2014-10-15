@@ -1,5 +1,5 @@
 <phpunit
-    bootstrap="bootstrap_test.php"
+    bootstrap="bootstrap_everon.php"
     colors="true"
     stopOnError="true"
     stopOnFailure="true"

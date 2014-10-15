@@ -7,8 +7,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Everon\Test\Module;
+namespace Everon\Module;
 
-class Manager extends \Everon\Module\Manager
+class Manager extends \Everon\Module\Handler implements Interfaces\Manager
 {
 }

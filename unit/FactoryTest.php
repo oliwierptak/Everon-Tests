@@ -129,13 +129,24 @@ class FactoryTest extends \Everon\TestCase
         $Factory->getDependencyContainer()->register('ConfigManager', function() use ($ConfigManager) {
             return $ConfigManager;
         });
+        
         $RequestMock = $this->getMock('Everon\Interfaces\Request');
         $Factory->getDependencyContainer()->register('Request', function() use ($RequestMock) {
             return $RequestMock;
         });
+
+        $ConnectionManagerMock = $this->getMock('Everon\DataMapper\Interfaces\ConnectionManager');
+        $Factory->getDependencyContainer()->register('ConnectionManager', function() use ($ConnectionManagerMock) {
+            return $ConnectionManagerMock;
+        });
         
-        $Model = $Factory->buildDomainModel('User', 'Everon\Test\Domain');
-        $this->assertInstanceOf('Everon\Test\Domain\User\Model', $Model);
+        $DataMapperManagerMock = $this->getMock('Everon\DataMapper\Interfaces\Manager');
+        $Factory->getDependencyContainer()->register('DataMapperManager', function() use ($DataMapperManagerMock) {
+            return $DataMapperManagerMock;
+        });
+        
+        $Model = $Factory->buildDomainModel('Foo', 'Everon\Domain');
+        $this->assertInstanceOf('Everon\Domain\Interfaces\Model', $Model);
     }
 
     /**
@@ -210,7 +221,7 @@ class FactoryTest extends \Everon\TestCase
      */
     public function testBuildLogger(Interfaces\Factory $Factory)
     {
-        $Logger = $Factory->buildLogger($this->getLogDirectory(), true);
+        $Logger = $Factory->buildLogger($this->getFrameworkBootstrap()->getEnvironment()->getLog(), true);
         $this->assertInstanceOf('Everon\Interfaces\Logger', $Logger);
     }
     
@@ -434,7 +445,7 @@ class FactoryTest extends \Everon\TestCase
      */
     public function testBuildLoggerThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
-        $Factory->buildLogger($this->getLogDirectory(), false);
+        $Factory->buildLogger($this->getFrameworkBootstrap()->getEnvironment()->getLog(), false);
     }
 
     /**
@@ -477,6 +488,11 @@ class FactoryTest extends \Everon\TestCase
     public function testBuildRequestShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
         $Factory->buildHttpRequest([], [], [], []);
+    }
+    
+    public function getTemplateDirectory()
+    {
+        return $this->getFixtureDirectory().'templates'.DIRECTORY_SEPARATOR;
     }
 
     public function dataProvider()

@@ -12,7 +12,44 @@ namespace Everon\Test;
 class RequestTest extends \Everon\TestCase
 {
     protected static $pass = 0;
-    
+
+    /**
+     * @var array
+     */
+    protected $server = [
+        'SERVER_PROTOCOL'=> 'HTTP/1.1',
+        'REQUEST_METHOD'=> 'GET',
+        'REQUEST_URI'=> '/v1/foobars',
+        'QUERY_STRING'=> '?foo=bar',
+        'SERVER_NAME'=> 'api.localhost',
+        'SERVER_PORT'=> 80,
+        'SERVER_ADDR'=> '127.0.0.1',
+        'REMOTE_ADDR'=> '127.0.0.1',
+        'HTTPS'=> 'off',
+    ];
+
+    /**
+     * @var array
+     */
+    protected $get = [
+        'foo' => 'bar'
+    ];
+
+    /**
+     * @var array
+     */
+    protected $post = [
+        'id' => null,
+        'email' => 'test@grofas.com',
+        'password' => 'foobar'
+    ];
+
+    /**
+     * @var array
+     */
+    protected $files = [];
+
+
     public function setUp()
     {
         ++static::$pass;
@@ -20,19 +57,7 @@ class RequestTest extends \Everon\TestCase
     
     public function testConstructor()
     {
-        $Request = new MyRequest([
-            'SERVER_PROTOCOL'=> 'HTTP/1.1',
-            'REQUEST_METHOD'=> 'GET',
-            'REQUEST_URI'=> '/',
-            'QUERY_STRING'=> '?foo=bar',
-            'SERVER_NAME'=> 'everon.nova',
-            'SERVER_PORT'=> 80,
-            'SERVER_ADDR'=> '127.0.0.1',
-            'REMOTE_ADDR'=> '127.0.0.1',
-            'HTTPS'=> 'off',
-        ],[
-            'foo' => 'bar'
-        ],[],[]);
+        $Request = new \Everon\Test\MyRequest($this->server, $this->get, $this->post, $this->files);
         
         $this->assertInstanceOf('\Everon\Interfaces\Request', $Request);
         $this->assertInternalType('array', $Request->getGetCollection()->toArray());

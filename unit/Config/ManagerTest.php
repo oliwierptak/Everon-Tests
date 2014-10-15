@@ -150,7 +150,7 @@ class ManagerTest extends \Everon\TestCase
 
         
         
-        $filename = $this->getConfigDirectory().'test.ini';
+        $filename = $this->getFrameworkBootstrap()->getEnvironment()->getConfig().'test.ini';
         $ConfigLoaderItem = $Factory->buildConfigLoaderItem($filename, parse_ini_file($filename, true));
         $Expected = $Factory->buildConfig(
             'test',
@@ -158,18 +158,14 @@ class ManagerTest extends \Everon\TestCase
             $Compiler
         );
 
-        $Environment = new Environment($this->FrameworkBootstrap->getEnvironment()->getRoot(), $this->FrameworkBootstrap->getEnvironment()->getEveronRoot());
-        $Environment->setConfig($this->getConfigDirectory());
-        $Environment->setCacheConfig($this->getConfigCacheDirectory());
+        //$FileSystem = $Factory->buildFileSystem($this->getFrameworkBootstrap()->getEnvironment()->getRoot());
         
-        $FileSystem = $Factory->buildFileSystem($this->getDoublesDirectory());
-        
-        $ConfigLoader = $Factory->buildConfigLoader($Environment->getConfig(), $Environment->getCacheConfig());
+        $ConfigLoader = $Factory->buildConfigLoader($this->getFrameworkBootstrap()->getEnvironment()->getConfig(), $this->getFrameworkBootstrap()->getEnvironment()->getCacheConfig());
         $ConfigLoader->setFactory($Factory);
         
         $ConfigManager = $Factory->buildConfigManager($ConfigLoader);
         $ConfigManager->setFactory($Factory);
-        $ConfigManager->setFileSystem($FileSystem);
+        //$ConfigManager->setFileSystem($FileSystem);
         
         return [
             [$ConfigManager, $Expected]

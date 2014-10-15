@@ -9,8 +9,8 @@
  */
 namespace Everon\Test\Domain;
 
-use Everon\Test\Domain\User\Entity;
 use Everon\Domain\Interfaces;
+use Everon\Domain\Foo\Entity;
 
 class EntityTest extends \Everon\TestCase
 {
@@ -22,7 +22,7 @@ class EntityTest extends \Everon\TestCase
             'last_name' => 'Doe',
             'date_of_birth' => '1990-09-09',
         ];
-        $Entity = new \Everon\Domain\Entity('id', $data);
+        $Entity = new \Everon\Domain\Foo\Entity('id', $data);
         $this->assertInstanceOf('Everon\Domain\Interfaces\Entity', $Entity);
         $this->assertEquals(1, $Entity->getId());
     }
@@ -37,7 +37,7 @@ class EntityTest extends \Everon\TestCase
         ];
         
         $Factory = $this->buildFactory();
-        $Entity = $Factory->buildDomainEntity('User', 'id', $data, 'Everon\Test\Domain');
+        $Entity = $Factory->buildDomainEntity('Foo', 'id', $data, 'Everon\Domain');
         $this->assertNull($Entity->getId());
         $this->assertTrue($Entity->isNew());
         $this->assertFalse($Entity->isDeleted());
@@ -186,7 +186,7 @@ class EntityTest extends \Everon\TestCase
         ];
         
         $Factory = $this->buildFactory();
-        $Entity = $Factory->buildDomainEntity('User', 'id', $data, 'Everon\Test\Domain');
+        $Entity = $Factory->buildDomainEntity('Foo', 'id', $data, 'Everon\Domain');
                     
         return [
             [$Entity, $data]

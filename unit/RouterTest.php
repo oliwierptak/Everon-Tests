@@ -55,7 +55,7 @@ class RouterTest extends \Everon\TestCase
     public function dataProvider()
     {
         
-        $data = parse_ini_file($this->getConfigDirectory().'router.ini', true);
+        $data = parse_ini_file($this->getFrameworkBootstrap()->getEnvironment()->getConfig().'router.ini', true);
         foreach ($data as $name => $item_data) {
             $data[$name][\Everon\Config\Item\Router::PROPERTY_MODULE] = 'Test';
         }

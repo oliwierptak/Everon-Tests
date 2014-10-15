@@ -9,7 +9,7 @@
  */
 namespace Everon\Test\Domain;
 
-use Everon\Test\Domain\User\Repository;
+use Everon\Domain\Foo\Repository;
 use Everon\Domain\Interfaces;
 
 class RepositoryTest extends \Everon\TestCase
@@ -17,7 +17,7 @@ class RepositoryTest extends \Everon\TestCase
     public function testConstructor()
     {
         $DataMapperMock = $this->getMock('Everon\Interfaces\DataMapper');
-        $Repository = new Repository('User', $DataMapperMock);
+        $Repository = new Repository('Foo', $DataMapperMock);
         $this->assertInstanceOf('Everon\Domain\Interfaces\Repository', $Repository);
     }
 
@@ -26,7 +26,7 @@ class RepositoryTest extends \Everon\TestCase
      */
     public function testPersistShouldAddNewEntityAndMarkEntityAsPersisted(Repository $Repository, array $data)
     {
-        $Entity = $this->buildFactory()->buildDomainEntity('User', 'id', $data, 'Everon\Test\Domain');
+        $Entity = $this->buildFactory()->buildDomainEntity('Foo', 'id', $data, 'Everon\Domain');
         $Repository->persist($Entity, 1);
         $this->assertTrue($Entity->isPersisted());
     }
@@ -36,7 +36,7 @@ class RepositoryTest extends \Everon\TestCase
      */
     public function testPersistShouldUpdateEntityAndMarkEntityAsPersisted(Repository $Repository, array $data)
     {
-        $Entity = $this->buildFactory()->buildDomainEntity('User', 'id', $data, 'Everon\Test\Domain');
+        $Entity = $this->buildFactory()->buildDomainEntity('Foo', 'id', $data, 'Everon\Domain');
         $Repository->persist($Entity, 1);
         $this->assertTrue($Entity->isPersisted());
     }
@@ -46,7 +46,7 @@ class RepositoryTest extends \Everon\TestCase
      */
     public function testRemoveShouldDeleteEntityAndMarkEntityAsDeleted(Repository $Repository, array $data)
     {
-        $Entity = $this->buildFactory()->buildDomainEntity('User', 'id', $data, 'Everon\Test\Domain');
+        $Entity = $this->buildFactory()->buildDomainEntity('Foo', 'id', $data, 'Everon\Domain');
         $Repository->remove($Entity, 1);
         $this->assertNull($Entity->getId());
         $this->assertTrue($Entity->isDeleted());
@@ -116,7 +116,7 @@ class RepositoryTest extends \Everon\TestCase
      */
     public function testGetNameShouldReturnClassName(Repository $Repository, array $data)
     {
-        $this->assertEquals('User', $Repository->getName());
+        $this->assertEquals('Foo', $Repository->getName());
     }
    
     public function dataProvider()
@@ -157,12 +157,12 @@ class RepositoryTest extends \Everon\TestCase
                
         $Factory = $this->buildFactory();
         $Container = $Factory->getDependencyContainer();
-        $DomainManagerMock = $this->getMock('Everon\Test\Domain\Interfaces\Manager', [], [], '', false);
+        $DomainManagerMock = $this->getMock('Everon\Domain\Interfaces\Manager', [], [], '', false);
         $Container->register('DomainManager', function() use ($DomainManagerMock) {
             return $DomainManagerMock;
         });
         
-        $Repository = $Factory->buildDomainRepository('User', $DataMapperMock, 'Everon\Test\Domain');
+        $Repository = $Factory->buildDomainRepository('Foo', $DataMapperMock, 'Everon\Domain');
         
         return [
             [$Repository, $entity_data]

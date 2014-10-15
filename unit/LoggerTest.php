@@ -42,6 +42,11 @@ class LoggerTest extends \Everon\TestCase
         $this->assertCount(1, $Logger->getLogFiles());
     }
 
+    public function getLogDirectory()
+    {
+        return $this->getTmpDirectory().'logs'.DIRECTORY_SEPARATOR;
+    }
+
     public function testWriting()
     {
         $Logger = new \Everon\Logger($this->getLogDirectory(), true);

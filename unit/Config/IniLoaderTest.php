@@ -13,13 +13,6 @@ use Everon\Config;
 
 class IniLoaderTest extends \Everon\TestCase
 {
-    protected function setUp()
-    {
-        if (is_dir($this->getTmpDirectory()) === false) {
-            @mkdir($this->getTmpDirectory(), 0775, true);
-        }
-    }
-    
     public function testConstructor()
     {
         $Loader = new \Everon\Config\Loader($this->FrameworkBootstrap->getEnvironment()->getConfig(), $this->FrameworkBootstrap->getEnvironment()->getCacheConfig());
@@ -76,7 +69,7 @@ class IniLoaderTest extends \Everon\TestCase
      */
     public function testRead(Config\Interfaces\Loader $ConfigLoader)
     {
-        $filename = $this->getConfigDirectory().'application.ini';
+        $filename = $this->getFrameworkBootstrap()->getEnvironment()->getConfig().'application.ini';
         $data = $ConfigLoader->read($filename);
         $this->assertInternalType('array', $data);
         $this->assertNotEmpty($data);
@@ -87,8 +80,8 @@ class IniLoaderTest extends \Everon\TestCase
      */
     public function testSaveConfigToCache(Config\Interfaces\Loader $ConfigLoader)
     {
-        $filename = $this->getConfigCacheDirectory().'application.ini';
-        $cache_filename = $this->getConfigCacheDirectory().'application.ini.php';
+        $filename = $this->getFrameworkBootstrap()->getEnvironment()->getConfig().'application.ini';
+        $cache_filename = $this->getFrameworkBootstrap()->getEnvironment()->getCacheConfig().'application.ini.php';
         $ConfigMock = $this->getMock('Everon\Interfaces\Config', [], [], '', false);
         
         $ConfigMock->expects($this->once())
@@ -132,7 +125,7 @@ class IniLoaderTest extends \Everon\TestCase
          * @var \Everon\Application\Interfaces\Factory $Factory
          */
         $Factory = $this->buildFactory();
-        $ConfigLoader = $Factory->buildConfigLoader($this->getConfigDirectory(), $this->getConfigCacheDirectory());
+        $ConfigLoader = $Factory->buildConfigLoader($this->getFrameworkBootstrap()->getEnvironment()->getConfig(), $this->getFrameworkBootstrap()->getEnvironment()->getCacheConfig());
 
         return [
             [$ConfigLoader]

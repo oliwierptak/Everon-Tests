@@ -7,11 +7,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Everon\Test\Domain\User;
+namespace Everon\DataMapper\PostgreSql;
 
-use Everon\Domain;
-use Everon\DataMapper\Interfaces\CriteriaOLD;
+use Everon\DataMapper;
 
-class Repository extends \Everon\Domain\Repository
+class Foo extends DataMapper\Schema\PostgreSql\Mapper
 {
 }

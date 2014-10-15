@@ -16,7 +16,7 @@ class ManagerTest extends \Everon\TestCase
     public function testConstructor()
     {
         $DataMapperManagerMock = $this->getMock('Everon\DataMapper\Interfaces\Manager');
-        $Manager = new \Everon\Test\Domain\Manager($DataMapperManagerMock);
+        $Manager = new \Everon\Domain\Manager($DataMapperManagerMock);
         $this->assertInstanceOf('Everon\Domain\Interfaces\Handler', $Manager);
     }
 
@@ -25,7 +25,7 @@ class ManagerTest extends \Everon\TestCase
      */
     public function testGetModelShouldReturnModel(\Everon\Domain\Interfaces\Manager $DomainManager)
     {
-        $ModelMock = $this->getMock('Everon\Test\Domain\User\Model');
+        $ModelMock = $this->getMock('Everon\Domain\Interfaces\Model');
         $FactoryMock = $this->getMock('Everon\Application\Interfaces\Factory');
         $FactoryMock->expects($this->once())
             ->method('buildDomainModel')
@@ -34,7 +34,7 @@ class ManagerTest extends \Everon\TestCase
         $DomainManager->setFactory($FactoryMock);
         $Model = $DomainManager->getModelByName('User');
         
-        $this->assertInstanceOf('Everon\Test\Domain\User\Model', $Model);
+        $this->assertInstanceOf('Everon\Domain\Interfaces\Model', $Model);
     }
     
     /**
@@ -46,7 +46,7 @@ class ManagerTest extends \Everon\TestCase
         $DataMapperMock = $this->getMock('Everon\Interfaces\DataMapper');
         $SchemaTableMock = $this->getMock('Everon\DataMapper\Interfaces\Schema\Table');
         $SchemaMock = $this->getMock('Everon\DataMapper\Interfaces\Schema');
-        $RepositoryMock = $this->getMock('Everon\Test\Domain\User\Repository', [], [], '', false);
+        $RepositoryMock = $this->getMock('Everon\Domain\Interfaces\Repository', [], [], '', false);
         $FactoryMock = $this->getMock('Everon\Application\Interfaces\Factory');
 
         $SchemaMock->expects($this->once())
@@ -68,7 +68,7 @@ class ManagerTest extends \Everon\TestCase
         
         $Repository = $DomainManager->getRepositoryByName('User');
         
-        $this->assertInstanceOf('Everon\Test\Domain\User\Repository', $Repository);
+        $this->assertInstanceOf('Everon\Domain\Interfaces\Repository', $Repository);
     }
     
     public function dataProvider()

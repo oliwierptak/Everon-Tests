@@ -73,11 +73,12 @@ class ClientTest extends \Everon\TestCase
     {
         $Factory = $this->buildFactory();
         $Container = $Factory->getDependencyContainer();
-
+        
         $ResourceManager = \Mockery::mock('Everon\Rest\Interfaces\ResourceManager');
         $Container->register('ResourceManager', function() use ($ResourceManager) {
             return $ResourceManager;
         });
+        
         
         $Href = new \Everon\Rest\Resource\Href('http://api.nova/', 'v1', 'url');
         $CurlAdapter = $this->getMock('Everon\Rest\Interfaces\CurlAdapter');

@@ -55,10 +55,13 @@ class FileSystemTest extends \Everon\TestCase
     {
         $path = implode(DIRECTORY_SEPARATOR, ['this', 'is', 'test']);
         $FileSystem->createPath($path);
-        $Dir = new \SplFileInfo($this->getTmpDirectory().$path);
-        $this->assertTrue($Dir->isDir());
+        $RealDir = new \SplFileInfo($this->getTmpDirectory().$path);
+        $this->assertTrue($RealDir->isDir());
 
-        $FileSystem->createPath($path.DIRECTORY_SEPARATOR.'more');
+        $path = $path.DIRECTORY_SEPARATOR.'more';
+        $FileSystem->createPath($path);
+        $RealDir = new \SplFileInfo($this->getTmpDirectory().$path);
+        $this->assertTrue($RealDir->isDir());
     }
     
     /**
@@ -68,11 +71,11 @@ class FileSystemTest extends \Everon\TestCase
     {
         $path = implode(DIRECTORY_SEPARATOR, ['this', 'is', 'test']);
         $FileSystem->createPath($path);
-        $Dir = new \SplFileInfo($this->getTmpDirectory().$path);
-        $this->assertTrue($Dir->isDir());
+        $RealDir = new \SplFileInfo($this->getTmpDirectory().$path);
+        $this->assertTrue($RealDir->isDir());
         
         $FileSystem->deletePath($path);
-        $this->assertFalse($Dir->isDir());
+        $this->assertFalse($RealDir->isDir());
     }
 
     /**

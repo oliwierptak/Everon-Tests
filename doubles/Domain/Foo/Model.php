@@ -7,11 +7,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Everon\Test;
+namespace Everon\Domain\Foo;
 
-class MyController extends \Everon\Mvc\Controller implements \Everon\Interfaces\Controller
+use Everon\Dependency;
+
+class Model extends \Everon\Domain\Model implements \Everon\Domain\Interfaces\Model
 {
+    use Dependency\Injection\Logger;
+
     public function testOne()
     {
+        $this->getLogger()->debug('some debug');
     }
 }

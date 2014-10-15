@@ -21,7 +21,7 @@ class DataMapperTest extends \Everon\TestCase
     {
         $SchemaMock = $this->getMock('Everon\DataMapper\Interfaces\Schema');
         $TableMock = $this->getMock('Everon\DataMapper\Interfaces\Schema\Table', [], [],'', false);
-        $DataMapper = new DataMapper\PostgreSql\User($TableMock, $SchemaMock);
+        $DataMapper = new \Everon\DataMapper\PostgreSql\Foo($TableMock, $SchemaMock);
         $this->assertInstanceOf('Everon\Interfaces\DataMapper', $DataMapper);
     }
 
@@ -154,7 +154,7 @@ class DataMapperTest extends \Everon\TestCase
         $TableMock = $this->getMock('Everon\DataMapper\Interfaces\Schema\Table', [],[], '', false);
         $TableMock->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('user'));
+            ->will($this->returnValue('foo'));
         $TableMock->expects($this->once())
             ->method('validateId')
             ->will($this->returnValue(1));
@@ -166,7 +166,7 @@ class DataMapperTest extends \Everon\TestCase
             ->will($this->returnValue('id'));
 
         $Factory = $this->buildFactory();
-        $Mapper = $Factory->buildDataMapper('User', $TableMock, $SchemaMock, 'Everon\Test\DataMapper');
+        $Mapper = $Factory->buildDataMapper('Foo', $TableMock, $SchemaMock, 'Everon\DataMapper');
         
         return [
             [$Mapper, $PdoAdapterMock]
