@@ -16,7 +16,8 @@ use Everon\Helper;
 class DataMapperTest extends \Everon\TestCase
 {
     use Helper\Arrays;
-    
+
+
     public function testConstructor()
     {
         $SchemaMock = $this->getMock('Everon\DataMapper\Interfaces\Schema');
