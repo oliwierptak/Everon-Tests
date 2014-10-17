@@ -27,12 +27,59 @@ class CriteriaBuilderTest extends \Everon\TestCase
     function testWhereOrAndShouldBuildCriteria(\Everon\DataMapper\Interfaces\Criteria\Builder $CriteriaBuilder)
     {
         $CriteriaBuilder->where('id', 'IN', [1,2,3])->orWhere('id', 'NOT IN', [4,5,6]);
-        $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria', $CriteriaBuilder->getCurrentCriteria());
-        $this->assertCount(2, $CriteriaBuilder->getCurrentCriteria()->toArray());
+        $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria\Container', $CriteriaBuilder->getCurrentContainer());
+        $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria', $CriteriaBuilder->getCurrentContainer()->getCriteria());
+        $this->assertCount(2, $CriteriaBuilder->getCurrentContainer()->getCriteria()->toArray());
 
         $CriteriaBuilder->where('name', '!=', 'foo')->andWhere('name', '!=', 'bar');
-        $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria', $CriteriaBuilder->getCurrentCriteria());
-        $this->assertCount(2, $CriteriaBuilder->getCurrentCriteria()->toArray());
+        $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria\Container', $CriteriaBuilder->getCurrentContainer());
+        $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria', $CriteriaBuilder->getCurrentContainer()->getCriteria());
+        $this->assertCount(2, $CriteriaBuilder->getCurrentContainer()->getCriteria()->toArray());
+    }
+
+    /**
+     * @dataProvider dataProvider
+     */
+    function testGlue(\Everon\DataMapper\Interfaces\Criteria\Builder $CriteriaBuilder)
+    {
+        $CriteriaBuilder->where('id', 'IN', [1,2,3])->orWhere('id', 'NOT IN', [4,5,6]);
+        $CriteriaBuilder->glueByOr();
+        $CriteriaBuilder->where('name', '!=', 'foo')->andWhere('name', '!=', 'bar');
+        $CriteriaBuilder->glueByAnd();
+        $CriteriaBuilder->where('bar', '=', 'foo')->andWhere('name', '=', 'Doe');
+
+        $SqlPart = $CriteriaBuilder->toSqlPart();
+
+        preg_match_all('@:([a-zA-Z]+)_(\d+)@', $SqlPart->getSql(), $sql_parameters);
+        $sql_parameters = $sql_parameters[0];
+
+        //strips : in front
+        array_walk($sql_parameters, function(&$item){
+            $item = substr($item, 1, strlen($item));
+        });
+
+        foreach ($sql_parameters as $key) {
+            $this->assertTrue(array_key_exists($key, $SqlPart->getParameters()));
+        }
+
+        $this->assertEquals(count($SqlPart->getParameters()), count($sql_parameters));
+        /*
+         (id IN (:id_1263450107,:id_1088910886,:id_404821955) OR id NOT IN (:id_470739703,:id_562547487,:id_230395754)) OR
+        (name != :name_1409254675 AND name != :name_190021050) AND
+        (bar = :bar_1337676982 AND name = :name_391340793)"
+            protected parameters -> array(10) [
+                'id_470739703' => integer 4
+                'id_562547487' => integer 5
+                'id_230395754' => integer 6
+                'id_1263450107' => integer 1
+                'id_1088910886' => integer 2
+                'id_404821955' => integer 3
+                'name_190021050' => string (3) "bar"
+                'name_1409254675' => string (3) "foo"
+                'name_391340793' => string (3) "Doe"
+                'bar_1337676982' => string (3) "foo"
+            ]
+         */
     }
 
     /**
@@ -41,13 +88,14 @@ class CriteriaBuilderTest extends \Everon\TestCase
     function testToSqlPartShouldReturnValidSqlPart(\Everon\DataMapper\Interfaces\Criteria\Builder $CriteriaBuilder)
     {
         $CriteriaBuilder->where('id', 'IN', [1,2,3])->orWhere('id', 'NOT IN', [4,5,6])->andWhere('name', '=', 'foo');
-        $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria', $CriteriaBuilder->getCurrentCriteria());
-        $this->assertCount(3, $CriteriaBuilder->getCurrentCriteria()->toArray());
+        $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria\Container', $CriteriaBuilder->getCurrentContainer());
+        $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria', $CriteriaBuilder->getCurrentContainer()->getCriteria());
+        $this->assertCount(3, $CriteriaBuilder->getCurrentContainer()->getCriteria()->toArray());
 
         $CriteriaBuilder->where('modified', 'IS', null)->andWhere('name', '!=', null)->orWhere('id', '=', 55);
-        $CriteriaBuilder->glueByOr();
-        $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria', $CriteriaBuilder->getCurrentCriteria());
-        $this->assertCount(3, $CriteriaBuilder->getCurrentCriteria()->toArray());
+        $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria\Container', $CriteriaBuilder->getCurrentContainer());
+        $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria', $CriteriaBuilder->getCurrentContainer()->getCriteria());
+        $this->assertCount(3, $CriteriaBuilder->getCurrentContainer()->getCriteria()->toArray());
 
         $SqlPart = $CriteriaBuilder->toSqlPart();
         

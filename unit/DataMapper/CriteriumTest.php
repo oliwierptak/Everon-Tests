@@ -64,7 +64,7 @@ class CriteriumTest extends \Everon\TestCase
         
         $Criterium->setFactory($Factory);
         
-        $SqlPart = $Criterium->toSqlPart();
+        $SqlPart = $Criterium->getSqlPart();
         $this->assertInstanceOf('Everon\DataMapper\Interfaces\SqlPart', $SqlPart);
     }
 
@@ -90,7 +90,7 @@ class CriteriumTest extends \Everon\TestCase
 
         $Criterium->setFactory($Factory);
 
-        $SqlPart = $Criterium->toSqlPart();
+        $SqlPart = $Criterium->getSqlPart();
         $this->assertInstanceOf('Everon\DataMapper\Interfaces\SqlPart', $SqlPart);
     }
 
@@ -116,7 +116,7 @@ class CriteriumTest extends \Everon\TestCase
 
         $Criterium->setFactory($Factory);
 
-        $SqlPart = $Criterium->toSqlPart();
+        $SqlPart = $Criterium->getSqlPart();
         $this->assertInstanceOf('Everon\DataMapper\Interfaces\SqlPart', $SqlPart);
     }
     
