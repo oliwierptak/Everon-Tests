@@ -138,6 +138,42 @@ class CriteriaBuilderTest extends \Everon\TestCase
         */
     }
 
+    /**
+     * @dataProvider dataProvider
+     */
+    function testToString(\Everon\DataMapper\Interfaces\Criteria\Builder $CriteriaBuilder)
+    {
+        $CriteriaBuilder->whereRaw('foo + bar')->andWhereRaw('1=1')->orWhereRaw('foo::bar()');
+        $this->assertEquals('(foo + bar AND 1=1 OR foo::bar())', (string) $CriteriaBuilder);
+    }
+
+    /**
+     * @dataProvider dataProvider
+     */
+    function testToArray(\Everon\DataMapper\Interfaces\Criteria\Builder $CriteriaBuilder)
+    {
+        $CriteriaBuilder->whereRaw('foo + bar')->andWhereRaw('1=1')->orWhereRaw('foo::bar()')->orWhere('id', '=', 55);
+        $this->assertCount(1, $CriteriaBuilder->toArray());
+    }
+
+    /**
+     * @dataProvider dataProvider
+     */
+    function testLimitOffsetGroupBy(\Everon\DataMapper\Interfaces\Criteria\Builder $CriteriaBuilder)
+    {
+        $CriteriaBuilder->whereRaw('foo + bar')->andWhereRaw('1=1')->orWhereRaw('foo::bar()');
+        $CriteriaBuilder->glueByAnd();
+        $CriteriaBuilder->whereRaw('1=1');
+        $CriteriaBuilder->setLimit(10);
+        $CriteriaBuilder->setOffset(5);
+        $CriteriaBuilder->setGroupBy('name,id');
+        $CriteriaBuilder->setOrderBy(['name' => 'DESC', 'id' => 'ASC']);
+        $SqlPart = $CriteriaBuilder->toSqlPart();
+        
+        $this->assertEquals('(foo + bar AND 1=1 OR foo::bar()) AND
+(1=1) GROUP BY name,id ORDER BY name DESC,id ASC LIMIT 10 OFFSET 5', $SqlPart->getSql());
+    }
+
     function dataProvider()
     {
         $Factory = $this->buildFactory();
