@@ -164,6 +164,38 @@ class PostgresDataMapperTest extends \Everon\TestCase
         $result = $Mapper->deleteByCriteria($Criteria);
         $this->assertEquals(1, $result);
     }
+
+    /**
+     * @dataProvider dataProvider
+     */
+    public function testCount(\Everon\Interfaces\DataMapper $Mapper, $PdoAdapter)
+    {
+        $PdoStatement = \Mockery::mock('\PDOStatement');
+        $PdoStatement->shouldReceive('fetchColumn')->once()->with()->andReturn(123);
+        
+        $PdoAdapter->shouldReceive('execute')->once()->with(
+'SELECT COUNT(id) FROM bar.foo t WHERE (1=1 AND id = :id)
+            
+            
+            
+            ',
+            ['id' => $this->entity_id]
+        )->andReturn($PdoStatement);
+
+        $Criteria = new \Everon\DataMapper\CriteriaOLD();
+        $Criteria->where(['id' => 1]);
+        
+        $Schema = $Mapper->getSchema();
+        $Schema->shouldReceive('getPdoAdapterByName')->once()->with('read')->andReturn($PdoAdapter);
+
+        $Table = $Mapper->getTable();
+        $Table->shouldReceive('getSchema')->once()->with()->andReturn($this->schema_name);
+        $Table->shouldReceive('getName')->once()->with()->andReturn($this->table_name);
+        $Table->shouldReceive('getPk')->once()->with()->andReturn($this->table_pk_column_name);
+
+        $result = $Mapper->count($Criteria);
+        $this->assertEquals(123, $result);
+    }
     
     /**
      * @dataProvider dataProvider
@@ -196,7 +228,6 @@ class PostgresDataMapperTest extends \Everon\TestCase
         $this->assertInternalType('array', $result);
         $this->assertEquals($this->entity_data, $result);
     }
-    
 
     public function dataProvider()
     {
