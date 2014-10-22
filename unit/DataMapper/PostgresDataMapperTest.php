@@ -200,31 +200,18 @@ class PostgresDataMapperTest extends \Everon\TestCase
 
     public function dataProvider()
     {
-        $PdoAdapterMock = \Mockery::mock('Everon\Interfaces\PdoAdapter');
+        $PdoAdapter = \Mockery::mock('Everon\Interfaces\PdoAdapter');
         
-        $SchemaMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema');
-        $SchemaMock->shouldReceive('getAdapterName')->once()->with()->andReturn('PostgreSql');
-        /* 
-               $SchemaMock->shouldReceive('getPdoAdapterByName')->once()->with()->andReturn($PdoAdapterMock);
-                $SchemaMock->shouldReceive('getDatabase')->once()->with()->andReturn('everon_test');
-                $SchemaMock->shouldReceive('getDriver')->once()->with()->andReturn('PostgreSql');
-                $SchemaMock->shouldReceive('getAdapterName')->once()->with()->andReturn('PostgreSql');
-        */
+        $Schema = \Mockery::mock('Everon\DataMapper\Interfaces\Schema');
+        $Schema->shouldReceive('getAdapterName')->once()->with()->andReturn('PostgreSql');
 
-
-        $TableMock = \Mockery::mock('Everon\DataMapper\Schema\Table'); //no interface cause PHP and traits
-/*
-        $TableMock->shouldReceive('getName')->once()->with()->andReturn('foo');
-        $TableMock->shouldReceive('validateId')->once()->with()->andReturn(1);
-        $TableMock->shouldReceive('getColumns')->once()->with()->andReturn(['id'=>$IdColumnMock, 'first_name' => $NameColumnMock]);
-        $TableMock->shouldReceive('getPk')->once()->with()->andReturn('id');
-*/
+        $Table = \Mockery::mock('Everon\DataMapper\Schema\Table'); //no interface cause PHP and traits
             
         $Factory = $this->buildFactory();
-        $Mapper = $Factory->buildDataMapper('Foo', $TableMock, $SchemaMock, 'Everon\DataMapper');
+        $Mapper = $Factory->buildDataMapper('Foo', $Table, $Schema, 'Everon\DataMapper');
         
         return [
-            [$Mapper, $PdoAdapterMock]
+            [$Mapper, $PdoAdapter]
         ];
     }
 }
