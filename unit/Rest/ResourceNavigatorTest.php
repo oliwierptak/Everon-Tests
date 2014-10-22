@@ -19,39 +19,18 @@ class ResourceNavigatorTest extends \Everon\TestCase
         $this->assertInstanceOf('Everon\Rest\Interfaces\ResourceNavigator', $Navigator);
     }
 
-    public function testState()
+    public function testStateMockery()
     {
-        $RequestMock = $this->getMock('Everon\Rest\Interfaces\Request');
-        $RequestMock->expects($this->at(0))
-            ->method('getGetParameter')
-            ->with('fields')
-            ->will($this->returnValue('id,name,date_added'));
-        $RequestMock->expects($this->at(1))
-            ->method('getGetParameter')
-            ->with('expand')
-            ->will($this->returnValue('test,me'));
-        $RequestMock->expects($this->at(2))
-            ->method('getGetParameter')
-            ->with('limit', 10)
-            ->will($this->returnValue(null));
-        $RequestMock->expects($this->at(3))
-            ->method('getGetParameter')
-            ->with('offset')
-            ->will($this->returnValue(null));
-        $RequestMock->expects($this->at(4))
-            ->method('getGetParameter')
-            ->with('filters')
-            ->will($this->returnValue(null));
-        $RequestMock->expects($this->at(5))
-            ->method('getGetParameter')
-            ->with('order_by')
-            ->will($this->returnValue('id,-name'));
-        $RequestMock->expects($this->at(6))
-            ->method('getQueryParameter')
-            ->with('collection')
-            ->will($this->returnValue(null));
+        $Request = \Mockery::mock('Everon\Rest\Interfaces\Request');
+        $Request->shouldReceive('getGetParameter')->once()->with('fields', [])->andReturn('id,name,date_added');
+        $Request->shouldReceive('getGetParameter')->once()->with('expand', [])->andReturn('test,me');
+        $Request->shouldReceive('getGetParameter')->once()->with('limit', 10)->andReturn(null);
+        $Request->shouldReceive('getGetParameter')->once()->with('offset', 0)->andReturn(null);
+        $Request->shouldReceive('getGetParameter')->once()->with('filters')->andReturn(null);
+        $Request->shouldReceive('getGetParameter')->once()->with('order_by', [])->andReturn('id,-name');
+        $Request->shouldReceive('getQueryParameter')->once()->with('collection', null)->andReturn(null);
         
-        $Navigator = new \Everon\Rest\Resource\Navigator($RequestMock);
+        $Navigator = new \Everon\Rest\Resource\Navigator($Request);
         
         $this->assertInstanceOf('Everon\Rest\Interfaces\ResourceNavigator', $Navigator);
         $this->assertEquals(['test', 'me'], $Navigator->getExpand());
