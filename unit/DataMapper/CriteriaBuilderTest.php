@@ -138,6 +138,24 @@ class CriteriaBuilderTest extends \Everon\TestCase
         */
     }
 
+    /**
+     * @dataProvider dataProvider
+     */
+    function testToString(\Everon\DataMapper\Interfaces\Criteria\Builder $CriteriaBuilder)
+    {
+        $CriteriaBuilder->whereRaw('foo + bar')->andWhereRaw('1=1')->orWhereRaw('foo::bar()');
+        $this->assertEquals('(foo + bar AND 1=1 OR foo::bar())', (string) $CriteriaBuilder);
+    }
+
+    /**
+     * @dataProvider dataProvider
+     */
+    function testToArray(\Everon\DataMapper\Interfaces\Criteria\Builder $CriteriaBuilder)
+    {
+        $CriteriaBuilder->whereRaw('foo + bar')->andWhereRaw('1=1')->orWhereRaw('foo::bar()')->orWhere('id', '=', 55);
+        $this->assertCount(1, $CriteriaBuilder->toArray());
+    }
+
     function dataProvider()
     {
         $Factory = $this->buildFactory();
