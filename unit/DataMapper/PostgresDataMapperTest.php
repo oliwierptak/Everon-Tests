@@ -54,13 +54,13 @@ class PostgresDataMapperTest extends \Everon\TestCase
         )->andReturn($this->entity_id);
 
         $IdColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
-        $IdColumnMock->shouldReceive('isPk')->times(3)->with()->andReturn(true);
+        $IdColumnMock->shouldReceive('isPk')->times(2)->with()->andReturn(true);
 
         $FirstNameColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
-        $FirstNameColumnMock->shouldReceive('isPk')->times(3)->with()->andReturn(false);
+        $FirstNameColumnMock->shouldReceive('isPk')->times(2)->with()->andReturn(false);
 
         $LastNameColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
-        $LastNameColumnMock->shouldReceive('isPk')->times(3)->with()->andReturn(false);
+        $LastNameColumnMock->shouldReceive('isPk')->times(2)->with()->andReturn(false);
         
         $Schema = $Mapper->getSchema();
         $Schema->shouldReceive('getPdoAdapterByName')->once()->with('write')->andReturn($PdoAdapter);
@@ -84,19 +84,23 @@ class PostgresDataMapperTest extends \Everon\TestCase
      */
     public function testSave(\Everon\Interfaces\DataMapper $Mapper, $PdoAdapter)
     {
+        $data_to_save = $this->entity_data;
+        $data_to_save['id_854230835'] = $this->entity_id;
+        unset($data_to_save['id']);
+
         $PdoAdapter->shouldReceive('update')->once()->with(
-            'UPDATE bar.foo t SET first_name = :first_name,last_name = :last_name WHERE id = :id',
-            $this->entity_data
-        )->andReturn($this->entity_id);
+            'UPDATE bar.foo t SET first_name = :first_name,last_name = :last_name WHERE (id = :id_854230835) LIMIT 1',
+            $data_to_save
+        )->andReturn(1);
 
         $IdColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
-        $IdColumnMock->shouldReceive('isPk')->times(2)->with()->andReturn(true);
+        $IdColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(true);
 
         $FirstNameColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
-        $FirstNameColumnMock->shouldReceive('isPk')->times(2)->with()->andReturn(false);
+        $FirstNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
 
         $LastNameColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
-        $LastNameColumnMock->shouldReceive('isPk')->times(2)->with()->andReturn(false);
+        $LastNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
 
         $Schema = $Mapper->getSchema();
         $Schema->shouldReceive('getPdoAdapterByName')->once()->with('write')->andReturn($PdoAdapter);
@@ -107,12 +111,24 @@ class PostgresDataMapperTest extends \Everon\TestCase
         $Table->shouldReceive('getSchema')->once()->with()->andReturn($this->schema_name);
         $Table->shouldReceive('getName')->once()->with()->andReturn($this->table_name);
         $Table->shouldReceive('getIdFromData')->once()->with($this->entity_data)->andReturn($this->entity_id);
-        $Table->shouldReceive('prepareDataForSql')->once()->with($this->entity_data, true)->andReturn($this->entity_data);
+        $Table->shouldReceive('prepareDataForSql')->once()->with($this->entity_data, true)->andReturn($data_to_save);
         $Table->shouldReceive('getColumns')->once()->with()->andReturn(['id'=>$IdColumnMock, 'first_name' => $FirstNameColumnMock, 'last_name' => $LastNameColumnMock]);
+
+        $SqlPart = \Mockery::mock('Everon\DataMapper\Interfaces\SqlPart');
+        $SqlPart->shouldReceive('getSql')->once()->with()->andReturn('WHERE (id = :id_854230835) LIMIT 1');
+        $SqlPart->shouldReceive('getParameters')->once()->with()->andReturn(['id_854230835' => $this->entity_id]);
+
+        $CriteriaBuilder = \Mockery::mock('Everon\DataMapper\Interfaces\Criteria\Builder');
+        $CriteriaBuilder->shouldReceive('where')->once()->with($this->table_pk_column_name, '=', $this->entity_id)->andReturn($CriteriaBuilder);
+        $CriteriaBuilder->shouldReceive('toSqlPart')->once()->with()->andReturn($SqlPart);
+        $CriteriaBuilder->shouldReceive('setLimit')->once()->with(1);
+        
+        $Factory = $Mapper->getFactory();
+        $Factory->shouldReceive('buildCriteriaBuilder')->zeroOrMoreTimes()->with()->andReturn($CriteriaBuilder);
 
         $result = $Mapper->save($this->entity_data);
 
-        $this->assertEquals($this->entity_id, $result);
+        $this->assertEquals(1, $result);
     }
 
     /**
@@ -120,10 +136,12 @@ class PostgresDataMapperTest extends \Everon\TestCase
      */
     public function testDelete(\Everon\Interfaces\DataMapper $Mapper, $PdoAdapter)
     {
-        $PdoAdapter->shouldReceive('delete')->once()->with(
-            'DELETE FROM bar.foo t WHERE id = :id',
-            ['id' => $this->entity_id]
+        $PdoAdapter->shouldReceive('insert')->once()->with(
+            'DELETE FROM bar.foo t WHERE (id = :id_854230835) LIMIT 1',
+            ['id_854230835' => $this->entity_id]
         )->andReturn($this->entity_id);
+
+        $PdoAdapter->shouldReceive('delete')->once()->andReturn($this->entity_id);
 
         $Schema = $Mapper->getSchema();
         $Schema->shouldReceive('getPdoAdapterByName')->once()->with('write')->andReturn($PdoAdapter);
@@ -134,6 +152,18 @@ class PostgresDataMapperTest extends \Everon\TestCase
         $Table->shouldReceive('getSchema')->once()->with()->andReturn($this->schema_name);
         $Table->shouldReceive('getName')->once()->with()->andReturn($this->table_name);
 
+        $SqlPart = \Mockery::mock('Everon\DataMapper\Interfaces\SqlPart');
+        $SqlPart->shouldReceive('getSql')->once()->with()->andReturn('WHERE (id = :id_854230835) LIMIT 1');
+        $SqlPart->shouldReceive('getParameters')->once()->with()->andReturn(['id_854230835' => $this->entity_id]);
+
+        $CriteriaBuilder = \Mockery::mock('Everon\DataMapper\Interfaces\Criteria\Builder');
+        $CriteriaBuilder->shouldReceive('where')->once()->with($this->table_pk_column_name, '=', $this->entity_id)->andReturn($CriteriaBuilder);
+        $CriteriaBuilder->shouldReceive('toSqlPart')->once()->with()->andReturn($SqlPart);
+
+        $Factory = $Mapper->getFactory();
+        $Factory->shouldReceive('buildCriteriaBuilder')->zeroOrMoreTimes()->with()->andReturn($CriteriaBuilder);
+
+
         $result = $Mapper->delete($this->entity_id);
         $this->assertEquals(1, $result);
     }
@@ -143,16 +173,19 @@ class PostgresDataMapperTest extends \Everon\TestCase
      */
     public function testDeleteByCriteria(\Everon\Interfaces\DataMapper $Mapper, $PdoAdapter)
     {
+        $PdoAdapter->shouldReceive('delete')->once()->andReturn($this->entity_id);
+
         $PdoAdapter->shouldReceive('delete')->once()->with(
-            'DELETE FROM bar.foo t WHERE (1=1 AND id = :id)',
-            ['id' => $this->entity_id]
+            'DELETE FROM bar.foo t WHERE (id = :id_854230835) LIMIT 1',
+            ['id_854230835' => $this->entity_id]
         )->andReturn($this->entity_id);
+
+        $SqlPart = \Mockery::mock('Everon\DataMapper\Interfaces\SqlPart');
+        $SqlPart->shouldReceive('getSql')->once()->with()->andReturn('WHERE (id = :id_854230835) LIMIT 1');
+        $SqlPart->shouldReceive('getParameters')->twice()->with()->andReturn(['id_854230835' => $this->entity_id]);
         
-        $Criteria = \Mockery::mock('Everon\DataMapper\Interfaces\CriteriaOLD');
-        $Criteria->shouldReceive('getWhereSql')->once()->with()->andReturn('WHERE (1=1 AND id = :id)');
-        $Criteria->shouldReceive('getWhere')->once()->with()->andReturn([
-            'id' => $this->entity_id
-        ]);
+        $CriteriaBuilder = \Mockery::mock('Everon\DataMapper\Interfaces\Criteria\Builder');
+        $CriteriaBuilder->shouldReceive('toSqlPart')->once()->with()->andReturn($SqlPart);
 
         $Schema = $Mapper->getSchema();
         $Schema->shouldReceive('getPdoAdapterByName')->once()->with('write')->andReturn($PdoAdapter);
@@ -161,7 +194,7 @@ class PostgresDataMapperTest extends \Everon\TestCase
         $Table->shouldReceive('getSchema')->once()->with()->andReturn($this->schema_name);
         $Table->shouldReceive('getName')->once()->with()->andReturn($this->table_name);
 
-        $result = $Mapper->deleteByCriteria($Criteria);
+        $result = $Mapper->deleteByCriteria($CriteriaBuilder);
         $this->assertEquals(1, $result);
     }
 
@@ -172,19 +205,22 @@ class PostgresDataMapperTest extends \Everon\TestCase
     {
         $PdoStatement = \Mockery::mock('\PDOStatement');
         $PdoStatement->shouldReceive('fetchColumn')->once()->with()->andReturn(123);
-        
+
         $PdoAdapter->shouldReceive('execute')->once()->with(
-'SELECT COUNT(id) FROM bar.foo t WHERE (1=1 AND id = :id)
-            
-            
-            
-            ',
-            ['id' => $this->entity_id]
+            'SELECT COUNT(t.id) FROM bar.foo t',
+            []
         )->andReturn($PdoStatement);
 
-        $Criteria = new \Everon\DataMapper\CriteriaOLD();
-        $Criteria->where(['id' => 1]);
-        
+        $SqlPart = \Mockery::mock('Everon\DataMapper\Interfaces\SqlPart');
+        $SqlPart->shouldReceive('getSql')->once()->with()->andReturn('');
+        $SqlPart->shouldReceive('getParameters')->once()->with()->andReturn([]);
+
+        $CriteriaBuilder = \Mockery::mock('Everon\DataMapper\Interfaces\Criteria\Builder');
+        $CriteriaBuilder->shouldReceive('setOrderBy')->once()->with([]);
+        $CriteriaBuilder->shouldReceive('setOffset')->once()->with(null);
+        $CriteriaBuilder->shouldReceive('setLimit')->once()->with(null);
+        $CriteriaBuilder->shouldReceive('toSqlPart')->once()->with()->andReturn($SqlPart);
+
         $Schema = $Mapper->getSchema();
         $Schema->shouldReceive('getPdoAdapterByName')->once()->with('read')->andReturn($PdoAdapter);
 
@@ -193,7 +229,7 @@ class PostgresDataMapperTest extends \Everon\TestCase
         $Table->shouldReceive('getName')->once()->with()->andReturn($this->table_name);
         $Table->shouldReceive('getPk')->once()->with()->andReturn($this->table_pk_column_name);
 
-        $result = $Mapper->count($Criteria);
+        $result = $Mapper->count($CriteriaBuilder);
         $this->assertEquals(123, $result);
     }
     
@@ -214,14 +250,22 @@ class PostgresDataMapperTest extends \Everon\TestCase
         $PdoStatement = \Mockery::mock('\PDOStatement');
         $PdoStatement->shouldReceive('fetch')->once()->with()->andReturn($this->entity_data);
 
-        $PdoAdapter->shouldReceive('execute')->once()->with('
-            SELECT * 
-            FROM bar.foo t
-            WHERE (1=1 AND id = :id)
-            
-            
-            LIMIT 1
-            ', ['id' => $this->entity_id])->andReturn($PdoStatement);
+        $PdoAdapter->shouldReceive('execute')->once()->with(
+            'SELECT * FROM bar.foo t WHERE (id = :id_854230835) LIMIT 1',
+            ['id_854230835' => $this->entity_id]
+        )->andReturn($PdoStatement);
+
+        $SqlPart = \Mockery::mock('Everon\DataMapper\Interfaces\SqlPart');
+        $SqlPart->shouldReceive('getSql')->once()->with()->andReturn('WHERE (id = :id_854230835) LIMIT 1');
+        $SqlPart->shouldReceive('getParameters')->once()->with()->andReturn(['id_854230835' => $this->entity_id]);
+
+        $CriteriaBuilder = \Mockery::mock('Everon\DataMapper\Interfaces\Criteria\Builder');
+        $CriteriaBuilder->shouldReceive('where')->once()->with($this->table_pk_column_name, '=', $this->entity_id)->andReturn($CriteriaBuilder);
+        $CriteriaBuilder->shouldReceive('toSqlPart')->once()->with()->andReturn($SqlPart);
+        $CriteriaBuilder->shouldReceive('setLimit')->once()->with(1);
+        
+        $Factory = $Mapper->getFactory();
+        $Factory->shouldReceive('buildCriteriaBuilder')->once()->with()->andReturn($CriteriaBuilder);
 
         $result = $Mapper->fetchOneById($this->entity_id);
 
@@ -240,7 +284,10 @@ class PostgresDataMapperTest extends \Everon\TestCase
             
         $Factory = $this->buildFactory();
         $Mapper = $Factory->buildDataMapper('Foo', $Table, $Schema, 'Everon\DataMapper');
-        
+
+        $FactoryMock = \Mockery::mock('Everon\Application\Interfaces\Factory'); //concrete class cause of interface inheritance and mocks problems
+        $Mapper->setFactory($FactoryMock);
+            
         return [
             [$Mapper, $PdoAdapter]
         ];
