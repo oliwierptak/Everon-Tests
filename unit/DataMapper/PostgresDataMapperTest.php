@@ -176,12 +176,12 @@ class PostgresDataMapperTest extends \Everon\TestCase
         $PdoAdapter->shouldReceive('delete')->once()->andReturn($this->entity_id);
 
         $PdoAdapter->shouldReceive('delete')->once()->with(
-            'DELETE FROM bar.foo t WHERE (id = :id_854230835) LIMIT 1',
+            'DELETE FROM bar.foo t WHERE (id = :id_854230835)',
             ['id_854230835' => $this->entity_id]
         )->andReturn($this->entity_id);
 
         $SqlPart = \Mockery::mock('Everon\DataMapper\Interfaces\SqlPart');
-        $SqlPart->shouldReceive('getSql')->once()->with()->andReturn('WHERE (id = :id_854230835) LIMIT 1');
+        $SqlPart->shouldReceive('getSql')->once()->with()->andReturn('WHERE (id = :id_854230835)');
         $SqlPart->shouldReceive('getParameters')->twice()->with()->andReturn(['id_854230835' => $this->entity_id]);
         
         $CriteriaBuilder = \Mockery::mock('Everon\DataMapper\Interfaces\Criteria\Builder');
