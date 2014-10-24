@@ -45,7 +45,7 @@ class CriteriaBuilderTest extends \Everon\TestCase
         $CriteriaBuilder->whereRaw('foo + bar')->andWhereRaw('1=1')->orWhereRaw('foo::bar()');
         $SqlPart = $CriteriaBuilder->toSqlPart();
         
-        $this->assertEquals('(foo + bar AND 1=1 OR foo::bar())', $SqlPart->getSql());
+        $this->assertEquals('WHERE (foo + bar AND 1=1 OR foo::bar())', $SqlPart->getSql());
         $this->assertEmpty($SqlPart->getParameters());
     }
 
@@ -61,8 +61,8 @@ class CriteriaBuilderTest extends \Everon\TestCase
         $CriteriaBuilder->where('bar', '=', 'foo')->andWhere('name', '=', 'Doe');
 
         $SqlPart = $CriteriaBuilder->toSqlPart();
-
-        preg_match_all('@:([a-zA-Z]+)_(\d+)@', $SqlPart->getSql(), $sql_parameters);
+        
+        preg_match_all('@:([a-zA-Z]+)_(\d+)(_(\d+))?@', $SqlPart->getSql(), $sql_parameters);
         $sql_parameters = $sql_parameters[0];
 
         //strips : in front
@@ -111,7 +111,7 @@ class CriteriaBuilderTest extends \Everon\TestCase
 
         $SqlPart = $CriteriaBuilder->toSqlPart();
         
-        preg_match_all('@:([a-zA-Z]+)_(\d+)@', $SqlPart->getSql(), $sql_parameters);
+        preg_match_all('@:([a-zA-Z]+)_(\d+)(_(\d+))?@', $SqlPart->getSql(), $sql_parameters);
         $sql_parameters = $sql_parameters[0];
         
         //strips : in front
@@ -144,7 +144,7 @@ class CriteriaBuilderTest extends \Everon\TestCase
     function testToString(\Everon\DataMapper\Interfaces\Criteria\Builder $CriteriaBuilder)
     {
         $CriteriaBuilder->whereRaw('foo + bar')->andWhereRaw('1=1')->orWhereRaw('foo::bar()');
-        $this->assertEquals('(foo + bar AND 1=1 OR foo::bar())', (string) $CriteriaBuilder);
+        $this->assertEquals('WHERE (foo + bar AND 1=1 OR foo::bar())', (string) $CriteriaBuilder);
     }
 
     /**
@@ -170,7 +170,7 @@ class CriteriaBuilderTest extends \Everon\TestCase
         $CriteriaBuilder->setOrderBy(['name' => 'DESC', 'id' => 'ASC']);
         $SqlPart = $CriteriaBuilder->toSqlPart();
         
-        $this->assertEquals('(foo + bar AND 1=1 OR foo::bar()) AND
+        $this->assertEquals('WHERE (foo + bar AND 1=1 OR foo::bar()) AND
 (1=1) GROUP BY name,id ORDER BY name DESC,id ASC LIMIT 10 OFFSET 5', $SqlPart->getSql());
     }
 
