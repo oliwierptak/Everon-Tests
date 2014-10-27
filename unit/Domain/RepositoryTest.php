@@ -372,7 +372,40 @@ class RepositoryTest extends \Everon\TestCase
         $this->assertInstanceOf('Everon\Domain\Interfaces\Entity', $result);
         $this->assertTrue($Entity->isPersisted());
     }
-    
+
+    /**
+     * @dataProvider dataProvider
+     */
+    public function testValidateEntityShouldReturnValidatedData(Repository $Repository)
+    {
+        $Entity = \Mockery::mock('Everon\Domain\Interfaces\Entity');
+        $Entity->shouldReceive('isNew')->once()->with()->andReturn(false);
+        $Entity->shouldReceive('toArray')->once()->with()->andReturn($this->entity_data);
+
+        $Table = \Mockery::mock('Everon\DataMapper\Schema\Table\Foo');
+        $Table->shouldReceive('prepareDataForSql')->once()->with($this->entity_data, true)->andReturn($this->entity_data);
+
+        $Mapper = $Repository->getMapper();
+        $Mapper->shouldReceive('getTable')->once()->with()->andReturn($Table);
+
+        $Repository->validateEntity($Entity);
+    }
+
+    /**
+     * @dataProvider dataProvider
+     */
+    public function testCount(Repository $Repository)
+    {
+        $CriteriaBuilder = \Mockery::mock('Everon\DataMapper\Interfaces\Criteria\Builder');
+        
+        $Mapper = $Repository->getMapper();
+        $Mapper->shouldReceive('count')->once()->with($CriteriaBuilder)->andReturn(123);
+
+        $count = $Repository->count($CriteriaBuilder);
+        
+        $this->assertEquals(123, $count);
+    }
+
     /**
      * @dataProvider dataProvider
      */
