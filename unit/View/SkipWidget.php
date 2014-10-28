@@ -24,7 +24,7 @@ class WidgetTest extends \Everon\TestCase
 
     public function testConstructor()
     {
-        $ViewWidget = new \Everon\Test\View\Main\Widget\MyWidget();
+        $ViewWidget = new \Everon\Test\View\Main\Widget\MyAbstractWidget();
         $this->assertInstanceOf('Everon\View\Interfaces\Widget', $ViewWidget);
     }
 

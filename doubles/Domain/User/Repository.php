@@ -14,8 +14,4 @@ use Everon\DataMapper\Interfaces\Criteria;
 
 class Repository extends \Everon\Domain\Repository
 {
-    public function buildEntityRelations(Domain\Interfaces\Entity $Entity, Criteria $Criteria)
-    {
-        
-    }
 }

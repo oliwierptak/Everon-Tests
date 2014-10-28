@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Everon\Test;
+namespace Everon\Test\Module;
 
 use Everon\Interfaces;
 use Everon\Exception;
@@ -18,8 +18,8 @@ class ModuleTest extends \Everon\TestCase
     public function testConstructor()
     {
         $ConfigMock = $this->getMock('Everon\Interfaces\Config');
-        $Module = new Module\Test\Module('test', 'directory', $ConfigMock, $ConfigMock);
-        $this->assertInstanceOf('Everon\Interfaces\Module', $Module);
+        $Module = new \Everon\Test\Module\Foo\Module('foo', 'directory', $ConfigMock, $ConfigMock);
+        $this->assertInstanceOf('Everon\Module\Interfaces\Module', $Module);
     }
     
     public function dataProvider()

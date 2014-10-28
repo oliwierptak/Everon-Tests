@@ -53,7 +53,7 @@ class ResourceNavigatorTest extends \Everon\TestCase
         $this->assertEquals(['test', 'me'], $Navigator->getExpand());
         $this->assertEquals(['id','name', 'date_added'], $Navigator->getFields());
         $this->assertEquals(['id','name'], $Navigator->getOrderBy());
-        $this->assertEquals(['id'=>'ASC', 'name'=>'DESC'], $Navigator->getSort());
+        $this->assertEquals(['id'=>'ASC', 'name'=>'DESC'], $Navigator->getOrderBy());
     }
 
     public function dataProvider()

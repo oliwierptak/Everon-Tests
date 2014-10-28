@@ -49,7 +49,7 @@ class LoggerTest extends \Everon\TestCase
             'warning' => $Logger->warn('warning'),
             'error' => $Logger->error('error'),
             'debug' => $Logger->debug('debug'),
-            'trace' => $Logger->trace('trace'),
+            'trace' => $Logger->trace(new \Exception('trace')),
             'critical' => $Logger->critical('critical'),
             'notFound' => $Logger->notFound('notFound')
         ];
