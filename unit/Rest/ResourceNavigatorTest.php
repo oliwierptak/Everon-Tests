@@ -76,7 +76,6 @@ class ResourceNavigatorTest extends \Everon\TestCase
         $FactoryMock = \Mockery::mock('Everon\Application\Interfaces\Factory');
         $Navigator->setFactory($FactoryMock);
         
-        
         return [
             [$Navigator]
         ];
