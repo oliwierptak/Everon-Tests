@@ -12,18 +12,10 @@ namespace Everon\Test\Rest;
 class FilterTest extends \Everon\TestCase
 {
     protected $json_data = [
-        'WHERE' => [
-            ['id', '=', 1, 'AND'],
-            ['type', '=', 'INFO']
-        ],
-        'AND' => [
-            ['status', '=', 'ACTIVE', 'OR'],
-            ['created', '>=', '2010-10-10'],
-        ],
-        'OR' => [
-            ['status', '=', 'INACTIVE', 'AND'],
-            ['created', '=', null],
-        ]
+        ['id', '=', 1],
+        ['type', '=', 'INFO', 'OR'],
+        ['status', '=', 'INACTIVE', 'AND'],
+        ['created', '=', null]
     ];
     
 
@@ -31,9 +23,6 @@ class FilterTest extends \Everon\TestCase
     {
         $Filter = new \Everon\Rest\Filter();
         $this->assertInstanceOf('Everon\Rest\Interfaces\Filter', $Filter);
-
-        //$Request = \Mockery::mock('Everon\Rest\Interfaces\Request');
-        //$Request->shouldReceive('getGetParameter')->once()->with('fields', [])->andReturn('id,name,date_added');
     }
 
     /**
@@ -41,13 +30,12 @@ class FilterTest extends \Everon\TestCase
      */
     public function testToCriteria(\Everon\Rest\Interfaces\Filter $Filter)
     {
-        //$Request = \Mockery::mock('Everon\Rest\Interfaces\Request');
-        //$Request->shouldReceive('getGetParameter')->once()->with('fields', [])->andReturn('id,name,date_added');
-
         $CriteriaBuilder = $Filter->toCriteria($this->json_data);
-        sd($CriteriaBuilder->toSqlPart());
+        $SqlPart = $CriteriaBuilder->toSqlPart();
         
         $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria\Builder', $CriteriaBuilder);
+        //$this->assertEquals('WHERE (id = :id_1243257904 OR type = :type_1052619708 AND status = :status_410253891 AND created IS NULL)', $CriteriaBuilder);
+        $this->assertCount(3, $SqlPart->getParameters());
     }
 
     public function dataProvider()
