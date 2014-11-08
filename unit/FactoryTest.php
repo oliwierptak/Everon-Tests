@@ -27,7 +27,7 @@ class FactoryTest extends \Everon\TestCase
     public function testBuildConfigShouldSilentlyFallBackToDefaultConfigWhenClassNotFound(Interfaces\Factory $Factory)
     {
         $Compiler = function(){};
-        $Item = new \Everon\Config\Loader\Item('wrong_filename', []);
+        $Item = new \Everon\Config\Loader\Item('wrong_filename', [], false);
         $Config = $Factory->buildConfig('test', $Item, $Compiler);
         $this->assertInstanceOf('Everon\Interfaces\Config', $Config);
     }
@@ -38,7 +38,7 @@ class FactoryTest extends \Everon\TestCase
     public function testBuildConfig(Interfaces\Factory $Factory)
     {
         $Compiler = function(){};
-        $Item = new \Everon\Config\Loader\Item('wrong_filename', []);
+        $Item = new \Everon\Config\Loader\Item('wrong_filename', [], false);
         $Config = $Factory->buildConfig('test', $Item, $Compiler);
         $this->assertInstanceOf('Everon\Interfaces\Config', $Config);
     }
@@ -318,7 +318,7 @@ class FactoryTest extends \Everon\TestCase
     public function testBuildConfigShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
         $Compiler = function(){};
-        $Item = new \Everon\Config\Loader\Item('wrong_filename', []);
+        $Item = new \Everon\Config\Loader\Item('wrong_filename', [], false);
         $Factory->buildConfig('test_config', $Item, $Compiler);
     }
     
