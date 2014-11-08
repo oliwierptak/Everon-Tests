@@ -18,6 +18,10 @@ $EVERON_CUSTOM_PATHS = [
     'web' => getcwd().'/doubles/Web/',
     'view' => getcwd().'/doubles/View/',
     'tmp' => getcwd().'/doubles/Tmp/',
+    'log' => getcwd().'/doubles/Tmp/logs/',
+    'cache' => getcwd().'/doubles/Tmp/cache/',
+    'cache_config' => getcwd().'/doubles/Tmp/cache/config/',
+    'cache_view' => getcwd().'/doubles/Tmp/cache/view/',
 ];
 
 require_once(
