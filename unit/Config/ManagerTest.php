@@ -151,7 +151,7 @@ class ManagerTest extends \Everon\TestCase
         
         
         $filename = $this->getFrameworkBootstrap()->getEnvironment()->getConfig().'test.ini';
-        $ConfigLoaderItem = $Factory->buildConfigLoaderItem($filename, parse_ini_file($filename, true));
+        $ConfigLoaderItem = $Factory->buildConfigLoaderItem($filename, parse_ini_file($filename, true), false);
         $Expected = $Factory->buildConfig(
             'test',
             $ConfigLoaderItem,
