@@ -76,7 +76,8 @@ class FactoryTest extends \Everon\TestCase
     public function testBuildConfigManager(Interfaces\Factory $Factory)
     {
         $Loader = $this->getMock('Everon\Config\Interfaces\Loader');
-        $ConfigManager = $Factory->buildConfigManager($Loader);
+        $LoaderCache = $this->getMock('Everon\Config\Interfaces\LoaderCache');
+        $ConfigManager = $Factory->buildConfigManager($Loader, $LoaderCache);
         $this->assertInstanceOf('Everon\Config\Interfaces\Manager', $ConfigManager);
     }
 
@@ -328,9 +329,9 @@ class FactoryTest extends \Everon\TestCase
      */
     public function testBuildConfigManagerShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
-        $Matcher = $this->getMock('Everon\Config\Interfaces\ExpressionMatcher');
         $Loader = $this->getMock('Everon\Config\Interfaces\Loader');
-        $Factory->buildConfigManager($Loader, $Matcher);
+        $LoaderCache = $this->getMock('Everon\Config\Interfaces\LoaderCache');
+        $Factory->buildConfigManager($Loader, $LoaderCache);
     }
     
     /**
