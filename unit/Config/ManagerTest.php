@@ -151,7 +151,7 @@ class ManagerTest extends \Everon\TestCase
         
         
         $filename = $this->getFrameworkBootstrap()->getEnvironment()->getConfig().'test.ini';
-        $ConfigLoaderItem = $Factory->buildConfigLoaderItem($filename, parse_ini_file($filename, true), false);
+        $ConfigLoaderItem = $Factory->buildConfigLoaderItem($filename, parse_ini_file($filename, true));
         $Expected = $Factory->buildConfig(
             'test',
             $ConfigLoaderItem,
@@ -160,7 +160,7 @@ class ManagerTest extends \Everon\TestCase
 
         //$FileSystem = $Factory->buildFileSystem($this->getFrameworkBootstrap()->getEnvironment()->getRoot());
         
-        $ConfigLoader = $Factory->buildConfigLoader($this->getFrameworkBootstrap()->getEnvironment()->getConfig(), $this->getFrameworkBootstrap()->getEnvironment()->getCacheConfig());
+        $ConfigLoader = $Factory->buildConfigLoader($this->getFrameworkBootstrap()->getEnvironment()->getConfig());
         $ConfigLoader->setFactory($Factory);
         
         $ConfigManager = $Factory->buildConfigManager($ConfigLoader);
