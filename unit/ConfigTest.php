@@ -15,7 +15,7 @@ class ConfigTest extends \Everon\TestCase
     public function testConstructor()
     {
         $filename = $this->getFrameworkBootstrap()->getEnvironment()->getConfig().'test.ini';
-        $ConfigLoaderItem = new \Everon\Config\Loader\Item($filename, parse_ini_file($filename, true));
+        $ConfigLoaderItem = new \Everon\Config\Loader\Item($filename, parse_ini_file($filename, true), false);
 
         $Compiler = function(&$item) {};
         $Config = new \Everon\Config('test', $ConfigLoaderItem, $Compiler);
@@ -52,8 +52,8 @@ class ConfigTest extends \Everon\TestCase
     public function dataProvider()
     {
         $filename = $this->getFrameworkBootstrap()->getEnvironment()->getConfig().'test.ini';
-        $ConfigLoaderItem = new \Everon\Config\Loader\Item($filename, parse_ini_file($filename, true));
-        $Compiler = function(&$item) {};        
+        $ConfigLoaderItem = new \Everon\Config\Loader\Item($filename, parse_ini_file($filename, true), false);
+        $Compiler = function(&$item) {};
         $Config = new \Everon\Config('test', $ConfigLoaderItem, $Compiler);
         $Config->setFactory($this->buildFactory());
         

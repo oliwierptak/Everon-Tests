@@ -9,14 +9,13 @@
  */
 namespace Everon\Test\Config;
 
-use Everon\Environment;
-
 class ManagerTest extends \Everon\TestCase
 {
     public function testConstructor()
     {
         $Loader = $this->getMock('Everon\Config\Interfaces\Loader');
-        $Manager = new \Everon\Config\Manager($Loader);
+        $LoaderCache = $this->getMock('Everon\Config\Interfaces\LoaderCache');
+        $Manager = new \Everon\Config\Manager($Loader, $LoaderCache);
         $this->assertInstanceOf('Everon\Config\Interfaces\Manager', $Manager);
     }
 
@@ -160,10 +159,13 @@ class ManagerTest extends \Everon\TestCase
 
         //$FileSystem = $Factory->buildFileSystem($this->getFrameworkBootstrap()->getEnvironment()->getRoot());
         
-        $ConfigLoader = $Factory->buildConfigLoader($this->getFrameworkBootstrap()->getEnvironment()->getConfig(), $this->getFrameworkBootstrap()->getEnvironment()->getCacheConfig());
+        $ConfigLoader = $Factory->buildConfigLoader($this->getFrameworkBootstrap()->getEnvironment()->getConfig());
         $ConfigLoader->setFactory($Factory);
+
+        $ConfigLoaderCache = $Factory->buildConfigCacheLoader($this->getFrameworkBootstrap()->getEnvironment()->getCacheConfig());
+        $ConfigLoaderCache->setFactory($Factory);
         
-        $ConfigManager = $Factory->buildConfigManager($ConfigLoader);
+        $ConfigManager = $Factory->buildConfigManager($ConfigLoader, $ConfigLoaderCache);
         $ConfigManager->setFactory($Factory);
         //$ConfigManager->setFileSystem($FileSystem);
         
