@@ -59,13 +59,8 @@ class ConnectionItemTest extends \Everon\TestCase
         $this->assertEquals('test', $ConnectionItem->getPassword());
         $this->assertEquals('UTF8', $ConnectionItem->getEncoding());
         $this->assertEquals('MYSQL', $ConnectionItem->getAdapterName());
-        $this->assertEquals('mysql:dbname=everon_test;host=localhost;port=3306', $ConnectionItem->getDsn());
-        $this->assertEquals(
-            $this->arrayMergeDefault(
-                [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''], $expected['options']
-            ),
-            $ConnectionItem->getOptions()
-        );
+        $this->assertEquals('mysql:dbname=everon_test;host=localhost;port=3306;charset=UTF8', $ConnectionItem->getDsn());
+        $this->assertEquals($expected['options'], $ConnectionItem->getOptions());
     }
 
     /**
@@ -74,12 +69,10 @@ class ConnectionItemTest extends \Everon\TestCase
     function testToPdo(\Everon\DataMapper\Interfaces\ConnectionItem $ConnectionItem, array $expected)
     {
         $this->assertEquals([
-            'mysql:dbname=everon_test;host=localhost;port=3306',
+            'mysql:dbname=everon_test;host=localhost;port=3306;charset=UTF8',
             'everon',
             'test',
-            $this->arrayMergeDefault(
-                [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''], $expected['options']
-            )
+            $expected['options'],
         ], $ConnectionItem->toPdo());
     }
 
