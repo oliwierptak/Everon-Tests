@@ -9,14 +9,13 @@
  */
 namespace Everon\Test\Config;
 
-use Everon\Environment;
-
 class ManagerTest extends \Everon\TestCase
 {
     public function testConstructor()
     {
         $Loader = $this->getMock('Everon\Config\Interfaces\Loader');
-        $Manager = new \Everon\Config\Manager($Loader);
+        $LoaderCache = $this->getMock('Everon\Config\Interfaces\LoaderCache');
+        $Manager = new \Everon\Config\Manager($Loader, $LoaderCache);
         $this->assertInstanceOf('Everon\Config\Interfaces\Manager', $Manager);
     }
 
