@@ -40,7 +40,7 @@ class DataMapperTest extends \Everon\TestCase
         $Pdo = $Factory->buildPdo($dsn, $username, $password, $options);
         $PdoAdapter = $Factory->buildPdoAdapter($Pdo, $Connection);
         $Reader = $Factory->buildSchemaReader($PdoAdapter);
-        $Schema = $Factory->buildSchema($Reader, $ConnectionManager);
+        $Schema = $Factory->buildSchema($Reader, $ConnectionManager,);
         $Table = $Schema->getTable('user');
         $Mapper = $Factory->buildDataMapper('User', $Table, $Schema);
         
