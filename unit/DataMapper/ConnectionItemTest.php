@@ -79,7 +79,7 @@ class ConnectionItemTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      * @expectedException \Everon\DataMapper\Exception\ConnectionItem
-     * @expectedExceptionMessage Driver database not set
+     * @expectedExceptionMessage Database driver not set
      */
     function testGetAdapterNameShouldThrowExceptionWhenAdapterNameNotSet(\Everon\DataMapper\Interfaces\ConnectionItem $ConnectionItem, array $expected)
     {
