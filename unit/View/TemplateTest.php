@@ -15,7 +15,17 @@ class TemplateTest extends \Everon\TestCase
     
     protected static $template_filename1 = '';
     protected static $template_filename2 = '';
-
+    
+    protected $Factory = null;
+    
+    public function getFactory()
+    {
+        if ($this->Factory === null) {
+            $this->Factory = $this->buildFactory();
+        }
+        
+        return $this->Factory;
+    }
 
     public function setupTemplateFile($filename, $content)
     {

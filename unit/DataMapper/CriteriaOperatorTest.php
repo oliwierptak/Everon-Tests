@@ -69,16 +69,17 @@ class CriteriaOperatorTest extends \Everon\TestCase
         $Operator = $Factory->buildCriteriaOperator('In');
 
         $Criterium = \Mockery::mock('Everon\DataMapper\Criteria\Criterium');
-        $Criterium->shouldReceive('getColumn')->twice()->andReturn($this->column);
+        $Criterium->shouldReceive('getColumn')->once()->andReturn($this->column);
         $Criterium->shouldReceive('getValue')->once()->andReturn([$this->value]);
+        $Criterium->shouldReceive('getPlaceholderAsParameter')->once()->andReturn($this->placeholder_as_parameter);
 
         list($sql, $parameters) = $Operator->toSqlPartData($Criterium);
 
+        
         $matches = [];
         $this->assertTrue(
-            preg_match('@^foo IN \(\:(foo_(\d+))\)$@', $sql, $matches) === 1
+            preg_match('@^foo IN \(\:(foo_(\d+)(_(\d+))?)\)$@', $sql, $matches) === 1
         );
-        
         $key = $matches[1];
         $this->assertEquals([$key => 'bar'], $parameters);
     }
@@ -89,14 +90,15 @@ class CriteriaOperatorTest extends \Everon\TestCase
         $Operator = $Factory->buildCriteriaOperator('NotIn');
 
         $Criterium = \Mockery::mock('Everon\DataMapper\Criteria\Criterium');
-        $Criterium->shouldReceive('getColumn')->twice()->andReturn($this->column);
+        $Criterium->shouldReceive('getColumn')->once()->andReturn($this->column);
         $Criterium->shouldReceive('getValue')->once()->andReturn([$this->value]);
+        $Criterium->shouldReceive('getPlaceholderAsParameter')->once()->andReturn($this->placeholder_as_parameter);
 
         list($sql, $parameters) = $Operator->toSqlPartData($Criterium);
 
         $matches = [];
         $this->assertTrue(
-            preg_match('@^foo NOT IN \(\:(foo_(\d+))\)$@', $sql, $matches) === 1
+            preg_match('@^foo NOT IN \(\:(foo_(\d+)(_(\d+))?)\)$@', $sql, $matches) === 1
         );
 
         $key = $matches[1];
@@ -177,12 +179,13 @@ class CriteriaOperatorTest extends \Everon\TestCase
         $Operator = $Factory->buildCriteriaOperator('Between');
 
         $Criterium = \Mockery::mock('Everon\DataMapper\Criteria\Criterium');
-        $Criterium->shouldReceive('getColumn')->twice()->andReturn($this->column);
+        //$Criterium->shouldReceive('getColumn')->twice()->andReturn($this->column);
         $Criterium->shouldReceive('getValue')->once()->andReturn(['2000-01-01', '2000-01-31']);
+        $Criterium->shouldReceive('getPlaceholderAsParameter')->twice()->andReturn($this->placeholder_as_parameter);
 
         list($sql, $parameters) = $Operator->toSqlPartData($Criterium);
 
-        preg_match_all('@:([a-zA-Z]+)_(\d+)@', $sql, $sql_parameters);
+        preg_match_all('@:([a-zA-Z]+)_(\d+)(_(\d+))?@', $sql, $sql_parameters);
         $sql_parameters = $sql_parameters[0];
 
         $sql_to_compare = 'BETWEEN '.trim(implode(' AND ', array_values($sql_parameters))); //BETWEEN :foo_414533573 AND :foo_1406630365
@@ -204,12 +207,12 @@ class CriteriaOperatorTest extends \Everon\TestCase
         $Operator = $Factory->buildCriteriaOperator('NotBetween');
 
         $Criterium = \Mockery::mock('Everon\DataMapper\Criteria\Criterium');
-        $Criterium->shouldReceive('getColumn')->twice()->andReturn($this->column);
         $Criterium->shouldReceive('getValue')->once()->andReturn(['2000-01-01', '2000-01-31']);
+        $Criterium->shouldReceive('getPlaceholderAsParameter')->twice()->andReturn($this->placeholder_as_parameter);
 
         list($sql, $parameters) = $Operator->toSqlPartData($Criterium);
 
-        preg_match_all('@:([a-zA-Z]+)_(\d+)@', $sql, $sql_parameters);
+        preg_match_all('@:([a-zA-Z]+)_(\d+)(_(\d+))?@', $sql, $sql_parameters);
         $sql_parameters = $sql_parameters[0];
 
         $sql_to_compare = 'NOT BETWEEN '.trim(implode(' AND ', array_values($sql_parameters))); //NOT BETWEEN :foo_414533573 AND :foo_1406630365
