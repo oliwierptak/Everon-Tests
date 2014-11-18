@@ -137,7 +137,7 @@ class EntityTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      * @expectedException \Everon\Domain\Exception\Entity
-     * @expectedExceptionMessage It is the database's job to maintain primary keys
+     * @expectedExceptionMessage It's the job of the database to maintain its primary keys.
      */
     function testSetIdShouldThrowException(Entity $Entity, array $data)
     {

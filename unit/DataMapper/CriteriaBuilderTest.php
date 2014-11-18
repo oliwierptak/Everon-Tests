@@ -170,8 +170,8 @@ class CriteriaBuilderTest extends \Everon\TestCase
         $CriteriaBuilder->setOrderBy(['name' => 'DESC', 'id' => 'ASC']);
         $SqlPart = $CriteriaBuilder->toSqlPart();
         
-        $this->assertEquals('WHERE (foo + bar AND 1=1 OR foo::bar()) AND
-(1=1) GROUP BY name,id ORDER BY name DESC,id ASC LIMIT 10 OFFSET 5', $SqlPart->getSql());
+        $this->assertEquals('WHERE (foo + bar AND 1=1 OR foo::bar())
+AND (1=1) GROUP BY name,id ORDER BY name DESC,id ASC LIMIT 10 OFFSET 5', $SqlPart->getSql());
     }
 
     function dataProvider()

@@ -85,12 +85,12 @@ class PostgresDataMapperTest extends \Everon\TestCase
     public function testSave(\Everon\Interfaces\DataMapper $Mapper, $PdoAdapter)
     {
         $data_to_save = $this->entity_data;
-        $data_to_save['id_854230835'] = $this->entity_id;
-        unset($data_to_save['id']);
+        //$data_to_save['id_854230835'] = $this->entity_id;
+        //unset($data_to_save['id']);
 
         $PdoAdapter->shouldReceive('update')->once()->with(
-            'UPDATE bar.foo t SET first_name = :first_name,last_name = :last_name WHERE (id = :id_854230835) LIMIT 1',
-            $data_to_save
+            'UPDATE bar.foo t SET first_name = :first_name,last_name = :last_name WHERE id = :id',
+            $this->entity_data
         )->andReturn(1);
 
         $IdColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
@@ -114,10 +114,11 @@ class PostgresDataMapperTest extends \Everon\TestCase
         $Table->shouldReceive('prepareDataForSql')->once()->with($this->entity_data, true)->andReturn($data_to_save);
         $Table->shouldReceive('getColumns')->once()->with()->andReturn(['id'=>$IdColumnMock, 'first_name' => $FirstNameColumnMock, 'last_name' => $LastNameColumnMock]);
 
-        $SqlPart = \Mockery::mock('Everon\DataMapper\Interfaces\SqlPart');
-        $SqlPart->shouldReceive('getSql')->once()->with()->andReturn('WHERE (id = :id_854230835) LIMIT 1');
-        $SqlPart->shouldReceive('getParameters')->once()->with()->andReturn(['id_854230835' => $this->entity_id]);
+/*        $SqlPart = \Mockery::mock('Everon\DataMapper\Interfaces\SqlPart');
+        $SqlPart->shouldReceive('getSql')->once()->with()->andReturn('WHERE (id = :id_854230835)');
+        $SqlPart->shouldReceive('getParameters')->once()->with()->andReturn(['id_854230835' => $this->entity_id]);*/
 
+        /*
         $CriteriaBuilder = \Mockery::mock('Everon\DataMapper\Interfaces\Criteria\Builder');
         $CriteriaBuilder->shouldReceive('where')->once()->with($this->table_pk_column_name, '=', $this->entity_id)->andReturn($CriteriaBuilder);
         $CriteriaBuilder->shouldReceive('toSqlPart')->once()->with()->andReturn($SqlPart);
@@ -125,8 +126,9 @@ class PostgresDataMapperTest extends \Everon\TestCase
         
         $Factory = $Mapper->getFactory();
         $Factory->shouldReceive('buildCriteriaBuilder')->zeroOrMoreTimes()->with()->andReturn($CriteriaBuilder);
+        */
 
-        $result = $Mapper->save($this->entity_data);
+        $result = $Mapper->save($data_to_save);
 
         $this->assertEquals(1, $result);
     }
