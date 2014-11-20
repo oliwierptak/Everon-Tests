@@ -30,7 +30,7 @@ class ResponseTest extends \Everon\TestCase
         $headers = xdebug_get_headers();
         
         $this->assertEquals($headers[0], 'content-type: text/html; charset="utf-8"');
-        $this->assertEquals($headers[1], 'EVRID: RequestIdentifier');
+        $this->assertEquals($headers[1], 'EVERON_ID: RequestIdentifier');
         $this->assertInternalType('string', $html);
         $this->assertEquals('<b>test</b>', $html);
         $this->assertEquals('text/html', $Response->getContentType());
@@ -47,7 +47,7 @@ class ResponseTest extends \Everon\TestCase
         $headers = xdebug_get_headers();
 
         $this->assertEquals($headers[0], 'content-type: application/json');
-        $this->assertEquals($headers[1], 'EVRID: RequestIdentifier');
+        $this->assertEquals($headers[1], 'EVERON_ID: RequestIdentifier');
         $this->assertInternalType('string', $json);
         $this->assertEquals('{"test":"yes"}', $json);
         $this->assertEquals('application/json', $Response->getContentType());
@@ -64,7 +64,7 @@ class ResponseTest extends \Everon\TestCase
         $headers = xdebug_get_headers();
 
         $this->assertEquals($headers[0], 'content-type: text/plain; charset="utf-8"');
-        $this->assertEquals($headers[1], 'EVRID: RequestIdentifier');
+        $this->assertEquals($headers[1], 'EVERON_ID: RequestIdentifier');
         $this->assertInternalType('string', $text);
         $this->assertEquals('test', $text);
         $this->assertEquals('text/plain', $Response->getContentType());
@@ -87,7 +87,7 @@ class ResponseTest extends \Everon\TestCase
 
         $this->assertEquals($headers[0], 'Set-Cookie: test=test+it; path=/; httponly');
         $this->assertEquals($headers[1], 'content-type: text/plain; charset="utf-8"');
-        $this->assertEquals($headers[2], 'EVRID: RequestIdentifier');
+        $this->assertEquals($headers[2], 'EVERON_ID: RequestIdentifier');
         $this->assertInternalType('string', $text);
         $this->assertEquals('test', $text);
         $this->assertEquals('text/plain', $Response->getContentType());
@@ -116,7 +116,7 @@ class ResponseTest extends \Everon\TestCase
         
         $this->assertEquals('Set-Cookie: test=test+it; expires='.$date.'; Max-Age=-31536000; path=/; httponly', $headers[0]);
         $this->assertEquals('content-type: text/plain; charset="utf-8"', $headers[1]);
-        $this->assertEquals('EVRID: RequestIdentifier', $headers[2]);
+        $this->assertEquals('EVERON_ID: RequestIdentifier', $headers[2]);
         $this->assertInternalType('string', $text);
         $this->assertEquals('test', $text);
         $this->assertEquals('text/plain', $Response->getContentType());
@@ -142,7 +142,7 @@ class ResponseTest extends \Everon\TestCase
 
         $this->assertEquals('Set-Cookie: test_me=test+it; path=/; httponly', $headers[0]);
         $this->assertEquals('content-type: text/plain; charset="utf-8"', $headers[1]);
-        $this->assertEquals('EVRID: RequestIdentifier', $headers[2]);
+        $this->assertEquals('EVERON_ID: RequestIdentifier', $headers[2]);
         $this->assertInternalType('string', $text);
         $this->assertEquals('test', $text);
         $this->assertEquals('text/plain', $Response->getContentType());
