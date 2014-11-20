@@ -174,6 +174,19 @@ class CriteriaBuilderTest extends \Everon\TestCase
 AND (1=1) GROUP BY name,id ORDER BY name DESC,id ASC LIMIT 10 OFFSET 5', $SqlPart->getSql());
     }
 
+    /**
+     * @dataProvider dataProvider
+     */
+    function testMergeContainerCollection(\Everon\DataMapper\Interfaces\Criteria\Builder $CriteriaBuilder)
+    {
+        $CriteriaBuilder->whereRaw('1=1');
+        
+        $ContainerCollection = $CriteriaBuilder->getContainerCollection(); //lets pretend it's a new thingy
+        $CriteriaBuilder->appendContainerCollection($ContainerCollection);
+        
+        $this->assertCount(2, $CriteriaBuilder->getContainerCollection());
+    }
+
     function dataProvider()
     {
         $Factory = $this->buildFactory();
