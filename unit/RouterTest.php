@@ -54,18 +54,22 @@ class RouterTest extends \Everon\TestCase
     
     public function dataProvider()
     {
-        $data = parse_ini_file($this->getFrameworkBootstrap()->getEnvironment()->getConfig().'router.ini', true);
-        foreach ($data as $name => $item_data) {
-            $data[$name][\Everon\Config\Item\Router::PROPERTY_MODULE] = 'Test';
-        }
-        
         /**
-         * @var \Everon\Interfaces\Factory $Factory
+         * @var \Everon\Application\Interfaces\Factory $Factory
          */
         $Factory = $this->buildFactory();
-        $ConfigLoaderItem = $Factory->buildConfigLoaderItem('router.ini', $data);
-        $RouterConfig = $Factory->buildConfig('Router', $ConfigLoaderItem, function() {});
 
+        $ConfigLoader = $Factory->buildConfigLoader($this->getFrameworkBootstrap()->getEnvironment()->getConfig());
+        $ConfigLoader->setFactory($Factory);
+
+        $ConfigLoaderCache = $Factory->buildConfigCacheLoader($this->getFrameworkBootstrap()->getEnvironment()->getCacheConfig());
+        $ConfigLoaderCache->setFactory($Factory);
+
+        $ConfigManager = $Factory->buildConfigManager($ConfigLoader, $ConfigLoaderCache);
+        $ConfigManager->setFactory($Factory);
+
+        $RouterConfig = $ConfigManager->getConfigByName('router');
+        
         return [
             [$Factory,
                 $Factory->buildHttpRequest($this->getServerDataForRequest([

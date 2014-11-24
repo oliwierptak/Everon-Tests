@@ -1,7 +1,9 @@
 <?php
 namespace Everon;
 
-const EVERON_ENVIRONMENT = 'development';
+if (defined('EVERON_ENVIRONMENT') === false) {
+    define('EVERON_ENVIRONMENT', 'development');
+}
 
 $CUSTOM_EXCEPTION_HANDLER = function(){}; //disable default exception handler
 

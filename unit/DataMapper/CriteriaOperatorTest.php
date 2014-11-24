@@ -179,7 +179,7 @@ class CriteriaOperatorTest extends \Everon\TestCase
         $Operator = $Factory->buildCriteriaOperator('Between');
 
         $Criterium = \Mockery::mock('Everon\DataMapper\Criteria\Criterium');
-        //$Criterium->shouldReceive('getColumn')->twice()->andReturn($this->column);
+        $Criterium->shouldReceive('getColumn')->once()->andReturn($this->column);
         $Criterium->shouldReceive('getValue')->once()->andReturn(['2000-01-01', '2000-01-31']);
         $Criterium->shouldReceive('getPlaceholderAsParameter')->twice()->andReturn($this->placeholder_as_parameter);
 
@@ -188,7 +188,7 @@ class CriteriaOperatorTest extends \Everon\TestCase
         preg_match_all('@:([a-zA-Z]+)_(\d+)(_(\d+))?@', $sql, $sql_parameters);
         $sql_parameters = $sql_parameters[0];
 
-        $sql_to_compare = 'BETWEEN '.trim(implode(' AND ', array_values($sql_parameters))); //BETWEEN :foo_414533573 AND :foo_1406630365
+        $sql_to_compare = 'foo BETWEEN '.trim(implode(' AND ', array_values($sql_parameters))); //BETWEEN :foo_414533573 AND :foo_1406630365
 
         //strips : in front
         array_walk($sql_parameters, function(&$item){
@@ -207,6 +207,7 @@ class CriteriaOperatorTest extends \Everon\TestCase
         $Operator = $Factory->buildCriteriaOperator('NotBetween');
 
         $Criterium = \Mockery::mock('Everon\DataMapper\Criteria\Criterium');
+        $Criterium->shouldReceive('getColumn')->once()->andReturn($this->column);
         $Criterium->shouldReceive('getValue')->once()->andReturn(['2000-01-01', '2000-01-31']);
         $Criterium->shouldReceive('getPlaceholderAsParameter')->twice()->andReturn($this->placeholder_as_parameter);
 
@@ -215,7 +216,7 @@ class CriteriaOperatorTest extends \Everon\TestCase
         preg_match_all('@:([a-zA-Z]+)_(\d+)(_(\d+))?@', $sql, $sql_parameters);
         $sql_parameters = $sql_parameters[0];
 
-        $sql_to_compare = 'NOT BETWEEN '.trim(implode(' AND ', array_values($sql_parameters))); //NOT BETWEEN :foo_414533573 AND :foo_1406630365
+        $sql_to_compare = 'foo NOT BETWEEN '.trim(implode(' AND ', array_values($sql_parameters))); //NOT BETWEEN :foo_414533573 AND :foo_1406630365
 
         //strips : in front
         array_walk($sql_parameters, function(&$item){
