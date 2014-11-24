@@ -64,7 +64,7 @@ class RouterTest extends \Everon\TestCase
          */
         $Factory = $this->buildFactory();
         $ConfigLoaderItem = $Factory->buildConfigLoaderItem('router.ini', $data);
-        $RouterConfig = $Factory->buildConfig('Router', $ConfigLoaderItem);
+        $RouterConfig = $Factory->buildConfig('Router', $ConfigLoaderItem, function() {});
 
         return [
             [$Factory,

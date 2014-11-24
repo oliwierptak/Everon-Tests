@@ -25,7 +25,7 @@ class RequestTest extends \Everon\TestCase
         'SERVER_PORT'=> 80,
         'SERVER_ADDR'=> '127.0.0.1',
         'REMOTE_ADDR'=> '127.0.0.1',
-        'HTTPS'=> 'off',
+        'HTTPS'=> 'off'
     ];
 
     /**
@@ -153,7 +153,8 @@ class RequestTest extends \Everon\TestCase
             'path' => '',
             'protocol' => '',
             'port' => '',
-            'secure' => ''            
+            'is_secure' => false,
+            'is_ajax' => false
         ]));
     }
 
@@ -232,6 +233,20 @@ class RequestTest extends \Everon\TestCase
     public function testToArray(\Everon\Interfaces\Request $Request, array $expected)
     {
         $this->assertInternalType('array', $Request->toArray());
+    }
+
+    /**
+     * @dataProvider dataProvider
+     */
+    public function testIsAjax(\Everon\Interfaces\Request $Request, array $expected)
+    {
+        $this->assertFalse($Request->isAjax());
+        
+        $Server = $Request->getServerCollection()->toArray();
+        $Server['X_REQUESTED_WITH'] = 'XmlHttpRequest';
+        $Request->setServerCollection($Server);
+        
+        $this->assertTrue($Request->isAjax());
     }
 
     public function dataProvider()

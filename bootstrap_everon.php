@@ -1,6 +1,8 @@
 <?php
 namespace Everon;
 
+const EVERON_ENVIRONMENT = 'development';
+
 $CUSTOM_EXCEPTION_HANDLER = function(){}; //disable default exception handler
 
 $nesting = implode('..', array_fill(0, 3, DIRECTORY_SEPARATOR));
