@@ -38,12 +38,12 @@ require_once(
  * @var Bootstrap $Bootstrap
  * @var Interfaces\Environment $Environment
  * @var Interfaces\DependencyContainer $Container
- * @var Interfaces\Factory $Factory
+ * @var Interfaces\Factory $EVERON_FACTORY
  */
 
 //cleanup global state after bootstrap, otherwise phpunit will complain, and $backupGlobalsBlacklist does not work
 unset($CUSTOM_EXCEPTION_HANDLER);
 unset($nesting);
-unset($Factory);
+unset($EVERON_FACTORY);
 unset($Container);
 unset($Environment);
