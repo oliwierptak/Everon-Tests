@@ -146,7 +146,7 @@ class RepositoryTest extends \Everon\TestCase
 
         $IdColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
         $IdColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(true);
-        $IdColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_id)->andReturn($this->entity_id);
+        //$IdColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_id)->andReturn($this->entity_id);
 
         $FirstNameColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
         $FirstNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
@@ -158,7 +158,7 @@ class RepositoryTest extends \Everon\TestCase
 
         $Table = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Table\Foo');
         $Table->shouldReceive('getPk')->once()->with()->andReturn('id');
-        $Table->shouldReceive('getColumns')->twice()->with()->andReturn(['id'=>$IdColumnMock, 'first_name' => $FirstNameColumnMock, 'last_name' => $LastNameColumnMock]);
+        $Table->shouldReceive('getColumns')->once()->with()->andReturn(['id'=>$IdColumnMock, 'first_name' => $FirstNameColumnMock, 'last_name' => $LastNameColumnMock]);
 
         $Mapper = $Repository->getMapper();
         $Mapper->shouldReceive('getTable')->once()->with()->andReturn($Table);
@@ -190,7 +190,7 @@ class RepositoryTest extends \Everon\TestCase
 
         $IdColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
         $IdColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(true);
-        $IdColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_id)->andReturn($this->entity_id);
+        //$IdColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_id)->andReturn($this->entity_id);
 
         $FirstNameColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
         $FirstNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
@@ -202,7 +202,7 @@ class RepositoryTest extends \Everon\TestCase
 
         $Table = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Table\Foo');
         $Table->shouldReceive('getPk')->once()->with()->andReturn('id');
-        $Table->shouldReceive('getColumns')->twice()->with()->andReturn(['id'=>$IdColumnMock, 'first_name' => $FirstNameColumnMock, 'last_name' => $LastNameColumnMock]);
+        $Table->shouldReceive('getColumns')->once()->with()->andReturn(['id'=>$IdColumnMock, 'first_name' => $FirstNameColumnMock, 'last_name' => $LastNameColumnMock]);
 
         $Mapper = $Repository->getMapper();
         $Mapper->shouldReceive('getTable')->once()->with()->andReturn($Table);
@@ -232,7 +232,7 @@ class RepositoryTest extends \Everon\TestCase
 
         $IdColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
         $IdColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(true);
-        $IdColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_id)->andReturn($this->entity_id);
+        //$IdColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_id)->andReturn($this->entity_id);
 
         $FirstNameColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
         $FirstNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
@@ -244,7 +244,7 @@ class RepositoryTest extends \Everon\TestCase
 
         $Table = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Table\Foo');
         $Table->shouldReceive('getPk')->once()->with()->andReturn('id');
-        $Table->shouldReceive('getColumns')->twice()->with()->andReturn(['id'=>$IdColumnMock, 'first_name' => $FirstNameColumnMock, 'last_name' => $LastNameColumnMock]);
+        $Table->shouldReceive('getColumns')->once()->with()->andReturn(['id'=>$IdColumnMock, 'first_name' => $FirstNameColumnMock, 'last_name' => $LastNameColumnMock]);
 
         $Mapper = $Repository->getMapper();
         $Mapper->shouldReceive('getTable')->once()->with()->andReturn($Table);
@@ -279,7 +279,7 @@ class RepositoryTest extends \Everon\TestCase
 
         $IdColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
         $IdColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(true);
-        $IdColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_id)->andReturn($this->entity_id);
+        //$IdColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_id)->andReturn($this->entity_id);
 
         $FirstNameColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
         $FirstNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
@@ -291,7 +291,7 @@ class RepositoryTest extends \Everon\TestCase
 
         $Table = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Table\Foo');
         $Table->shouldReceive('getPk')->twice()->with()->andReturn('id');
-        $Table->shouldReceive('getColumns')->twice()->with()->andReturn(['id'=>$IdColumnMock, 'first_name' => $FirstNameColumnMock, 'last_name' => $LastNameColumnMock]);
+        $Table->shouldReceive('getColumns')->once()->with()->andReturn(['id'=>$IdColumnMock, 'first_name' => $FirstNameColumnMock, 'last_name' => $LastNameColumnMock]);
 
         $Mapper = $Repository->getMapper();
         $Mapper->shouldReceive('getTable')->once()->with()->andReturn($Table);
@@ -321,7 +321,7 @@ class RepositoryTest extends \Everon\TestCase
 
         $IdColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
         $IdColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(true);
-        $IdColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_id)->andReturn($this->entity_id);
+        //$IdColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_id)->andReturn($this->entity_id);
 
         $FirstNameColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
         $FirstNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
@@ -333,7 +333,7 @@ class RepositoryTest extends \Everon\TestCase
 
         $Table = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Table\Foo');
         $Table->shouldReceive('getPk')->once()->with()->andReturn('id');
-        $Table->shouldReceive('getColumns')->twice()->with()->andReturn(['id'=>$IdColumnMock, 'first_name' => $FirstNameColumnMock, 'last_name' => $LastNameColumnMock]);
+        $Table->shouldReceive('getColumns')->once()->with()->andReturn(['id'=>$IdColumnMock, 'first_name' => $FirstNameColumnMock, 'last_name' => $LastNameColumnMock]);
 
         $Mapper = $Repository->getMapper();
         $Mapper->shouldReceive('getTable')->once()->with()->andReturn($Table);
@@ -368,7 +368,7 @@ class RepositoryTest extends \Everon\TestCase
 
         $IdColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
         $IdColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(true);
-        $IdColumnMock->shouldReceive('getColumnDataForEntity')->twice()->with($this->entity_id)->andReturn($this->entity_id);
+        $IdColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_id)->andReturn($this->entity_id);
 
         $FirstNameColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
         $FirstNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
@@ -380,7 +380,7 @@ class RepositoryTest extends \Everon\TestCase
 
         $Table = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Table\Foo');
         $Table->shouldReceive('getPk')->once()->with()->andReturn('id');
-        $Table->shouldReceive('getColumns')->times(3)->with()->andReturn(['id'=>$IdColumnMock, 'first_name' => $FirstNameColumnMock, 'last_name' => $LastNameColumnMock]);
+        $Table->shouldReceive('getColumns')->times(2)->with()->andReturn(['id'=>$IdColumnMock, 'first_name' => $FirstNameColumnMock, 'last_name' => $LastNameColumnMock]);
         $Table->shouldReceive('prepareDataForSql')->with($this->entity_data, true)->once()->andReturn($this->entity_data);
         
         $Mapper = $Repository->getMapper();
