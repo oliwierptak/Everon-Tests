@@ -27,26 +27,7 @@ class LoggerTest extends \Everon\TestCase
 
     protected function setUp()
     {
-        $Logger = new \Everon\Logger($this->getLogDirectory(), true);
-        
-        foreach ($Logger->getLogFiles() as $level => $filename) {
-            $log_file = $this->getLogDirectory().$filename;
-            if (is_file($log_file)) {
-                unlink($log_file);
-            }
-        }
-    }
-    /**
-     * @dataProvider dataProvider
-     */
-    public function testSetGetFiles(\Everon\Interfaces\Logger $Logger)
-    {
-        $files = [
-            'error' => 'test-everon-error.log',
-        ];
-        
-        $Logger->setLogFiles($files);
-        $this->assertCount(1, $Logger->getLogFiles());
+ 
     }
 
     /**
@@ -58,9 +39,7 @@ class LoggerTest extends \Everon\TestCase
             'warning' => $Logger->warn('warning'),
             'error' => $Logger->error('error'),
             'debug' => $Logger->debug('debug'),
-            'trace' => $Logger->trace(new \Exception('trace')),
-            'critical' => $Logger->critical('critical'),
-            'notFound' => $Logger->notFound('notFound')
+            'trace' => $Logger->trace(new \Exception('trace'))
         ];
         
         foreach ($dates as $log_time) {

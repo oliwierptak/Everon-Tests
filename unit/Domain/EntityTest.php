@@ -9,6 +9,7 @@
  */
 namespace Everon\Test\Domain;
 
+use Everon\Domain;
 use Everon\Domain\Interfaces;
 use Everon\Domain\Foo\Entity;
 
@@ -152,28 +153,6 @@ class EntityTest extends \Everon\TestCase
     function testGetValueByNameShouldThrowExceptionWhenKeyDoesNotExist(Entity $Entity, array $data)
     {
         $Entity->getValueByName('i dont exist');
-    }
-    
-    /**
-     * @dataProvider dataProvider
-     */
-    function testSerializeUnserialize(Entity $Entity, array $data)
-    {
-        $serialized = serialize($Entity);
-        $UnserializedEntity = unserialize($serialized);
-        
-        $this->assertEquals(1, $UnserializedEntity->getId());
-        $this->assertTrue($UnserializedEntity->isPersisted());
-    }
-
-    /**
-     * @dataProvider dataProvider
-     */
-    function testVarExport(Entity $Entity, array $data)
-    {
-        $exported = var_export($Entity, 1);
-        $eval = eval('$ExportedEntity = '.$exported.';');
-        $this->assertEquals($Entity, $ExportedEntity);
     }
     
     function dataProvider()

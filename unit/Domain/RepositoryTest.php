@@ -145,15 +145,15 @@ class RepositoryTest extends \Everon\TestCase
         $Factory->shouldReceive('buildCriteriaBuilder')->twice()->with()->andReturn($CriteriaBuilder);
 
         $IdColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
-        $IdColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(true);
-        //$IdColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_id)->andReturn($this->entity_id);
+        //$IdColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(true);
+        $IdColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_id)->andReturn($this->entity_id);
 
         $FirstNameColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
-        $FirstNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
+        //$FirstNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
         $FirstNameColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_data['first_name'])->andReturn($this->entity_data['first_name']);
 
         $LastNameColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
-        $LastNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
+        //$LastNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
         $LastNameColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_data['last_name'])->andReturn($this->entity_data['last_name']);
 
         $Table = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Table\Foo');
@@ -189,15 +189,15 @@ class RepositoryTest extends \Everon\TestCase
         $Factory->shouldReceive('buildCriteriaBuilder')->once()->with()->andReturn($CriteriaBuilder);
 
         $IdColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
-        $IdColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(true);
-        //$IdColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_id)->andReturn($this->entity_id);
+        //$IdColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(true);
+        $IdColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_id)->andReturn($this->entity_id);
 
         $FirstNameColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
-        $FirstNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
+        //$FirstNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
         $FirstNameColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_data['first_name'])->andReturn($this->entity_data['first_name']);
 
         $LastNameColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
-        $LastNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
+        //$LastNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
         $LastNameColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_data['last_name'])->andReturn($this->entity_data['last_name']);
 
         $Table = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Table\Foo');
@@ -231,15 +231,15 @@ class RepositoryTest extends \Everon\TestCase
         $Factory->shouldReceive('buildCriteriaBuilder')->once()->with()->andReturn($CriteriaBuilder);
 
         $IdColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
-        $IdColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(true);
-        //$IdColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_id)->andReturn($this->entity_id);
+        //$IdColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(true);
+        $IdColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_id)->andReturn($this->entity_id);
 
         $FirstNameColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
-        $FirstNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
+        //$FirstNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
         $FirstNameColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_data['first_name'])->andReturn($this->entity_data['first_name']);
 
         $LastNameColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
-        $LastNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
+        //$LastNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
         $LastNameColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_data['last_name'])->andReturn($this->entity_data['last_name']);
 
         $Table = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Table\Foo');
@@ -278,15 +278,15 @@ class RepositoryTest extends \Everon\TestCase
         $Factory->shouldReceive('buildCriteriaBuilder')->twice()->with()->andReturn($CriteriaBuilder);
 
         $IdColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
-        $IdColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(true);
-        //$IdColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_id)->andReturn($this->entity_id);
+        //$IdColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(true);
+        $IdColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_id)->andReturn($this->entity_id);
 
         $FirstNameColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
-        $FirstNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
+        //$FirstNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
         $FirstNameColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_data['first_name'])->andReturn($this->entity_data['first_name']);
 
         $LastNameColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
-        $LastNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
+        //$LastNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
         $LastNameColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_data['last_name'])->andReturn($this->entity_data['last_name']);
 
         $Table = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Table\Foo');
@@ -320,15 +320,15 @@ class RepositoryTest extends \Everon\TestCase
         $Factory->shouldReceive('buildCriteriaBuilder')->once()->with()->andReturn($CriteriaBuilder);
 
         $IdColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
-        $IdColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(true);
-        //$IdColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_id)->andReturn($this->entity_id);
+        //$IdColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(true);
+        $IdColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_id)->andReturn($this->entity_id);
 
         $FirstNameColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
-        $FirstNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
+        //$FirstNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
         $FirstNameColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_data['first_name'])->andReturn($this->entity_data['first_name']);
 
         $LastNameColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
-        $LastNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
+        //$LastNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
         $LastNameColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_data['last_name'])->andReturn($this->entity_data['last_name']);
 
         $Table = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Table\Foo');
@@ -367,15 +367,15 @@ class RepositoryTest extends \Everon\TestCase
         $Factory->shouldReceive('buildCriteriaBuilder')->once()->with()->andReturn($CriteriaBuilder);
 
         $IdColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
-        $IdColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(true);
-        $IdColumnMock->shouldReceive('getColumnDataForEntity')->once()->with($this->entity_id)->andReturn($this->entity_id);
+        //$IdColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(true);
+        $IdColumnMock->shouldReceive('getColumnDataForEntity')->twice()->with($this->entity_id)->andReturn($this->entity_id);
 
         $FirstNameColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
-        $FirstNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
+        //$FirstNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
         $FirstNameColumnMock->shouldReceive('getColumnDataForEntity')->twice()->with($this->entity_data['first_name'])->andReturn($this->entity_data['first_name']);
 
         $LastNameColumnMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Column');
-        $LastNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
+        //$LastNameColumnMock->shouldReceive('isPk')->times(1)->with()->andReturn(false);
         $LastNameColumnMock->shouldReceive('getColumnDataForEntity')->twice()->with($this->entity_data['last_name'])->andReturn($this->entity_data['last_name']);
 
         $Table = \Mockery::mock('Everon\DataMapper\Interfaces\Schema\Table\Foo');
