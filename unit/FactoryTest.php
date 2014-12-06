@@ -26,8 +26,7 @@ class FactoryTest extends \Everon\TestCase
      */
     public function testBuildConfigShouldSilentlyFallBackToDefaultConfigWhenClassNotFound(Interfaces\Factory $Factory)
     {
-        $Item = new \Everon\Config\Loader\Item('wrong_filename', [], false);
-        $Config = $Factory->buildConfig('test', $Item, function(){});
+        $Config = $Factory->buildConfig('test', 'filename', []);
         $this->assertInstanceOf('Everon\Interfaces\Config', $Config);
     }
 
@@ -36,8 +35,7 @@ class FactoryTest extends \Everon\TestCase
      */
     public function testBuildConfig(Interfaces\Factory $Factory)
     {
-        $Item = new \Everon\Config\Loader\Item('wrong_filename', [], false);
-        $Config = $Factory->buildConfig('test', $Item, function(){});
+        $Config = $Factory->buildConfig('test', 'filename', []);
         $this->assertInstanceOf('Everon\Interfaces\Config', $Config);
     }
     
@@ -74,7 +72,7 @@ class FactoryTest extends \Everon\TestCase
     public function testBuildConfigManager(Interfaces\Factory $Factory)
     {
         $Loader = $this->getMock('Everon\Config\Interfaces\Loader');
-        $LoaderCache = $this->getMock('Everon\Config\Interfaces\LoaderCache');
+        $LoaderCache = $this->getMock('Everon\FileSystem\Interfaces\CacheLoader');
         $ConfigManager = $Factory->buildConfigManager($Loader, $LoaderCache);
         $this->assertInstanceOf('Everon\Config\Interfaces\Manager', $ConfigManager);
     }
@@ -315,8 +313,7 @@ class FactoryTest extends \Everon\TestCase
      */
     public function testBuildConfigShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
-        $Item = new \Everon\Config\Loader\Item('wrong_filename', [], false);
-        $Factory->buildConfig('test_config', $Item, function(){});
+        $Factory->buildConfig('test_config', 'wrong_filename', []);
     }
     
     /**
@@ -327,7 +324,7 @@ class FactoryTest extends \Everon\TestCase
     public function testBuildConfigManagerShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
         $Loader = $this->getMock('Everon\Config\Interfaces\Loader');
-        $LoaderCache = $this->getMock('Everon\Config\Interfaces\LoaderCache');
+        $LoaderCache = $this->getMock('Everon\FileSystem\Interfaces\CacheLoader');
         $Factory->buildConfigManager($Loader, $LoaderCache);
     }
     

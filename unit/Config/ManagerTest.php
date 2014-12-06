@@ -14,7 +14,7 @@ class ManagerTest extends \Everon\TestCase
     public function testConstructor()
     {
         $Loader = $this->getMock('Everon\Config\Interfaces\Loader');
-        $LoaderCache = $this->getMock('Everon\Config\Interfaces\LoaderCache');
+        $LoaderCache = $this->getMock('Everon\FileSystem\Interfaces\CacheLoader');
         $Manager = new \Everon\Config\Manager($Loader, $LoaderCache);
         $this->assertInstanceOf('Everon\Config\Interfaces\Manager', $Manager);
     }
@@ -144,15 +144,12 @@ class ManagerTest extends \Everon\TestCase
          */
         $Factory = $this->buildFactory();
 
-        //$name, Interfaces\ConfigLoaderItem $ConfigLoaderItem, \Closure $Compiler
-        $Compiler = function(&$data) {};
-        
         $filename = $this->getFrameworkBootstrap()->getEnvironment()->getConfig().'test.ini';
-        $ConfigLoaderItem = $Factory->buildConfigLoaderItem($filename, parse_ini_file($filename, true));
+        $data = parse_ini_file($filename, true);
         $Expected = $Factory->buildConfig(
             'test',
-            $ConfigLoaderItem,
-            $Compiler
+            $filename,
+            $data
         );
 
         //$FileSystem = $Factory->buildFileSystem($this->getFrameworkBootstrap()->getEnvironment()->getRoot());
