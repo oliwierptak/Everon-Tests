@@ -60,7 +60,7 @@ class ResourceNavigatorTest extends \Everon\TestCase
         $Factory = $Navigator->getFactory();
         $Factory->shouldReceive('buildCriteriaBuilder')->once()->with()->andReturn($CriteriaBuilder);
         
-        $CriteriaBuilder = $Navigator->toCriteria();
+        $CriteriaBuilder = $Navigator->toCriteria('fooBars');
 
         $this->assertInstanceOf('Everon\Rest\Interfaces\ResourceNavigator', $Navigator);
         $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria\Builder', $CriteriaBuilder);
