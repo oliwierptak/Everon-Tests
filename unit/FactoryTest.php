@@ -51,6 +51,16 @@ class FactoryTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
+    public function testBuildHttpCore(Interfaces\Factory $Factory)
+    {
+        $Core = $Factory->buildHttpCore();
+        $this->assertInstanceOf('Everon\Interfaces\Core', $Core);
+    }
+
+
+    /**
+     * @dataProvider dataProvider
+     */
     public function testBuildMvcCore(Interfaces\Factory $Factory)
     {
         $Core = $Factory->buildMvc();

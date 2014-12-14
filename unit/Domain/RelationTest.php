@@ -231,8 +231,8 @@ class RelationTest extends \Everon\TestCase
 
         //SCHEMA
         $SchemaMock = \Mockery::mock('Everon\DataMapper\Interfaces\Schema');
-        $SchemaMock->shouldReceive('getTableByName')->with('s_users.user')->twice()->andReturn($UserTable);
-        $SchemaMock->shouldReceive('getTableByName')->with('s_misc.ticket')->twice()->andReturn($TicketTable);
+        $SchemaMock->shouldReceive('getTableByName')->with('s_users.user')->times(1)->andReturn($UserTable);
+        $SchemaMock->shouldReceive('getTableByName')->with('s_misc.ticket')->times(1)->andReturn($TicketTable);
 
         //DATA MAPPERS
         $UserDataMapper->shouldReceive('getSchema')->once()->andReturn($SchemaMock);
@@ -244,20 +244,23 @@ class RelationTest extends \Everon\TestCase
         //$OwnerEntity->shouldReceive('getValueByName')->with('user_id')->once()->andReturn(1);
         $OwnerEntity->shouldReceive('getValueByName')->with('id')->once()->andReturn(1);
 
-
+        $DomainManagerMock = \Mockery::mock('Everon\Domain\Interfaces\Manager');
+        $DomainManagerMock->shouldReceive('getRepositoryByName')->with('User')->once()->andReturn($UserRepository);
+        $DomainManagerMock->shouldReceive('getRepositoryByName')->with('Ticket')->times(4)->andReturn($TicketRepository);
+        
         //FACTORY
         $FactoryMock = \Mockery::mock('Everon\Application\Interfaces\Factory');
-        $FactoryMock->shouldReceive('buildDataMapper')->with('User', $UserTable, $SchemaMock)->once()->andReturn($UserDataMapper);
-        $FactoryMock->shouldReceive('buildDataMapper')->with('Ticket', $TicketTable, $SchemaMock)->once()->andReturn($TicketDataMapper);
-        $FactoryMock->shouldReceive('buildDomainRepository')->with('User', $UserDataMapper)->once()->andReturn($UserRepository);
-        $FactoryMock->shouldReceive('buildDomainRepository')->with('Ticket', $TicketDataMapper)->once()->andReturn($TicketRepository);
+        //$FactoryMock->shouldReceive('buildDataMapper')->with('User', $UserTable, $SchemaMock)->once()->andReturn($UserDataMapper);
+        //$FactoryMock->shouldReceive('buildDataMapper')->with('Ticket', $TicketTable, $SchemaMock)->once()->andReturn($TicketDataMapper);
+        //$FactoryMock->shouldReceive('buildDomainRepository')->with('User', $UserDataMapper)->once()->andReturn($UserRepository);
+        //$FactoryMock->shouldReceive('buildDomainRepository')->with('Ticket', $TicketDataMapper)->once()->andReturn($TicketRepository);
 
         $TicketMapper = $Factory->buildDomainRelationMapper(Domain\Relation::MANY_TO_ONE, 'Ticket', null, 'id', 'user_id');
 
         $TicketRelationForUser = $Factory->buildDomainRelation('Ticket', $OwnerEntity, $TicketMapper);
         $TicketRelationForUser->getDomainManager()->getDataMapperManager()->setSchema($SchemaMock);
         $TicketRelationForUser->getDomainManager()->setFactory($FactoryMock);
-        
+        $TicketRelationForUser->setDomainManager($DomainManagerMock);
         
         $this->assertInstanceOf('Everon\Domain\Interfaces\Relation', $TicketRelationForUser);
         
