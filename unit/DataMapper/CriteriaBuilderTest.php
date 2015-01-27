@@ -52,6 +52,21 @@ class CriteriaBuilderTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
+    function testWhereRawWithParameters(\Everon\DataMapper\Interfaces\Criteria\Builder $CriteriaBuilder)
+    {
+        $CriteriaBuilder->whereRaw(':foo + bar', ['foo' => 'foo_value'])->andWhereRaw('bar = :bar', ['bar' => 'bar_value'])->orWhereRaw('foo::bar()');
+        $SqlPart = $CriteriaBuilder->toSqlPart();
+        $parameters = $SqlPart->getParameters();
+        
+        $this->assertEquals('WHERE (:foo + bar AND bar = :bar OR foo::bar())', $SqlPart->getSql());
+        $this->assertNotEmpty($parameters);
+        $this->assertEquals($parameters['foo'], 'foo_value');
+        $this->assertEquals($parameters['bar'], 'bar_value');
+    }
+
+    /**
+     * @dataProvider dataProvider
+     */
     function testGlue(\Everon\DataMapper\Interfaces\Criteria\Builder $CriteriaBuilder)
     {
         $CriteriaBuilder->where('id', 'IN', [1,2,3])->orWhere('id', 'NOT IN', [4,5,6]);
