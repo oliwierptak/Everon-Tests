@@ -229,6 +229,42 @@ class CriteriaOperatorTest extends \Everon\TestCase
         $this->assertEquals($parameters_to_compare, $parameters);
     }
 
+    public function testToSqlPartDataShouldReturnSqlPartAndParametersRawWithParameters()
+    {
+        $parameters = ['foo' => 'foo_value', 'bar' => 'bar_value'];
+        $column_value = 'foo = :foo AND bar = :bar';
+        
+        $Factory = $this->buildFactory();
+        $Operator = $Factory->buildCriteriaOperator('Raw');
+
+        $Criterium = \Mockery::mock('Everon\DataMapper\Criteria\Criterium');
+        $Criterium->shouldReceive('getColumn')->once()->andReturn($column_value);
+        $Criterium->shouldReceive('getValue')->once()->andReturn($parameters);
+
+        list($sql, $parameters) = $Operator->toSqlPartData($Criterium);
+        
+        $this->assertEquals($sql, $column_value);
+        $this->assertEquals($parameters, $parameters);
+    }
+    
+    public function testToSqlPartDataShouldReturnSqlPartAndParametersRawNoParameters()
+    {
+        $parameters = null;
+        $column_value = "foo = 'foo'";
+
+        $Factory = $this->buildFactory();
+        $Operator = $Factory->buildCriteriaOperator('Raw');
+
+        $Criterium = \Mockery::mock('Everon\DataMapper\Criteria\Criterium');
+        $Criterium->shouldReceive('getColumn')->once()->andReturn($column_value);
+        $Criterium->shouldReceive('getValue')->once()->andReturn($parameters);
+
+        list($sql, $parameters) = $Operator->toSqlPartData($Criterium);
+
+        $this->assertEquals($sql, $column_value);
+        $this->assertEquals($parameters, $parameters);
+    }
+
     public function dataProvider()
     {
         $Factory = $this->buildFactory();
