@@ -24,7 +24,7 @@ $EVERON_CUSTOM_PATHS = [
     'tmp' => getcwd().'/doubles/Tmp/',
     'log' => getcwd().'/doubles/Tmp/logs/',
     'cache' => getcwd().'/doubles/Tmp/cache/',
-    'cache_config' => getcwd().'/doubles/Tmp/cache/config/',
+    'cache_config' => getcwd().'/doubles/Tmp/cache/',
     'cache_view' => getcwd().'/doubles/Tmp/cache/view/',
 ];
 
