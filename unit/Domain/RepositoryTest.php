@@ -166,7 +166,7 @@ class RepositoryTest extends \Everon\TestCase
 
         $Repository->setFactory($Factory);
 
-        $result = $Repository->getEntityByPropertyValue(['id' => $this->entity_id]);
+        $result = $Repository->getOneByPropertyValue(['id' => $this->entity_id]);
 
         $this->assertInstanceOf('Everon\Domain\Interfaces\Entity', $result);
     }
