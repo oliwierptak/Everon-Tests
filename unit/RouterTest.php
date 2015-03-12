@@ -59,7 +59,7 @@ class RouterTest extends \Everon\TestCase
          */
         $Factory = $this->buildFactory();
 
-        $ConfigLoader = $Factory->buildConfigLoader($this->getFrameworkBootstrap()->getEnvironment()->getConfig());
+        $ConfigLoader = $Factory->buildConfigLoader($this->getFrameworkBootstrap()->getEnvironment()->getConfig(), $this->getFrameworkBootstrap()->getEnvironment()->getConfigFlavour());
         $ConfigLoader->setFactory($Factory);
 
         $ConfigLoaderCache = $Factory->buildConfigCacheLoader($this->getFrameworkBootstrap()->getEnvironment()->getCacheConfig());
