@@ -14,7 +14,7 @@ class EnvironmentTest extends \Everon\TestCase
    
     public function testConstructor()
     {
-        $Environment = new \Everon\Environment('app_root', 'src_root');
+        $Environment = new \Everon\Environment('app_root', 'src_root', EVERON_ENVIRONMENT);
         $this->assertInstanceOf('Everon\Interfaces\Environment', $Environment);
     }
 
@@ -22,7 +22,7 @@ class EnvironmentTest extends \Everon\TestCase
     {
         $root = $this->FrameworkBootstrap->getEnvironment()->getRoot();
         $root_source = $this->FrameworkBootstrap->getEnvironment()->getEveronRoot();
-        $Environment = new \Everon\Environment($root, $root_source);
+        $Environment = new \Everon\Environment($root, $root_source, EVERON_ENVIRONMENT);
 
         $this->assertEquals($root, $Environment->getRoot());
 
@@ -36,13 +36,13 @@ class EnvironmentTest extends \Everon\TestCase
         $this->assertEquals($root.'Tmp'.DIRECTORY_SEPARATOR, $Environment->getTmp());
         $this->assertEquals($root.'Tmp'.DIRECTORY_SEPARATOR.'logs'.DIRECTORY_SEPARATOR, $Environment->getLog());
         $this->assertEquals($root.'Tmp'.DIRECTORY_SEPARATOR.'cache'.DIRECTORY_SEPARATOR, $Environment->getCache());
-        $this->assertEquals($root.'Tmp'.DIRECTORY_SEPARATOR.'cache'.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR, $Environment->getCacheConfig());
+        $this->assertEquals($root.'Tmp'.DIRECTORY_SEPARATOR.'cache'.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR, $Environment->getCache());
         $this->assertEquals($root.'Tmp'.DIRECTORY_SEPARATOR.'cache'.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR, $Environment->getCacheView());
     }
     
     public function testSetters()
     {
-        $Environment = new \Everon\Environment('app_root', 'src_root');
+        $Environment = new \Everon\Environment('app_root', 'src_root', EVERON_ENVIRONMENT);
         
         $Environment->setRoot('test');
         $this->assertEquals('test', $Environment->getRoot());
@@ -73,9 +73,6 @@ class EnvironmentTest extends \Everon\TestCase
         
         $Environment->setCache('test');
         $this->assertEquals('test', $Environment->getCache());
-        
-        $Environment->setCacheConfig('test');
-        $this->assertEquals('test', $Environment->getCacheConfig());
     }
 
 }

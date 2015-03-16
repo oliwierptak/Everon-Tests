@@ -157,7 +157,7 @@ class ManagerTest extends \Everon\TestCase
         $ConfigLoader = $Factory->buildConfigLoader($this->getFrameworkBootstrap()->getEnvironment()->getConfig(), $this->getFrameworkBootstrap()->getEnvironment()->getConfigFlavour());
         $ConfigLoader->setFactory($Factory);
 
-        $ConfigLoaderCache = $Factory->buildConfigCacheLoader($this->getFrameworkBootstrap()->getEnvironment()->getCacheConfig());
+        $ConfigLoaderCache = $Factory->buildConfigCacheLoader($this->getFrameworkBootstrap()->getEnvironment()->getCache());
         $ConfigLoaderCache->setFactory($Factory);
         
         $ConfigManager = $Factory->buildConfigManager($ConfigLoader, $ConfigLoaderCache);
