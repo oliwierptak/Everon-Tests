@@ -46,11 +46,6 @@ class CriteriumTest extends \Everon\TestCase
      */
     public function testToSqlPartDataShouldReturnSqlPartInstance(\Everon\DataMapper\Interfaces\Criteria\Criterium $Criterium)
     {
-        //$class_is = Criteria\Builder::getOperatorClassName(Criteria\Operator::TYPE_IS);
-        //$class_not_is = Criteria\Builder::getOperatorClassName(Criteria\Operator::TYPE_NOT_IS);
-
-        //$CriteriaOperatorIs = \Mockery::mock('Everon\DataMapper\Interfaces\Criteria\Operator');
-        //$CriteriaOperatorNotIs = \Mockery::mock('Everon\DataMapper\Interfaces\Criteria\Operator');
         $CriteriaOperatorEqual = \Mockery::mock('Everon\DataMapper\Interfaces\Criteria\Operator');
         $CriteriaOperatorEqual->shouldReceive('toSqlPartData')->once()->andReturn($this->sql_part_data);
 
@@ -58,8 +53,6 @@ class CriteriumTest extends \Everon\TestCase
         
         $Factory = \Mockery::mock('Everon\Application\Interfaces\Factory');
         $Factory->shouldReceive('buildDataMapperSqlPart')->once()->andReturn($SqlPart);
-        //$Factory->shouldReceive('buildCriteriaOperator')->once()->with($class_is)->andReturn($CriteriaOperatorIs);
-        //$Factory->shouldReceive('buildCriteriaOperator')->once()->with($class_not_is)->andReturn($CriteriaOperatorNotIs);
         $Factory->shouldReceive('buildCriteriaOperator')->once()->with(Criteria\Operator::TYPE_EQUAL)->andReturn($CriteriaOperatorEqual);
         
         $Criterium->setFactory($Factory);

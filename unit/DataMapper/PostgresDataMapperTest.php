@@ -113,21 +113,7 @@ class PostgresDataMapperTest extends \Everon\TestCase
         $Table->shouldReceive('getIdFromData')->once()->with($this->entity_data)->andReturn($this->entity_id);
         $Table->shouldReceive('prepareDataForSql')->once()->with($this->entity_data, true)->andReturn($data_to_save);
         $Table->shouldReceive('getColumns')->once()->with()->andReturn(['id'=>$IdColumnMock, 'first_name' => $FirstNameColumnMock, 'last_name' => $LastNameColumnMock]);
-
-/*        $SqlPart = \Mockery::mock('Everon\DataMapper\Interfaces\SqlPart');
-        $SqlPart->shouldReceive('getSql')->once()->with()->andReturn('WHERE (id = :id_854230835)');
-        $SqlPart->shouldReceive('getParameters')->once()->with()->andReturn(['id_854230835' => $this->entity_id]);*/
-
-        /*
-        $CriteriaBuilder = \Mockery::mock('Everon\DataMapper\Interfaces\Criteria\Builder');
-        $CriteriaBuilder->shouldReceive('where')->once()->with($this->table_pk_column_name, '=', $this->entity_id)->andReturn($CriteriaBuilder);
-        $CriteriaBuilder->shouldReceive('toSqlPart')->once()->with()->andReturn($SqlPart);
-        $CriteriaBuilder->shouldReceive('setLimit')->once()->with(1);
         
-        $Factory = $Mapper->getFactory();
-        $Factory->shouldReceive('buildCriteriaBuilder')->zeroOrMoreTimes()->with()->andReturn($CriteriaBuilder);
-        */
-
         $result = $Mapper->save($data_to_save);
 
         $this->assertEquals(1, $result);
