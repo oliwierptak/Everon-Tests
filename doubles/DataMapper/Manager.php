@@ -7,10 +7,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Everon\Test\DataMapper\PostgreSql;
+namespace Everon\DataMapper;
 
-use Everon\DataMapper;
-
-class User extends DataMapper\Schema\PostgreSql\Mapper
+class Manager extends Handler implements Interfaces\Manager
 {
 }

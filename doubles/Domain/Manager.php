@@ -7,12 +7,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Everon\Test\Domain;
+namespace Everon\Domain;
 
-class Manager extends \Everon\Domain\Handler
+class Manager extends \Everon\Domain\Handler implements Interfaces\Manager
 {
-    public function getUserRepository()
+    public function getFooRepository()
     {
-        return $this->getRepositoryByName('User');
+        return $this->getRepositoryByName('Foo');
     }
 }

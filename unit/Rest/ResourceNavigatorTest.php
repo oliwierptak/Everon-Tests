@@ -9,59 +9,72 @@
  */
 namespace Everon\Test\Rest;
 
+use Everon\Rest;
+
 class ResourceNavigatorTest extends \Everon\TestCase
 {
-
-    public function testConstructor()
+    protected $limit = 10;
+    protected $offset = 0;
+    protected $order_by = null;
+    protected $order_by_result = ['id'=>'ASC', 'name'=>'DESC'];
+    
+    
+    public function testGetExpandGetFieldsGetOrderBy()
     {
-        $RequestMock = $this->getMock('Everon\Rest\Interfaces\Request');
-        $Navigator = new \Everon\Rest\Resource\Navigator($RequestMock);
-        $this->assertInstanceOf('Everon\Rest\Interfaces\ResourceNavigator', $Navigator);
-    }
-
-    public function testState()
-    {
-        $RequestMock = $this->getMock('Everon\Rest\Interfaces\Request');
-        $RequestMock->expects($this->at(0))
-            ->method('getQueryParameter')
-            ->with('fields')
-            ->will($this->returnValue('id,name,date_added'));
-        $RequestMock->expects($this->at(1))
-            ->method('getQueryParameter')
-            ->with('expand')
-            ->will($this->returnValue('test,me'));
-        $RequestMock->expects($this->at(2))
-            ->method('getQueryParameter')
-            ->with('order_by')
-            ->will($this->returnValue('id,-name'));
-        $RequestMock->expects($this->at(3))
-            ->method('getQueryParameter')
-            ->with('limit')
-            ->will($this->returnValue(null));
-        $RequestMock->expects($this->at(4))
-            ->method('getQueryParameter')
-            ->with('offset')
-            ->will($this->returnValue(null));
-        $RequestMock->expects($this->at(5))
-            ->method('getQueryParameter')
-            ->with('collection')
-            ->will($this->returnValue(null));
+        $Request = \Mockery::mock('Everon\Rest\Interfaces\Request');
+        $Request->shouldReceive('getGetParameter')->once()->with('fields', [])->andReturn('id,name,date_added');
+        $Request->shouldReceive('getGetParameter')->once()->with('expand', [])->andReturn('test,me');
+        $Request->shouldReceive('getGetParameter')->once()->with('limit', $this->limit)->andReturn($this->limit);
+        $Request->shouldReceive('getGetParameter')->once()->with('offset', $this->offset)->andReturn($this->offset);
+        $Request->shouldReceive('getGetParameter')->once()->with('filters')->andReturn(null);
+        $Request->shouldReceive('getGetParameter')->once()->with('order_by', [])->andReturn('id,-name');
+        $Request->shouldReceive('getQueryParameter')->once()->with('collection', null)->andReturn(null);
         
-        $Navigator = new \Everon\Rest\Resource\Navigator($RequestMock);
+        $Navigator = new \Everon\Rest\Resource\Navigator($Request);
         
         $this->assertInstanceOf('Everon\Rest\Interfaces\ResourceNavigator', $Navigator);
         $this->assertEquals(['test', 'me'], $Navigator->getExpand());
         $this->assertEquals(['id','name', 'date_added'], $Navigator->getFields());
-        $this->assertEquals(['id','name'], $Navigator->getOrderBy());
-        $this->assertEquals(['id'=>'ASC', 'name'=>'DESC'], $Navigator->getOrderBy());
+        $this->assertEquals($this->order_by_result, $Navigator->getOrderBy());
+    }
+
+    /**
+     * @dataProvider dataProvider
+     */
+    public function testGetCriteriaShouldReturnCriteria(Rest\Interfaces\ResourceNavigator $Navigator)
+    {
+        $Request = $Navigator->getRequest();
+        $Request->shouldReceive('getGetParameter')->once()->with('fields', [])->andReturn('id,name,date_added');
+        $Request->shouldReceive('getGetParameter')->once()->with('expand', [])->andReturn('test,me');
+        $Request->shouldReceive('getGetParameter')->once()->with('limit', $this->limit)->andReturn($this->limit);
+        $Request->shouldReceive('getGetParameter')->once()->with('offset', $this->offset)->andReturn($this->offset);
+        $Request->shouldReceive('getGetParameter')->once()->with('filters')->andReturn(null);
+        $Request->shouldReceive('getGetParameter')->once()->with('order_by', [])->andReturn('id,-name');
+        $Request->shouldReceive('getQueryParameter')->once()->with('collection', null)->andReturn(null);
+
+        $CriteriaBuilder = \Mockery::mock('Everon\DataMapper\Interfaces\Criteria\Builder');
+        $CriteriaBuilder->shouldReceive('setLimit')->once()->with($this->limit)->andReturn($CriteriaBuilder);
+        $CriteriaBuilder->shouldReceive('setOffset')->once()->with($this->offset)->andReturn($CriteriaBuilder);
+        $CriteriaBuilder->shouldReceive('setOrderBy')->once()->with($this->order_by_result)->andReturn($CriteriaBuilder);
+
+        $Factory = $Navigator->getFactory();
+        $Factory->shouldReceive('buildCriteriaBuilder')->once()->with()->andReturn($CriteriaBuilder);
+        
+        $CriteriaBuilder = $Navigator->toCriteria('fooBars');
+
+        $this->assertInstanceOf('Everon\Rest\Interfaces\ResourceNavigator', $Navigator);
+        $this->assertInstanceOf('Everon\DataMapper\Interfaces\Criteria\Builder', $CriteriaBuilder);
     }
 
     public function dataProvider()
     {
-        $RequestMock = $this->getMock('Everon\Rest\Interfaces\Request');
         $Factory = $this->buildFactory();
         
-        $Navigator = $Factory->buildRestResourceNavigator($RequestMock);
+        $Request = \Mockery::mock('Everon\Rest\Interfaces\Request');
+        $Navigator = $Factory->buildRestResourceNavigator($Request);
+
+        $FactoryMock = \Mockery::mock('Everon\Application\Interfaces\Factory');
+        $Navigator->setFactory($FactoryMock);
         
         return [
             [$Navigator]

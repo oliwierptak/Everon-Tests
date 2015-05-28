@@ -14,11 +14,8 @@ class ConfigTest extends \Everon\TestCase
 
     public function testConstructor()
     {
-        $filename = $this->getConfigDirectory().'test.ini';
-        $ConfigLoaderItem = new \Everon\Config\Loader\Item($filename, parse_ini_file($filename, true));
-
-        $Compiler = function(&$item) {};
-        $Config = new \Everon\Config('test', $ConfigLoaderItem, $Compiler);
+        $filename = $this->getFrameworkBootstrap()->getEnvironment()->getConfig().'test.ini';
+        $Config = new \Everon\Config('test', $filename, parse_ini_file($filename, true));
         $this->assertInstanceOf('Everon\Interfaces\Config', $Config);
     }
 
@@ -42,7 +39,6 @@ class ConfigTest extends \Everon\TestCase
      */
     public function testGetNonExistingValueShouldReturnNullOrDefault(\Everon\Interfaces\Config $Config)
     {
-        //todo $Config->get() return default value even when section was not found
         $this->assertEquals('1', $Config->go('section')->get('test'));
         $this->assertEquals(null, $Config->go('section')->get('foo'));
         $this->assertEquals(null, $Config->go('section')->get('more error'));
@@ -51,10 +47,8 @@ class ConfigTest extends \Everon\TestCase
 
     public function dataProvider()
     {
-        $filename = $this->getConfigDirectory().'test.ini';
-        $ConfigLoaderItem = new \Everon\Config\Loader\Item($filename, parse_ini_file($filename, true));
-        $Compiler = function(&$item) {};        
-        $Config = new \Everon\Config('test', $ConfigLoaderItem, $Compiler);
+        $filename = $this->getFrameworkBootstrap()->getEnvironment()->getConfig().'test.ini';
+        $Config = new \Everon\Config('test', $filename, parse_ini_file($filename, true));
         $Config->setFactory($this->buildFactory());
         
         return [

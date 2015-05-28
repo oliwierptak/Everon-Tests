@@ -9,7 +9,6 @@
  */
 namespace Everon\Test\Module;
 
-use Everon\Module;
 use Everon\Exception;
 
 class ManagerTest extends \Everon\TestCase
@@ -17,14 +16,14 @@ class ManagerTest extends \Everon\TestCase
     
     function testConstructor()
     {
-        $ModuleManager = new \Everon\Test\Module\Manager();
+        $ModuleManager = new \Everon\Module\Manager();
         $this->assertInstanceOf('Everon\Module\Interfaces\Manager', $ModuleManager);
     }
 
     /**
      * @dataProvider dataProvider
      */
-    function testGetModuleShouldReturnModule(Module\Interfaces\Handler $ModuleManager)
+    function testGetModuleShouldReturnModule(\Everon\Module\Interfaces\Handler $ModuleManager)
     {
         $Module = $ModuleManager->getModuleByName('Foo');
         $this->assertInstanceOf('Everon\Module\Interfaces\Module', $Module);
@@ -55,7 +54,7 @@ class ManagerTest extends \Everon\TestCase
             return $ViewManagerMock;
         });
 
-        $RouterConfigMock = $this->getMock('Everon\Config\Router', [], [], '', false);
+        $RouterConfigMock = $this->getMock('Everon\Config\Interfaces\ItemRouter', [], [], '', false);
         $ModuleConfigMock = $this->getMock('Everon\Interfaces\Config', [], [], '', false);
 
         $ConfigManagerMock = $this->getMock('Everon\Config\Interfaces\Manager');

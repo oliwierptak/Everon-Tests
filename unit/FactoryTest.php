@@ -26,9 +26,7 @@ class FactoryTest extends \Everon\TestCase
      */
     public function testBuildConfigShouldSilentlyFallBackToDefaultConfigWhenClassNotFound(Interfaces\Factory $Factory)
     {
-        $Compiler = function(){};
-        $Item = new \Everon\Config\Loader\Item('wrong_filename', []);
-        $Config = $Factory->buildConfig('test', $Item, $Compiler);
+        $Config = $Factory->buildConfig('test', 'filename', []);
         $this->assertInstanceOf('Everon\Interfaces\Config', $Config);
     }
 
@@ -37,9 +35,7 @@ class FactoryTest extends \Everon\TestCase
      */
     public function testBuildConfig(Interfaces\Factory $Factory)
     {
-        $Compiler = function(){};
-        $Item = new \Everon\Config\Loader\Item('wrong_filename', []);
-        $Config = $Factory->buildConfig('test', $Item, $Compiler);
+        $Config = $Factory->buildConfig('test', 'filename', []);
         $this->assertInstanceOf('Everon\Interfaces\Config', $Config);
     }
     
@@ -51,6 +47,16 @@ class FactoryTest extends \Everon\TestCase
         $Core = $Factory->buildConsole();
         $this->assertInstanceOf('Everon\Interfaces\Core', $Core);
     }
+
+    /**
+     * @dataProvider dataProvider
+     */
+    public function testBuildHttpCore(Interfaces\Factory $Factory)
+    {
+        $Core = $Factory->buildHttpCore();
+        $this->assertInstanceOf('Everon\Interfaces\Core', $Core);
+    }
+
 
     /**
      * @dataProvider dataProvider
@@ -75,9 +81,9 @@ class FactoryTest extends \Everon\TestCase
      */
     public function testBuildConfigManager(Interfaces\Factory $Factory)
     {
-        $Matcher = $this->getMock('Everon\Config\Interfaces\ExpressionMatcher');
         $Loader = $this->getMock('Everon\Config\Interfaces\Loader');
-        $ConfigManager = $Factory->buildConfigManager($Loader, $Matcher);
+        $LoaderCache = $this->getMock('Everon\FileSystem\Interfaces\CacheLoader');
+        $ConfigManager = $Factory->buildConfigManager($Loader, $LoaderCache);
         $this->assertInstanceOf('Everon\Config\Interfaces\Manager', $ConfigManager);
     }
 
@@ -129,13 +135,24 @@ class FactoryTest extends \Everon\TestCase
         $Factory->getDependencyContainer()->register('ConfigManager', function() use ($ConfigManager) {
             return $ConfigManager;
         });
+        
         $RequestMock = $this->getMock('Everon\Interfaces\Request');
         $Factory->getDependencyContainer()->register('Request', function() use ($RequestMock) {
             return $RequestMock;
         });
+
+        $ConnectionManagerMock = $this->getMock('Everon\DataMapper\Interfaces\ConnectionManager');
+        $Factory->getDependencyContainer()->register('ConnectionManager', function() use ($ConnectionManagerMock) {
+            return $ConnectionManagerMock;
+        });
         
-        $Model = $Factory->buildDomainModel('User', 'Everon\Test\Domain');
-        $this->assertInstanceOf('Everon\Test\Domain\User\Model', $Model);
+        $DataMapperManagerMock = $this->getMock('Everon\DataMapper\Interfaces\Manager');
+        $Factory->getDependencyContainer()->register('DataMapperManager', function() use ($DataMapperManagerMock) {
+            return $DataMapperManagerMock;
+        });
+        
+        $Model = $Factory->buildDomainModel('Foo', 'Everon\Domain');
+        $this->assertInstanceOf('Everon\Domain\Interfaces\Model', $Model);
     }
 
     /**
@@ -210,7 +227,7 @@ class FactoryTest extends \Everon\TestCase
      */
     public function testBuildLogger(Interfaces\Factory $Factory)
     {
-        $Logger = $Factory->buildLogger($this->getLogDirectory(), true);
+        $Logger = $Factory->buildLogger($this->getFrameworkBootstrap()->getEnvironment()->getLog(), true);
         $this->assertInstanceOf('Everon\Interfaces\Logger', $Logger);
     }
     
@@ -306,9 +323,7 @@ class FactoryTest extends \Everon\TestCase
      */
     public function testBuildConfigShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
-        $Compiler = function(){};
-        $Item = new \Everon\Config\Loader\Item('wrong_filename', []);
-        $Factory->buildConfig('test_config', $Item, $Compiler);
+        $Factory->buildConfig('test_config', 'wrong_filename', []);
     }
     
     /**
@@ -318,9 +333,9 @@ class FactoryTest extends \Everon\TestCase
      */
     public function testBuildConfigManagerShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
-        $Matcher = $this->getMock('Everon\Config\Interfaces\ExpressionMatcher');
         $Loader = $this->getMock('Everon\Config\Interfaces\Loader');
-        $Factory->buildConfigManager($Loader, $Matcher);
+        $LoaderCache = $this->getMock('Everon\FileSystem\Interfaces\CacheLoader');
+        $Factory->buildConfigManager($Loader, $LoaderCache);
     }
     
     /**
@@ -434,7 +449,7 @@ class FactoryTest extends \Everon\TestCase
      */
     public function testBuildLoggerThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
-        $Factory->buildLogger($this->getLogDirectory(), false);
+        $Factory->buildLogger($this->getFrameworkBootstrap()->getEnvironment()->getLog(), false);
     }
 
     /**
@@ -477,6 +492,11 @@ class FactoryTest extends \Everon\TestCase
     public function testBuildRequestShouldThrowExceptionWhenWrongClass(Interfaces\Factory $Factory)
     {
         $Factory->buildHttpRequest([], [], [], []);
+    }
+    
+    public function getTemplateDirectory()
+    {
+        return $this->getFixtureDirectory().'templates'.DIRECTORY_SEPARATOR;
     }
 
     public function dataProvider()

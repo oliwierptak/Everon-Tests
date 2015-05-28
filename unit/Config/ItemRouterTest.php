@@ -20,8 +20,11 @@ class ItemRouterTest extends \Everon\TestCase
             'url' => '/',
             'controller' => 'Test',
             'action' => 'testMe',
+            'method' => 'testMe',
             'get' => [],
+            'query' => [],
             'post' => [],
+            'secure' => false,
             \Everon\Config\Item::PROPERTY_DEFAULT => true,
         ];
         
@@ -31,6 +34,9 @@ class ItemRouterTest extends \Everon\TestCase
         $this->assertEquals($data['controller'], $Item->getController());
         $this->assertEquals($data['action'], $Item->getAction());
         $this->assertEquals($data['url'], $Item->getUrl());
+        $this->assertEquals($data['url'], $Item->getUrl());
+        $this->assertEquals($data['method'], $Item->getMethod());
+        $this->assertEquals($data['secure'], $Item->isSecure());
         $this->assertEquals($data[\Everon\Config\Item::PROPERTY_NAME], $Item->getName());
         $this->assertEquals($data[\Everon\Config\Item::PROPERTY_DEFAULT], $Item->isDefault());
         $this->assertEquals($data[\Everon\Config\Item\Router::PROPERTY_MODULE], $Item->getModule());

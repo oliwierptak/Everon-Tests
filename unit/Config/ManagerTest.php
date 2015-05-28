@@ -9,14 +9,13 @@
  */
 namespace Everon\Test\Config;
 
-use Everon\Environment;
-
 class ManagerTest extends \Everon\TestCase
 {
     public function testConstructor()
     {
         $Loader = $this->getMock('Everon\Config\Interfaces\Loader');
-        $Manager = new \Everon\Config\Manager($Loader);
+        $LoaderCache = $this->getMock('Everon\FileSystem\Interfaces\CacheLoader');
+        $Manager = new \Everon\Config\Manager($Loader, $LoaderCache);
         $this->assertInstanceOf('Everon\Config\Interfaces\Manager', $Manager);
     }
 
@@ -145,31 +144,25 @@ class ManagerTest extends \Everon\TestCase
          */
         $Factory = $this->buildFactory();
 
-        //$name, Interfaces\ConfigLoaderItem $ConfigLoaderItem, \Closure $Compiler
-        $Compiler = function(&$data) {};
-
-        
-        
-        $filename = $this->getConfigDirectory().'test.ini';
-        $ConfigLoaderItem = $Factory->buildConfigLoaderItem($filename, parse_ini_file($filename, true));
+        $filename = $this->getFrameworkBootstrap()->getEnvironment()->getConfig().'test.ini';
+        $data = parse_ini_file($filename, true);
         $Expected = $Factory->buildConfig(
             'test',
-            $ConfigLoaderItem,
-            $Compiler
+            $filename,
+            $data
         );
 
-        $Environment = new Environment($this->FrameworkBootstrap->getEnvironment()->getRoot(), $this->FrameworkBootstrap->getEnvironment()->getEveronRoot());
-        $Environment->setConfig($this->getConfigDirectory());
-        $Environment->setCacheConfig($this->getConfigCacheDirectory());
+        //$FileSystem = $Factory->buildFileSystem($this->getFrameworkBootstrap()->getEnvironment()->getRoot());
         
-        $FileSystem = $Factory->buildFileSystem($this->getDoublesDirectory());
-        
-        $ConfigLoader = $Factory->buildConfigLoader($Environment->getConfig(), $Environment->getCacheConfig());
+        $ConfigLoader = $Factory->buildConfigLoader($this->getFrameworkBootstrap()->getEnvironment()->getConfig(), $this->getFrameworkBootstrap()->getEnvironment()->getConfigFlavour());
         $ConfigLoader->setFactory($Factory);
+
+        $ConfigLoaderCache = $Factory->buildConfigCacheLoader($this->getFrameworkBootstrap()->getEnvironment()->getCache());
+        $ConfigLoaderCache->setFactory($Factory);
         
-        $ConfigManager = $Factory->buildConfigManager($ConfigLoader);
+        $ConfigManager = $Factory->buildConfigManager($ConfigLoader, $ConfigLoaderCache);
         $ConfigManager->setFactory($Factory);
-        $ConfigManager->setFileSystem($FileSystem);
+        //$ConfigManager->setFileSystem($FileSystem);
         
         return [
             [$ConfigManager, $Expected]

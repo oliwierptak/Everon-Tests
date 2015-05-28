@@ -61,12 +61,13 @@ class PaginatorTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testGetLimitShouldFallbackToDefaultWhenInvalid(Interfaces\Paginator $Paginator)
+    public function testGetLimitShouldNotBeLessThenDefault(Interfaces\Paginator $Paginator)
     {
         $this->assertEquals(3, $Paginator->getPageCount());
 
         $Paginator->setLimit(-1);
 
+        $this->assertEquals(\Everon\Helper\Paginator::DEFAULT_LIMIT, $Paginator->getLimit());
         $this->assertEquals(3, $Paginator->getPageCount());
         $this->assertEquals(1, $Paginator->getCurrentPage());
     }
@@ -74,12 +75,28 @@ class PaginatorTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testSetOffsetShouldNotBeBiggerThenTotal(Interfaces\Paginator $Paginator)
+    public function testGetLimitShouldNotBeBiggerThenTotalMinusDefault(Interfaces\Paginator $Paginator)
+    {
+        $this->assertEquals(3, $Paginator->getPageCount());
+
+        $Paginator->setLimit(100);
+
+        $this->assertEquals(\Everon\Helper\Paginator::DEFAULT_LIMIT, $Paginator->getLimit());
+        $this->assertEquals(3, $Paginator->getPageCount());
+        $this->assertEquals(1, $Paginator->getCurrentPage());
+    }
+
+    /**
+     * @dataProvider dataProvider
+     */
+    public function testSetOffsetShouldNotBeBiggerThenTotalMinusDefault(Interfaces\Paginator $Paginator)
     {
         $this->assertEquals(3, $Paginator->getPageCount());
 
         $Paginator->setOffset(100);
 
+        $this->assertEquals(\Everon\Helper\Paginator::DEFAULT_LIMIT, $Paginator->getLimit());
+        $this->assertEquals($Paginator->getTotal() - \Everon\Helper\Paginator::DEFAULT_LIMIT, $Paginator->getOffset());
         $this->assertEquals(3, $Paginator->getPageCount());
         $this->assertEquals(3, $Paginator->getCurrentPage());
     }
@@ -93,6 +110,7 @@ class PaginatorTest extends \Everon\TestCase
 
         $Paginator->setOffset(-100);
 
+        $this->assertEquals(0, $Paginator->getOffset());
         $this->assertEquals(3, $Paginator->getPageCount());
         $this->assertEquals(1, $Paginator->getCurrentPage());
     }

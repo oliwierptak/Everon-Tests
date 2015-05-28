@@ -19,44 +19,42 @@ class LoggerTest extends \Everon\TestCase
         $this->assertInstanceOf('\Everon\Interfaces\Logger', $Logger);
     }
 
+
+    protected function getLogDirectory()
+    {
+        return $this->getTmpDirectory().'logs'.DIRECTORY_SEPARATOR;
+    }
+
     protected function setUp()
     {
-        $Logger = new \Everon\Logger($this->getLogDirectory(), true);
-        
-        foreach ($Logger->getLogFiles() as $level => $filename) {
-            $log_file = $this->getLogDirectory().$filename;
-            if (is_file($log_file)) {
-                unlink($log_file);
-            }
-        }
+ 
     }
 
-    public function testSetGetFiles()
+    /**
+     * @dataProvider dataProvider
+     */
+    public function testWriting(\Everon\Interfaces\Logger $Logger)
     {
-        $Logger = new \Everon\Logger($this->getLogDirectory(), true);
-        $files = [
-            'error' => 'test-everon-error.log',
-        ];
-        
-        $Logger->setLogFiles($files);
-        $this->assertCount(1, $Logger->getLogFiles());
-    }
-
-    public function testWriting()
-    {
-        $Logger = new \Everon\Logger($this->getLogDirectory(), true);
         $dates = [
             'warning' => $Logger->warn('warning'),
             'error' => $Logger->error('error'),
             'debug' => $Logger->debug('debug'),
-            'trace' => $Logger->trace(new \Exception('trace')),
-            'critical' => $Logger->critical('critical'),
-            'notFound' => $Logger->notFound('notFound')
+            'trace' => $Logger->trace(new \Exception('trace'))
         ];
         
         foreach ($dates as $log_time) {
             $this->assertInstanceOf('DateTime', $log_time);
         }
+    }
+    
+    public function dataProvider()
+    {
+        $Factory = $this->buildFactory();
+        $Logger = $Factory->buildLogger($this->getLogDirectory(), true);
+        
+        return [
+            [$Logger]
+        ];
     }
 
 }

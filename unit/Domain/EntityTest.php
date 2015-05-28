@@ -9,8 +9,9 @@
  */
 namespace Everon\Test\Domain;
 
-use Everon\Test\Domain\User\Entity;
+use Everon\Domain;
 use Everon\Domain\Interfaces;
+use Everon\Domain\Foo\Entity;
 
 class EntityTest extends \Everon\TestCase
 {
@@ -22,7 +23,7 @@ class EntityTest extends \Everon\TestCase
             'last_name' => 'Doe',
             'date_of_birth' => '1990-09-09',
         ];
-        $Entity = new \Everon\Domain\Entity('id', $data);
+        $Entity = new \Everon\Domain\Foo\Entity('id', $data);
         $this->assertInstanceOf('Everon\Domain\Interfaces\Entity', $Entity);
         $this->assertEquals(1, $Entity->getId());
     }
@@ -37,7 +38,7 @@ class EntityTest extends \Everon\TestCase
         ];
         
         $Factory = $this->buildFactory();
-        $Entity = $Factory->buildDomainEntity('User', 'id', $data, 'Everon\Test\Domain');
+        $Entity = $Factory->buildDomainEntity('Foo', 'id', $data, 'Everon\Domain');
         $this->assertNull($Entity->getId());
         $this->assertTrue($Entity->isNew());
         $this->assertFalse($Entity->isDeleted());
@@ -137,7 +138,7 @@ class EntityTest extends \Everon\TestCase
     /**
      * @dataProvider dataProvider
      * @expectedException \Everon\Domain\Exception\Entity
-     * @expectedExceptionMessage It is the database's job to maintain primary keys
+     * @expectedExceptionMessage It's the job of the database to maintain its primary keys.
      */
     function testSetIdShouldThrowException(Entity $Entity, array $data)
     {
@@ -154,28 +155,6 @@ class EntityTest extends \Everon\TestCase
         $Entity->getValueByName('i dont exist');
     }
     
-    /**
-     * @dataProvider dataProvider
-     */
-    function testSerializeUnserialize(Entity $Entity, array $data)
-    {
-        $serialized = serialize($Entity);
-        $UnserializedEntity = unserialize($serialized);
-        
-        $this->assertEquals(1, $UnserializedEntity->getId());
-        $this->assertTrue($UnserializedEntity->isPersisted());
-    }
-
-    /**
-     * @dataProvider dataProvider
-     */
-    function testVarExport(Entity $Entity, array $data)
-    {
-        $exported = var_export($Entity, 1);
-        $eval = eval('$ExportedEntity = '.$exported.';');
-        $this->assertEquals($Entity, $ExportedEntity);
-    }
-    
     function dataProvider()
     {
         $data = [
@@ -186,7 +165,7 @@ class EntityTest extends \Everon\TestCase
         ];
         
         $Factory = $this->buildFactory();
-        $Entity = $Factory->buildDomainEntity('User', 'id', $data, 'Everon\Test\Domain');
+        $Entity = $Factory->buildDomainEntity('Foo', 'id', $data, 'Everon\Domain');
                     
         return [
             [$Entity, $data]

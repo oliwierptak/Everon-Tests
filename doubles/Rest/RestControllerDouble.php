@@ -7,16 +7,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Everon\Test\Domain\User;
+namespace Everon\Rest;
 
-use Everon\Dependency;
-
-class Model
+class RestControllerDouble extends \Everon\Rest\Controller
 {
-    use Dependency\Injection\Logger;
-
-    public function testOne()
+    public function foobar()
     {
-        $this->getLogger()->debug('some debug');
+        
     }
 }

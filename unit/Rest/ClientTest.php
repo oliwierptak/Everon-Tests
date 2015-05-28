@@ -53,8 +53,7 @@ class ClientTest extends \Everon\TestCase
         
         $this->assertEquals($expected, $result);
     }
-
-
+    
     /**
      * @dataProvider dataProvider
      */
@@ -74,17 +73,12 @@ class ClientTest extends \Everon\TestCase
     {
         $Factory = $this->buildFactory();
         $Container = $Factory->getDependencyContainer();
-
-        $Container->register('ResourceManager', function() use ($Factory) {
-            $Factory->getDependencyContainer()->monitor('ResourceManager', ['Everon\Config\Manager']);
-            $ConfigManager = $Factory->getDependencyContainer()->resolve('ConfigManager');
-
-            $rest = $ConfigManager->getConfigValue('rest.rest');
-            $versioning = $ConfigManager->getConfigValue('rest.versioning');
-            $mapping = $ConfigManager->getConfigValue('rest.mapping', []);
-            $rest_server_url = $rest['protocol'].$rest['host'].':'.$rest['port'].$rest['url'];
-            return $Factory->buildRestResourceManager($rest_server_url, $versioning['supported_versions'], $versioning['type'], $mapping, 'Everon\Rest\Resource');
+        
+        $ResourceManager = \Mockery::mock('Everon\Rest\Interfaces\ResourceManager');
+        $Container->register('ResourceManager', function() use ($ResourceManager) {
+            return $ResourceManager;
         });
+        
         
         $Href = new \Everon\Rest\Resource\Href('http://api.nova/', 'v1', 'url');
         $CurlAdapter = $this->getMock('Everon\Rest\Interfaces\CurlAdapter');

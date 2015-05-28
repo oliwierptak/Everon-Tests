@@ -13,6 +13,5 @@ class MyController extends \Everon\Mvc\Controller implements \Everon\Interfaces\
 {
     public function testOne()
     {
-        $this->getView()->setOutput('test one');
     }
 }
