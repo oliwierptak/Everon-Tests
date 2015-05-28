@@ -24,6 +24,7 @@ class EntityTest extends \Everon\TestCase
             'date_of_birth' => '1990-09-09',
         ];
         $Entity = new \Everon\Domain\Foo\Entity('id', $data);
+        
         $this->assertInstanceOf('Everon\Domain\Interfaces\Entity', $Entity);
         $this->assertEquals(1, $Entity->getId());
     }
@@ -39,6 +40,7 @@ class EntityTest extends \Everon\TestCase
         
         $Factory = $this->buildFactory();
         $Entity = $Factory->buildDomainEntity('Foo', 'id', $data, 'Everon\Domain');
+        
         $this->assertNull($Entity->getId());
         $this->assertTrue($Entity->isNew());
         $this->assertFalse($Entity->isDeleted());
